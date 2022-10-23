@@ -30,30 +30,30 @@ class CategorySeeder extends Seeder
         Category::create([
             'name' => 'Category5',
         ]);
-        Category::create([
-            'name' => 'subCategory1',
-            'parent_id' => '1',
-        ]);
-        Category::create([
-            'name' => 'subCategory2',
-            'parent_id' => '2',
-
-        ]);
-        Category::create([
-            'name' => 'subCategory3',
-            'parent_id' => '3',
-
-        ]);
-        Category::create([
-            'name' => 'subCategory4',
-            'parent_id' => '4',
-
-        ]);
-        Category::create([
-            'name' => 'subCategory5',
-            'parent_id' => '5',
-
-        ]);
+//        Category::create([
+//            'name' => 'subCategory1',
+//            'parent_id' => '1',
+//        ]);
+//        Category::create([
+//            'name' => 'subCategory2',
+//            'parent_id' => '2',
+//
+//        ]);
+//        Category::create([
+//            'name' => 'subCategory3',
+//            'parent_id' => '3',
+//
+//        ]);
+//        Category::create([
+//            'name' => 'subCategory4',
+//            'parent_id' => '4',
+//
+//        ]);
+//        Category::create([
+//            'name' => 'subCategory5',
+//            'parent_id' => '5',
+//
+//        ]);
 
 
     }

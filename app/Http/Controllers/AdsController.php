@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ads;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class AdsController extends Controller
@@ -12,7 +13,7 @@ class AdsController extends Controller
     public function index()
     {
         $ads = Ads::paginate(5);
-        return view('admin.ads.index', compact('ads'));
+        return view('celebrity.ads.index', compact('ads'));
     }
 
     public function store(Request $request)
@@ -25,7 +26,7 @@ class AdsController extends Controller
         ]);
 
         $input = $request->all();
-
+        $input['celebrity_id'] = Auth::user()->id;
         $file = $request->file('image');
         $fileName = 'ads-' . time() . '.' . $file->getClientOriginalExtension();
         $path = $file->storeAs('files', $fileName);

@@ -6,25 +6,28 @@ use App\Http\Requests\StoreSizeRequest;
 use App\Http\Requests\UpdateSizeRequest;
 use App\Models\Size;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SizeController extends Controller
 {
     public function index()
     {
-        $sizes = Size::all();
-        return view('admin.sizes.index', compact('sizes'));
+        $user = Auth::user()->id;
+        $sizes = Size::where('celebrity_id',$user)->get();
+        return view('celebrity.sizes.index', compact('sizes'));
     }
 
     public function store(StoreSizeRequest $request)
     {
-        $size = Size::create($request->all('name'));
+        $request['celebrity_id']=Auth::user()->id;
+        $size = Size::create($request->all('name','celebrity_id'));
         toastr()->success('Created Successfully', 'Create');
         return redirect()->route('sizes.index');
     }
 
     public function create()
     {
-        return view('admin.sizes.create');
+        return view('celebrity.sizes.create');
     }
 
     public function show(Size $size)
@@ -34,7 +37,7 @@ class SizeController extends Controller
 
     public function edit(Size $size)
     {
-        return view('admin.sizes.edit', compact('size'));
+        return view('celebrity.sizes.edit', compact('size'));
     }
 
     public function update(UpdateSizeRequest $request, Size $size)

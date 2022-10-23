@@ -4,19 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        $categories = Category::with('children')->whereNull('parent_id')->get();
-        $categoriesChildes = Category::with('children')->whereNull('haveSub')->whereNotNull('parent_id')->get();
-        return view('admin.category.index',compact('categories','categoriesChildes'));
+        $user = Auth::user()->id;
+        $categories = Category::with('children')->whereNull('parent_id')->where('seeder','0')->get();
+        $categoriesChildes = Category::with('children')->where('celebrity_id',$user)->whereNull('haveSub')->whereNotNull('parent_id')->get();
+        return view('celebrity.category.index',compact('categories','categoriesChildes'));
     }
 
     /**
@@ -27,7 +25,7 @@ class CategoryController extends Controller
     public function create(Request $request)
     {
         $categories = Category::whereNull('parent_id')->orderby('name', 'asc')->get();
-        return view('admin.category.create',compact('categories'));
+        return view('celebrity.category.create',compact('categories'));
 
     }
 
@@ -48,7 +46,9 @@ class CategoryController extends Controller
         Category::create([
             'name' => $request->name,
             'parent_id' =>$request->parent_id,
-            'haveSub' =>$request->haveSub
+            'haveSub' =>$request->haveSub,
+            'celebrity_id' =>Auth::user()->id,
+            'seeder' =>1
         ]);
 
         return redirect()->back()->with('success', 'Category has been created successfully.');
@@ -105,8 +105,8 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         if ($category->children) {
-            foreach ($category->children()->with('products')->get() as $child) {
-                foreach ($child->products as $post) {
+            foreach ($category->children()->with('product')->get() as $child) {
+                foreach ($child->product as $post) {
                     $post->update(['category_id' => NULL]);
                 }
             }
@@ -114,7 +114,7 @@ class CategoryController extends Controller
             $category->children()->delete();
         }
 
-        foreach ($category->products as $product) {
+        foreach ($category->product as $product) {
             $product->update(['category_id' => NULL]);
         }
 

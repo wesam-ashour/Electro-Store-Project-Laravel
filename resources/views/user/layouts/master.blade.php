@@ -19,11 +19,11 @@
     <!-- Title -->
     <title> Store </title>
 
-    @include('layouts.css')
+    @include('user.layouts.css')
 
 </head>
 
-<body class="main-body app sidebar-mini light-theme">
+<body class="main-body app sidebar-mini dark-theme">
 
 <!-- Loader -->
 <div id="global-loader">
@@ -35,14 +35,14 @@
 <div class="page">
 
     <!-- main-sidebar -->
-    @include('layouts.sidebar')
+    @include('user.layouts.sidebar')
     <!-- /main-sidebar -->
 
     <!-- main-content -->
     <div class="main-content app-content">
 
         <!-- main-header -->
-        @include('layouts.header')
+        @include('user.layouts.header')
         <!-- /main-header -->
 
         <!-- container -->
@@ -55,12 +55,12 @@
     <!-- /main-content -->
 
     <!-- Footer opened -->
-    @include('layouts.footer')
+    @include('user.layouts.footer')
     <!-- Footer closed -->
 
 </div>
 <!-- End Page -->
 
-@include('layouts.js')
+@include('user.layouts.js')
 </body>
 </html>

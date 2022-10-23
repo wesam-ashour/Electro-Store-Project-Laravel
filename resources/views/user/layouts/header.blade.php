@@ -21,38 +21,38 @@
                 <li class="">
                     <div class="dropdown  nav-itemd-none d-md-flex">
                         <a href="#" class="d-flex  nav-item nav-link pr-0 country-flag1" data-toggle="dropdown" aria-expanded="false">
-                            <span class="avatar country-Flag mr-0 align-self-center bg-transparent"><img src="../../assets/img/flags/us_flag.jpg" alt="img"></span>
+                            <span class="avatar country-Flag mr-0 align-self-center bg-transparent"><img src="{{asset('assets/img/flags/us_flag.jpg')}}" alt="img"></span>
                             <div class="my-auto">
                                 <strong class="mr-2 ml-2 my-auto">English</strong>
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-left dropdown-menu-arrow" x-placement="bottom-end">
                             <a href="#" class="dropdown-item d-flex ">
-                                <span class="avatar  mr-3 align-self-center bg-transparent"><img src="../../assets/img/flags/french_flag.jpg" alt="img"></span>
+                                <span class="avatar  mr-3 align-self-center bg-transparent"><img src="{{asset('assets/img/flags/french_flag.jpg')}}" alt="img"></span>
                                 <div class="d-flex">
                                     <span class="mt-2">French</span>
                                 </div>
                             </a>
                             <a href="#" class="dropdown-item d-flex">
-                                <span class="avatar  mr-3 align-self-center bg-transparent"><img src="../../assets/img/flags/germany_flag.jpg" alt="img"></span>
+                                <span class="avatar  mr-3 align-self-center bg-transparent"><img src="{{asset('assets/img/flags/germany_flag.jpg')}}" alt="img"></span>
                                 <div class="d-flex">
                                     <span class="mt-2">Germany</span>
                                 </div>
                             </a>
                             <a href="#" class="dropdown-item d-flex">
-                                <span class="avatar mr-3 align-self-center bg-transparent"><img src="../../assets/img/flags/italy_flag.jpg" alt="img"></span>
+                                <span class="avatar mr-3 align-self-center bg-transparent"><img src="{{asset('assets/img/flags/italy_flag.jpg')}}" alt="img"></span>
                                 <div class="d-flex">
                                     <span class="mt-2">Italy</span>
                                 </div>
                             </a>
                             <a href="#" class="dropdown-item d-flex">
-                                <span class="avatar mr-3 align-self-center bg-transparent"><img src="../../assets/img/flags/russia_flag.jpg" alt="img"></span>
+                                <span class="avatar mr-3 align-self-center bg-transparent"><img src="{{asset('assets/img/flags/russia_flag.jpg')}}" alt="img"></span>
                                 <div class="d-flex">
                                     <span class="mt-2">Russia</span>
                                 </div>
                             </a>
                             <a href="#" class="dropdown-item d-flex">
-                                <span class="avatar  mr-3 align-self-center bg-transparent"><img src="../../assets/img/flags/spain_flag.jpg" alt="img"></span>
+                                <span class="avatar  mr-3 align-self-center bg-transparent"><img src="{{asset('assets/img/flags/spain_flag.jpg')}}" alt="img"></span>
                                 <div class="d-flex">
                                     <span class="mt-2">spain</span>
                                 </div>
@@ -89,7 +89,7 @@
                         </div>
                         <div class="main-message-list chat-scroll">
                             <a href="#" class="p-3 d-flex border-bottom">
-                                <div class="  drop-img  cover-image  " data-image-src="../../assets/img/faces/3.jpg">
+                                <div class="  drop-img  cover-image  " data-image-src="{{asset('assets/img/faces/3.jpg')}}">
                                     <span class="avatar-status bg-teal"></span>
                                 </div>
                                 <div class="wd-90p">
@@ -101,7 +101,7 @@
                                 </div>
                             </a>
                             <a href="#" class="p-3 d-flex border-bottom">
-                                <div class="drop-img cover-image" data-image-src="../../assets/img/faces/2.jpg">
+                                <div class="drop-img cover-image" data-image-src="{{asset('assets/img/faces/2.jpg')}}">
                                     <span class="avatar-status bg-teal"></span>
                                 </div>
                                 <div class="wd-90p">
@@ -113,7 +113,7 @@
                                 </div>
                             </a>
                             <a href="#" class="p-3 d-flex border-bottom">
-                                <div class="drop-img cover-image" data-image-src="../../assets/img/faces/9.jpg">
+                                <div class="drop-img cover-image" data-image-src="{{asset('assets/img/faces/9.jpg')}}">
                                     <span class="avatar-status bg-teal"></span>
                                 </div>
                                 <div class="wd-90p">
@@ -125,7 +125,7 @@
                                 </div>
                             </a>
                             <a href="#" class="p-3 d-flex border-bottom">
-                                <div class="drop-img cover-image" data-image-src="../../assets/img/faces/12.jpg">
+                                <div class="drop-img cover-image" data-image-src="{{asset('assets/img/faces/12.jpg')}}">
                                     <span class="avatar-status bg-teal"></span>
                                 </div>
                                 <div class="wd-90p">
@@ -137,7 +137,7 @@
                                 </div>
                             </a>
                             <a href="#" class="p-3 d-flex border-bottom">
-                                <div class="drop-img cover-image" data-image-src="../../assets/img/faces/5.jpg">
+                                <div class="drop-img cover-image" data-image-src="{{asset('assets/img/faces/5.jpg')}}">
                                     <span class="avatar-status bg-teal"></span>
                                 </div>
                                 <div class="wd-90p">

@@ -1,4 +1,4 @@
-@extends('admin.layouts.master')
+@extends('layouts.master')
 @section('content')
     <br>
     <section class="section-pagetop bg-dark">

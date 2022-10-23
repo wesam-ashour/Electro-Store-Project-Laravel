@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('status');
             $table->string('image');
             $table->string('priority');
+            $table->foreignId('celebrity_id')->nullable()->constrained('celebrities')->cascadeOnDelete();
             $table->timestamps();
         });
     }

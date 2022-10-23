@@ -12,6 +12,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WishlistController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
@@ -29,7 +30,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     $products = Product::with('category')->orderBy('id', 'ASC')->paginate(6);
     return view('welcome',compact('products'));
-});
+})->name('home.page');
 
 //home page without auth
 Route::get('/accounts', [HomeController::class, 'myAccount'])->name('accounts');
@@ -45,16 +46,25 @@ Route::delete('remove-from-cart', [ProductController::class, 'remove'])->name('r
 Route::get('clearCart', [ProductController::class, 'clearCart'])->name('clearCart');
 Route::get('clearCartItems', [ProductController::class, 'removeCartItems'])->name('clearCartItems');
 
+Route::post('applyCouponCode', [ProductController::class, 'applyCouponCode'])->name('applyCouponCode');
+Route::get('removeCouponCode', [ProductController::class, 'removeCouponCode'])->name('removeCouponCode');
+
+
 //checkout
-Route::get('/checkout', [ProductController::class, 'getCheckout'])->name('checkout.index');
+Route::post('/checkout', [ProductController::class, 'getCheckout'])->name('checkout.index');
 Route::get('/checkout/details/{id}', [ProductController::class, 'checkoutDetails'])->name('checkout.details');
-Route::post('/checkout/order', [ProductController::class, 'placeOrder'])->name('checkout.place.order');
+Route::post('stripe', [ProductController::class, 'placeOrder'])->name('stripe.post');
 
 
 
 
 Route::prefix('user')->middleware('auth')->group(function () {
-    Route::get('/dashboard', [HomeController::class, 'index']);
+    Route::get('/dashboard', [HomeController::class, 'index'])->name('user.dashboard');
+
+    Route::get('wishlist', [WishlistController::class, 'wishlist'])->name('wishlist');
+    Route::post('favorite-add/{id}', [WishlistController::class, 'favoriteAdd'])->name('favorite.add');
+    Route::delete('favorite-remove/{id}', [WishlistController::class, 'favoriteRemove'])->name('favorite.remove');
+
 
     Route::get('profile', [UserController::class, 'profile'])->name('profile_user');
     Route::get('profile/{user}', [UserController::class, 'edit_profile'])->name('edit_profile');
@@ -70,20 +80,6 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('ads', AdsController::class);
-    Route::resource('products', ProductController::class);
-    Route::resource('categories', CategoryController::class);
-    Route::resource('colors', ColorController::class);
-    Route::resource('sizes', SizeController::class);
-    Route::resource('materials', MaterialController::class);
-
-    Route::get('GetSubCatAgainstMainCatEdit/{id}', [ProductController::class, 'GetSubCatAgainstMainCatEdit']);
-
-    Route::post('/getSub', [ProductController::class, 'getSub'])->name('getSub');
-
-    Route::get('filter', [ProductController::class, 'index'])->name('filter');
-
-    Route::get('material_store_ajax', [MaterialController::class, 'store_ajax'])->name('store_ajax');
-
 
     Route::get('profile', [UserController::class, 'profile'])->name('profile');
     Route::get('profile/{user}', [UserController::class, 'edit_profile'])->name('edit_profile');
@@ -96,6 +92,15 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
 
 Route::prefix('celebrity')->middleware('auth:celebrity')->group(function () {
     Route::get('/dashboard', [CelebrityController::class, 'index'])->name('celebrity.dashboard');
+    Route::resource('products', ProductController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('colors', ColorController::class);
+    Route::resource('sizes', SizeController::class);
+    Route::resource('materials', MaterialController::class);
+
+    Route::get('GetSubCatAgainstMainCatEdit/{id}', [ProductController::class, 'GetSubCatAgainstMainCatEdit']);
+    Route::get('GetSubCatAgainstMainCatEdit/{id}', [ProductController::class, 'GetSubCatAgainstMainCatEdit']);
+
 });
 
 

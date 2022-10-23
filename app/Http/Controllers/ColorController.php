@@ -6,25 +6,28 @@ use App\Http\Requests\StoreColorRequest;
 use App\Http\Requests\UpdateColorRequest;
 use App\Models\Color;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ColorController extends Controller
 {
     public function index()
     {
-        $colors = Color::all();
-        return view('admin.colors.index', compact('colors'));
+        $user = Auth::user()->id;
+        $colors = Color::where('celebrity_id',$user)->get();
+        return view('celebrity.colors.index', compact('colors'));
     }
 
     public function store(StoreColorRequest $request)
     {
-        $color = Color::create($request->all('name', 'color'));
+        $request['celebrity_id']=Auth::user()->id;
+        $color = Color::create($request->all('name', 'color','celebrity_id'));
         toastr()->success('Created Successfully','Create');
         return redirect()->route('colors.index');
     }
 
     public function create()
     {
-        return view('admin.colors.create');
+        return view('celebrity.colors.create');
     }
 
     public function show(Color $color)
@@ -34,7 +37,7 @@ class ColorController extends Controller
 
     public function edit(Color $color)
     {
-        return view('admin.colors.edit', compact('color'));
+        return view('celebrity.colors.edit', compact('color'));
     }
 
     public function update(UpdateColorRequest $request, Color $color)

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('path');
-            $table->foreignId('admin_id')->nullable()->constrained('admins')->cascadeOnDelete();
+            $table->foreignId('celebrity_id')->nullable()->constrained('celebrities')->cascadeOnDelete();
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->foreignId('product_id')->nullable()->constrained('products')->cascadeOnDelete();
             $table->timestamps();

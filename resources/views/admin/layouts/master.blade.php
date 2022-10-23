@@ -17,7 +17,7 @@
           jquery html,premium,premium quality,sidebar bootstrap 4,template admin bootstrap 4"/>
 
     <!-- Title -->
-    <title> Store </title>
+    <title> Store - Admin</title>
 
     @include('admin.layouts.css')
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Celebrity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CelebrityController extends Controller
 {
@@ -14,7 +15,8 @@ class CelebrityController extends Controller
      */
     public function index()
     {
-        return view('celebrity.dashboard');
+        $user =Auth::user();
+        return view('celebrity.dashboard',compact('user'));
     }
 
     /**

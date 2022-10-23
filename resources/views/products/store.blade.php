@@ -217,7 +217,9 @@
                                                     {{$cats->name}}
                                                 @endforeach
                                             </p>
-                                            <h3 class="product-name"><a href="{{route('product.show',$product->id)}}">{{$product['title']}}</a></h3>
+                                            <h3 class="product-name"><a
+                                                    href="{{route('product.show',$product->id)}}">{{$product['title']}}</a>
+                                            </h3>
                                             <h4 class="product-price">${{$product['offer_price']}}
                                                 <del class="product-old-price">${{$product['price']}}</del>
                                             </h4>
@@ -228,14 +230,16 @@
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>
                                             </div>
-                                            <div class="product-btns">
-                                                <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
-                                                        class="tooltipp">add to wishlist</span></button>
-                                                <button class="add-to-compare"><i class="fa fa-exchange"></i><span
-                                                        class="tooltipp">add to compare</span></button>
-                                                <button class="quick-view"><i class="fa fa-eye"></i><span
-                                                        class="tooltipp">quick view</span></button>
-                                            </div>
+                                            <form action="{{ route('favorite.add', $product->id) }}" method="POST"
+                                                  enctype="multipart/form-data">
+                                                @csrf
+                                                <div class="product-btns">
+                                                    <button class="add-to-wishlist">
+                                                        <i class="fa fa-heart-o"></i>
+                                                        <span class="tooltipp">add to wishlist</span>
+                                                    </button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -264,43 +268,7 @@
         <!-- /row -->
     </div>
     <!-- /container -->
-    </div>
     <!-- /SECTION -->
-
-    <!-- NEWSLETTER -->
-    <div id="newsletter" class="section">
-        <!-- container -->
-        <div class="container">
-            <!-- row -->
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="newsletter">
-                        <p>Sign Up for the <strong>NEWSLETTER</strong></p>
-                        <form>
-                            <input class="input" type="email" placeholder="Enter Your Email">
-                            <button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
-                        </form>
-                        <ul class="newsletter-follow">
-                            <li>
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-instagram"></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-pinterest"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- /row -->
-        </div>
-        <!-- /container -->
-    </div>
     <!-- /NEWSLETTER -->
 @endsection
 

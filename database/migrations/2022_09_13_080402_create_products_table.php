@@ -18,14 +18,12 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('description');
-            $table->string('category_id');
-            $table->string('boutique_id')->nullable();
-            $table->foreignId('admin_id')->nullable()->constrained('admins')->cascadeOnDelete();
+            $table->foreignId('celebrity_id')->nullable()->constrained('celebrities')->cascadeOnDelete();
             $table->string('status');
             $table->string('price');
             $table->string('offer_price');
-            $table->string('in_stock_quantity');
             $table->string('cover');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('product_colors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->foreignId('color_id')->constrained()->onDelete('cascade');
+            $table->foreignId('product_id')->constrained();
+            $table->foreignId('color_id')->constrained();
             $table->integer('quantity')->nullable();
             $table->string('logo')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

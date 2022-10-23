@@ -22,7 +22,7 @@ class CreateCelebritySeeder extends Seeder
         $user = Celebrity::create([
             'first_name' => 'ali',
             'last_name' => 'Ashour',
-            'username' => 'wesam',
+            'username' => 'user',
             'password' => bcrypt('password'),
             'mobile' => '05999999',
         ]);

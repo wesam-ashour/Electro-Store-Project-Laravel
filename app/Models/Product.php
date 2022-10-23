@@ -4,17 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Maize\Markable\Markable;
+use Maize\Markable\Models\Favorite;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes,Markable;
     protected $with =['color_product'];
     protected $fillable = [
         'title',
         'description',
-        'category_id',
-        'boutique_id',
-        'admin_id',
+        'celebrity_id',
         'status',
         'price',
         'offer_price',
@@ -25,6 +26,9 @@ class Product extends Model
     {
         return $this->hasMany(Image::class);
     }
+//    public function category() {
+//        return $this->belongsToMany(Category::class);
+//    }
     public function category() {
         return $this->belongsToMany(Category::class);
     }
@@ -41,6 +45,10 @@ class Product extends Model
     public function size() {
         return $this->belongsToMany(Size::class);
     }
+    protected static $marks = [
+        Favorite::class,
+    ];
+
 
 
 }

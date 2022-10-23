@@ -25,7 +25,6 @@ class StoreMaterialRequest extends FormRequest
     {
         return [
             'name' => 'required|min:3|max:20',
-            'colors_id' => 'required',
         ];
     }
 }
