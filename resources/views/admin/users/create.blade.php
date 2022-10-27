@@ -8,13 +8,12 @@
                     <h4 class="card-title mb-1">Create New User</h4>
                 </div>
                 <div class="card-body pt-0">
-                    <form method="POST" action="{{route('users.store')}}">
+                    <form method="POST" action="{{ route('users.store') }}">
                         @csrf
                         <div class="">
                             <div class="form-group">
                                 <label>First name</label>
-                                <input type="text" name="first_name" class="form-control"
-                                       placeholder="Enter First name">
+                                <input type="text" name="first_name" class="form-control" placeholder="Enter First name">
                             </div>
                             <div class="form-group">
                                 <label>Last name</label>
@@ -23,12 +22,12 @@
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Email address</label>
                                 <input type="email" name="email" class="form-control" id="exampleInputEmail1"
-                                       placeholder="Enter Email">
+                                    placeholder="Enter Email">
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Password</label>
                                 <input type="password" name="password" class="form-control" id="exampleInputPassword1"
-                                       placeholder="Password">
+                                    placeholder="Password">
                             </div>
                             <div class="form-group">
                                 <label>Phone number</label>
@@ -37,20 +36,22 @@
                             <div class="mb-4">
                                 <label>Status</label>
                                 <select name="status" class="form-control">
-                                    @foreach(\App\Models\User::STATUS as $status)
-                                        <option
-                                            value="{{$status}}" {{ old('status') == $status ? 'selected' : '' }}>{{ $status }}</option>
+                                    @foreach (\App\Models\User::STATUS as $status)
+                                        <option value="{{ $status }}"
+                                            {{ old('status') == $status ? 'selected' : '' }}>
+                                            @if ($status == 1)
+                                                Active
+                                            @else
+                                                Inactive
+                                            @endif</option>
                                     @endforeach
                                 </select>
                             </div>
-{{--                            <div class="form-group">--}}
-{{--                                <label>Status</label>--}}
-{{--                                <input type="text" name="status" class="form-control" placeholder="Enter Status">--}}
-{{--                            </div>--}}
-                            <div class="form-group">
+                    
+                            {{-- <div class="form-group">
                                 <label>Status</label>
-                                {!! Form::select('roles[]', $roles,[], array('class' => 'form-control','multiple')) !!}
-                            </div>
+                                {!! Form::select('roles[]', $roles, [], ['class' => 'form-control', 'multiple']) !!}
+                            </div> --}}
                         </div>
                         <button type="submit" class="btn btn-primary mt-3 mb-0">Submit</button>
                     </form>

@@ -81,3 +81,53 @@
 <script src="{{asset('assets/plugins/fancyuploder/jquery.iframe-transport.js')}}"></script>
 <script src="{{asset('assets/plugins/fancyuploder/jquery.fancy-fileupload.js')}}"></script>
 <script src="{{asset('/assets/plugins/fancyuploder/fancy-uploader.js')}}"></script>
+
+<script src="{{URL::asset('assets/table-data.js')}}"></script>
+
+<script>
+    jQuery(document).ready(function(){
+       jQuery('#ajaxSubmit').click(function(e){
+          e.preventDefault();
+          $.ajaxSetup({
+             headers: {
+                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+             }
+         });
+          jQuery.ajax({
+             url: "{{ route('add_address') }}",
+             method: 'post',
+             data: {
+                area: jQuery('#area').val(),
+                block_no: jQuery('#block_no').val(),
+                street_no: jQuery('#street_no').val(),
+                building_type: jQuery('#building_type').val(),
+                house_no: jQuery('#house_no').val(),
+                building_no: jQuery('#building_no').val(),
+                floor_no: jQuery('#floor_no').val(),
+                flat_no: jQuery('#flat_no').val(),
+                landmark: jQuery('#landmark').val(),
+             },
+             success: function(result){
+                 if(result.errors)
+                 {
+                     jQuery('.alert-danger').html('');
+
+                     jQuery.each(result.errors, function(key, value){
+                         jQuery('.alert-danger').show();
+                         jQuery('.alert-danger').append('<li>'+value+'</li>');
+                     });
+                 }
+                 else
+                 {
+                     jQuery('.alert-danger').hide();
+                     $('#open').hide();
+                     $('#myModal').modal('hide');
+                 }
+             }});
+          });
+       });
+ </script>
+
+
+
+

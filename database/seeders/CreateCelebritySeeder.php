@@ -25,6 +25,7 @@ class CreateCelebritySeeder extends Seeder
             'username' => 'user',
             'password' => bcrypt('password'),
             'mobile' => '05999999',
+            'add_by' => 'seeder',
         ]);
 
     }

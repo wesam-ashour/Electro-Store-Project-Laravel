@@ -12,6 +12,7 @@ class Product extends Model
 {
     use HasFactory,SoftDeletes,Markable;
     protected $with =['color_product'];
+    
     protected $fillable = [
         'title',
         'description',
@@ -48,6 +49,7 @@ class Product extends Model
     protected static $marks = [
         Favorite::class,
     ];
+
 
 
 

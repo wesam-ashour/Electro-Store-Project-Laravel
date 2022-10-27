@@ -11,9 +11,9 @@
                                 <img alt="avatar" src="{{asset('assets/img/user.png')}}">
                             </div>
                             <div class="media-body">
-                                <h5>{{$user->first_name . ' ' . $user->last_name}}</h5>
-                                @if(!empty($user->getRoleNames()))
-                                    @foreach($user->getRoleNames() as $v)
+                                <h5>{{$users->first_name . ' ' . $users->last_name}}</h5>
+                                @if(!empty($users->getRoleNames()))
+                                    @foreach($users->getRoleNames() as $v)
                                 <p>{{$v}}</p>
                                     @endforeach
                                 @else
@@ -32,17 +32,20 @@
                             <div class="media">
                                 <div class="media-body">
                                     <div>
-                                        <label>Mobile</label> <span class="tx-medium">{{$user->mobile}}</span>
+                                        <label>Mobile</label> <span class="tx-medium">{{$users->mobile}}</span>
                                     </div>
                                     <div>
-                                        <label>Status</label> <span class="tx-medium">{{$user->status}}</span>
+                                        <label>Status</label> <span class="tx-medium">{{$users->status}}</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="media">
                                 <div class="media-body">
                                     <div>
-                                        <label>Email Account</label> <span class="tx-medium">{{$user->email}}</span>
+                                        <label>Email Account</label> <span class="tx-medium">{{$users->email}}</span>
+                                    </div>
+                                    <div>
+                                        <label>Added By</label> <span class="tx-medium">{{$users->add_by}}</span>
                                     </div>
 
                                 </div>
@@ -50,14 +53,21 @@
                             <div class="media">
                                 <div class="media-body">
                                     <div>
-                                        <label>Current Addresses</label> <span class="tx-medium">No Address</span>
+                                        <label>Current Addresses</label> <span class="tx-medium">
+                                            @forelse ($addresss as $address)
+                                            {{$loop->iteration}}- {{$address->area}}<br>
+                                            @empty
+                                                No address added
+                                            @endforelse
+                                            
+                                        </span>
                                     </div>
                                 </div>
                             </div>
                             <div class="media mb-0">
                                 <div class="media-body">
                                     <div>
-                                        <label>Account created before</label> <span class="tx-medium">{{$user->created_at->diffForHumans()}}</span>
+                                        <label>Account created before</label> <span class="tx-medium">{{$users->created_at->diffForHumans()}}</span>
                                     </div>
                                 </div>
                             </div>

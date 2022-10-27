@@ -8,43 +8,63 @@
                     <h4 class="card-title mb-1">Update User Info</h4>
                 </div>
                 <div class="card-body pt-0">
-                    <form method="POST" action="{{route('users.update',$user->id)}}">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <form method="POST" action="{{ route('users.update', $users->id) }}">
                         @csrf
                         @method('PUT')
                         <div class="">
                             <div class="form-group">
                                 <label>First name</label>
-                                <input type="text" name="first_name" class="form-control"
-                                       placeholder="Enter First name" value="{{$user->first_name}}">
+                                <input type="text" name="first_name" class="form-control" placeholder="Enter First name"
+                                    value="{{ $users->first_name }}">
                             </div>
                             <div class="form-group">
                                 <label>Last name</label>
-                                <input type="text" name="last_name" class="form-control"
-                                       placeholder="Enter Last name" value="{{$user->last_name}}">
+                                <input type="text" name="last_name" class="form-control" placeholder="Enter Last name"
+                                    value="{{ $users->last_name }}">
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Email address</label>
                                 <input type="email" name="email" class="form-control" id="exampleInputEmail1"
-                                       placeholder="Enter Email" value="{{$user->email}}">
+                                    placeholder="Enter Email" value="{{ $users->email }}">
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Password</label>
                                 <input type="password" name="password" class="form-control" id="exampleInputPassword1"
-                                       placeholder="Password">
+                                    placeholder="Password">
                             </div>
                             <div class="form-group">
                                 <label>Phone number</label>
-                                <input type="tel" name="mobile" class="form-control"
-                                       placeholder="Enter Phone number" value="{{$user->mobile}}">
+                                <input type="tel" name="mobile" class="form-control" placeholder="Enter Phone number"
+                                    value="{{ $users->mobile }}">
                             </div>
-                            <div class="form-group">
+                            <div class="mb-4">
                                 <label>Status</label>
-                                <input type="text" name="status" class="form-control"
-                                       placeholder="Enter Status" value="{{$user->status}}">
+                                <select name="status" class="form-control">
+                                    @foreach (\App\Models\User::STATUS as $status)
+                                        <option value="{{ $status }}"
+                                        {{ (old('status') ? old('status') : $users->status ?? '') == $status ? 'selected' : '' }}>
+                                            @if ($status == 1)
+                                                Active
+                                            @else
+                                                Inactive
+                                            @endif
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <div class="form-group">
-                                <label>Status</label>
-                                {!! Form::select('roles[]', $roles,$userRole, array('class' => 'form-control','multiple')) !!}                            </div>
+                            {{-- <div class="form-group">
+                                <label>Roles</label>
+                                {!! Form::select('roles[]', $roles, $userRole, ['class' => 'form-control', 'multiple']) !!}
+                            </div> --}}
                         </div>
                         <button type="submit" class="btn btn-primary mt-3 mb-0">Submit</button>
                     </form>

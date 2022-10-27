@@ -64,7 +64,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="fullname" class="form-label">Mobile</label>
-                        <input class="form-control" name="mobile" type="text" id="mobile" placeholder="Enter your mobile" required>
+                        <input class="form-control" name="mobile" type="text" id="mobile" placeholder="Enter your mobile">
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>

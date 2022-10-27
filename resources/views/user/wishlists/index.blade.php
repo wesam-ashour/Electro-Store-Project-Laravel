@@ -1,8 +1,11 @@
 @extends('layouts.master')
 @section('content')
     <div class="container">
+        <br>
+        <strong>List of wishlists</strong>
+        @if ($products->count())
     <table class="table">
-        <caption>List of wishlists</caption>
+        
         <thead>
         <tr>
             <th scope="col">#</th>
@@ -23,7 +26,7 @@
                       style="display: inline-block;">
                     <input type="hidden" name="_method" value="DELETE">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <input type="submit" class="px-4 py-2 text-white bg-red-700 rounded"
+                    <input type="submit" class="btn btn-danger"
                            value="Delete">
                 </form>
             </td>
@@ -33,5 +36,11 @@
         @endforelse
         </tbody>
     </table>
+    @else
+    <br>
+    <br>
+    <br>
+    No products added to wish list yet!
+    @endif
     </div>
 @endsection

@@ -8,18 +8,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Scout\Searchable;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable  implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable,HasRoles;
-//    protected $guard_name = 'web';
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, Searchable;
+    //    protected $guard_name = 'web';
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    public const STATUS = ['Active','Inactive'];
+    public const STATUS = ['1', '0'];
     protected $fillable = [
         'first_name',
         'last_name',
@@ -27,6 +28,7 @@ class User extends Authenticatable  implements MustVerifyEmail
         'password',
         'mobile',
         'status',
+        'add_by',
     ];
 
     /**
@@ -47,6 +49,16 @@ class User extends Authenticatable  implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'mobile' => $this->mobile,
+            'email' => $this->email
+        ];
+    }
 
     public function addresses()
     {
@@ -55,5 +67,9 @@ class User extends Authenticatable  implements MustVerifyEmail
     public function images(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Image::class);
+    }
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

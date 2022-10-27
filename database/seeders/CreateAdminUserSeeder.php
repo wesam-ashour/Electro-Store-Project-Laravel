@@ -26,6 +26,8 @@ class CreateAdminUserSeeder extends Seeder
             'password' => bcrypt('password'),
             'mobile' => '05999999',
             'image' => 'files/users-1.jpg',
+            'status'=> '1',
+            'sub_admin' => '1',
 
         ]);
 

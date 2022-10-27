@@ -4,17 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+        $user = Auth::user();
+        $orders = Order::where('user_id', $user->id)
+            ->orderBy('id', 'ASC')
+            ->paginate(5);
+        return view('user.orders.index', compact('orders'));
     }
 
     /**
@@ -38,15 +40,11 @@ class OrderController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Order $order)
+
+    public function show(Order $order, $id)
     {
-        //
+        $orderDetails = DB::table('order_items')->where(['order_id' => $id])->get();
+        return view('user.orders.show', compact('orderDetails'));
     }
 
     /**

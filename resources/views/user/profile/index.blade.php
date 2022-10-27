@@ -1,224 +1,300 @@
 @extends('layouts.master')
 @section('content')
+    <style>
+        .cards {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 0 solid transparent;
+            border-radius: .25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 6px 0 rgb(218 218 253 / 65%), 0 2px 6px 0 rgb(206 206 238 / 54%);
+        }
 
-    <!-- breadcrumb -->
-    <div class="breadcrumb-header justify-content-between">
-        <div class="my-auto">
-            <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">Pages</h4><span
-                    class="text-muted mt-1 tx-13 ml-2 mb-0">/ Profile</span>
-            </div>
-        </div>
-        <div class="d-flex my-xl-auto right-content">
-            <div class="pr-1 mb-3 mb-xl-0">
-                <button type="button" class="btn btn-info btn-icon mr-2"><i class="mdi mdi-filter-variant"></i></button>
-            </div>
-            <div class="pr-1 mb-3 mb-xl-0">
-                <button type="button" class="btn btn-danger btn-icon mr-2"><i class="mdi mdi-star"></i></button>
-            </div>
-            <div class="pr-1 mb-3 mb-xl-0">
-                <button type="button" class="btn btn-warning  btn-icon mr-2"><i class="mdi mdi-refresh"></i></button>
-            </div>
-            <div class="mb-3 mb-xl-0">
-                <div class="btn-group dropdown">
-                    <button type="button" class="btn btn-primary">14 Aug 2019</button>
-                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                            id="dropdownMenuDate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuDate"
-                         data-x-placement="bottom-end">
-                        <a class="dropdown-item" href="#">2015</a>
-                        <a class="dropdown-item" href="#">2016</a>
-                        <a class="dropdown-item" href="#">2017</a>
-                        <a class="dropdown-item" href="#">2018</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- breadcrumb -->
+        .me-21 {
+            margin-right: .5rem !important;
+        }
+    </style>
+    <br>
+    <br>
 
-    <!-- row -->
-    <div class="row row-sm">
-        <div class="col-lg-4">
-            <div class="card mg-b-20">
-                <div class="card-body">
-                    <div class="pl-0">
-                        <div class="main-profile-overview">
-                            {{--                            <div class="main-img-user profile-user">--}}
-                            {{--                                <img alt="" src="../../assets/img/faces/6.jpg"><a class="fas fa-camera profile-edit"--}}
-                            {{--                                                                                  href="JavaScript:void(0);"></a>--}}
-                            {{--                            </div>--}}
-                            <div class="d-flex justify-content-between mg-b-20">
-                                <div>
-                                    <h5 class="main-profile-name">Name: {{$user->first_name . " " . $user->last_name}}</h5>
-                                    <p class="main-profile-name-text">
-                                        Role:
-                                        @if(!empty($user->getRoleNames()))
-                                            @foreach($user->getRoleNames() as $v)
-                                                {{ $v }}
-                                            @endforeach
-                                        @endif</p>
+    <div class="container">
+        <div class="main-body">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="cards">
+                        <div class="card-body"><br>
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="Admin"
+                                    class="rounded-circle p-1 bg-primary" width="110">
+
+                                <div class="mt-3"><br>
+                                    <h4>{{ $user->first_name . ' ' . $user->last_name }}</h4>
+                                    <p class="text-secondary mb-1">regular user</p>
+                                    {{-- <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p> --}}
                                 </div>
                             </div>
-                            <h6>Email</h6>
-                            <div class="main-profile-bio">
-                                {{$user->email}}
+                            <hr class="my-4">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="feather feather-globe me-21 icon-inline">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                                            <path
+                                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                                            </path>
+                                        </svg>Website</h6>
+                                    <span class="text-secondary">https://bootdey.com</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="feather feather-github me-21 icon-inline">
+                                            <path
+                                                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                                            </path>
+                                        </svg>Github</h6>
+                                    <span class="text-secondary">bootdey</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="feather feather-twitter me-21 icon-inline text-info">
+                                            <path
+                                                d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z">
+                                            </path>
+                                        </svg>Twitter</h6>
+                                    <span class="text-secondary">@bootdey</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="feather feather-instagram me-21 icon-inline text-danger">
+                                            <rect x="2" y="2" width="20" height="20" rx="5"
+                                                ry="5"></rect>
+                                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                        </svg>Instagram</h6>
+                                    <span class="text-secondary">bootdey</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="feather feather-facebook me-21 icon-inline text-primary">
+                                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z">
+                                            </path>
+                                        </svg>Facebook</h6>
+                                    <span class="text-secondary">bootdey</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <form action="{{ route('update_profile', $user->id) }}" method="POST">
+                        @csrf
+                        {{ method_field('put') }}
+                        <div class="card">
+                            <div class="card-body"><br>
+                                <h5 class="d-flex align-items-center mb-3">Information </h5><br>
+                                <div class="row mb-3">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">First Name</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        <input type="text" class="form-control" name="first_name"
+                                            value="{{ $user->first_name }}">
+                                    </div>
+                                </div><br>
+                                <div class="row mb-3">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Last Name</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        <input type="text" class="form-control" name="last_name"
+                                            value="{{ $user->last_name }}">
+                                    </div>
+                                </div><br>
+                                <div class="row mb-3">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Email</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        <input type="email" class="form-control" name="email"
+                                            value="{{ $user->email }}">
+                                    </div>
+                                </div><br>
+                                <div class="row mb-3">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Mobile</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        <input type="text" class="form-control" name="mobile"
+                                            value="{{ $user->mobile }}">
+                                    </div>
+                                </div><br>
+                                <div class="row mb-3">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Password</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        <input type="password" name="password" class="form-control">
+                                    </div>
+                                </div><br>
+                                <div class="row">
+                                    <div class="col-sm-3"></div>
+                                    <div class="col-sm-9 text-secondary">
+                                        <button type="submit" class="btn btn-success px-4">Save Changes</button>
+                                    </div>
+                                </div>
                             </div>
-                            <h6>Phone</h6>
-                            <div class="main-profile-bio">
-                                {{$user->mobile ?: "null"}}
-                            </div>
-                            <!-- main-profile-bio -->
-                            <hr class="mg-y-30">
-                            <label class="main-content-label tx-13 mg-b-20">Address</label>
-                            <div class="form-group">
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table mg-b-0 text-md-nowrap">
-                                            @if(count($Address))
-                                            <thead>
+                        </div>
+                    </form>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-body"><br>
+                                    <h5 class="d-flex align-items-center mb-3">Addresss </h5>
+
+                                    <div class="row mb-3"><br>
+                                        <div class="col-sm-3">
+                                            <button type="button" class="btn btn-primary px-4" data-toggle="modal"
+                                                data-target="#myModal" id="open">Add address</button>
+                                        </div>
+
+                                    </div><br>
+                                    <table class="table table-striped">
+                                        <thead>
                                             <tr>
-                                                <th>Address</th>
-                                                <th>Action</th>
+                                                <th scope="col">#</th>
+                                                <th scope="col">address</th>
+                                                <th scope="col">action</th>
                                             </tr>
-                                            </thead>
-                                            <tbody>
-                                            <?php $i = 0; ?>
-                                            @foreach($Address as $address)
-                                                    <?php $i++; ?>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($addresss as $address)
                                                 <tr>
-                                                    <td>{{$address->area}}</td>
+                                                    <th scope="row">{{ $loop->iteration }}</th>
+                                                    <td>{{ $address->area }}</td>
                                                     <td>
-                                                        <a href="{{ url('/user/address',$address->id) }}"
-                                                           class="btn btn-sm btn-primary"> Edit</a>
-                                                        <form action="{{ url('/user/address/destroy', $address->id) }}"
-                                                              method="post" style="display: inline-block;">
+                                                        <a class="btn btn-info"
+                                                            href="{{ route('edit_address', $address->id) }}">
+                                                            Edit</i></a>
+                                                        <form action="{{ route('destroy_address', $address->id) }}"
+                                                            method="post" style="display: inline-block;">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-danger">
-                                                                Delete
+                                                            <button type="submit" class="btn btn-danger">
+                                                                Delete</i>
                                                             </button>
                                                         </form>
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                            </tbody>
-                                            @else
-                                            No Address Found
-                                            @endif
-                                        </table>
-                                    </div>
+                                        </tbody>
+                                    </table>
+                                    {{ $addresss->links() }}
                                 </div>
-
-                                {{--                                    <p>{{ $i . "-" .$address->address ?: null}} <a href="{{ url('address',$address->id) }}" class="btn btn-sm btn-primary"> Edit</a></p>--}}
                             </div>
-                            <!--skill bar-->
-                        </div><!-- main-profile-overview -->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-8">
-            <div class="card">
-                <div class="card-body">
-                    <div class="tabs-menu ">
-                        <!-- Tabs -->
-                        <ul class="nav nav-tabs profile navtab-custom panel-tabs">
-                            <li class="active">
-                                <a href="#home" data-toggle="tab" aria-expanded="true"> <span class="visible-xs"><i
-                                            class="las la-user-circle tx-16 mr-1"></i></span> <span class="hidden-xs">ABOUT ME</span>
-                                </a>
-                            </li>
-                            <li class="">
-                                <a href="#profile" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i
-                                            class="las la-images tx-15 mr-1"></i></span> <span
-                                        class="hidden-xs">GALLERY</span> </a>
-                            </li>
-                            <li class="">
-                                <a href="#settings" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i
-                                            class="las la-cog tx-16 mr-1"></i></span> <span class="hidden-xs">Add Address</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="tab-content border-left border-bottom border-right border-top-0 p-4">
-                        <div class="tab-pane active" id="home">
-                            <h4 class="tx-15 text-uppercase mb-3">BIOdata</h4>
-                            <p class="m-b-5">Hi I'm Petey Cruiser,has been the industry's standard dummy text ever since
-                                the 1500s, when an unknown printer took a galley of type. Donec pede justo, fringilla
-                                vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
-                                venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer
-                                tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.
-                                Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
-                            <div class="m-t-30">
-                                <h4 class="tx-15 text-uppercase mt-3">Experience</h4>
-                                <div class=" p-t-10">
-                                    <h5 class="text-primary m-b-5 tx-14">Lead designer / Developer</h5>
-                                    <p class="">websitename.com</p>
-                                    <p><b>2010-2015</b></p>
-                                    <p class="text-muted tx-13 m-b-0"></p>
-                                </div>
-                                <hr>
-                            </div>
+        <form method="post" action="{{ route('add_address') }}" id="form">
+            @csrf
+            <!-- Modal -->
+            <div class="modal" tabindex="-1" role="dialog" id="myModal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="alert alert-danger" style="display:none"></div>
+                        <div class="modal-header">
+
+                            <h5 class="modal-title">Add new address</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                        <div class="tab-pane" id="profile">
+                        <div class="modal-body">
                             <div class="row">
-                                <div class="col-sm-4">
-                                    <div class="border p-1 card thumb">
-                                        <a href="#" class="image-popup" title="Screenshot-2"> <img
-                                                src="../../assets/img/photos/7.jpg" class="thumb-img"
-                                                alt="work-thumbnail"> </a>
-                                        <h4 class="text-center tx-14 mt-3 mb-0">Gallary Image</h4>
-                                        <div class="ga-border"></div>
-                                        <p class="text-muted text-center"><small>Photography</small></p>
-                                    </div>
+                                <div class="form-group col-md-4">
+                                    <label for="Name">area:</label>
+                                    <input type="text" class="form-control" name="area" id="area">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="Club">block_no:</label>
+                                    <input type="text" class="form-control" name="block_no" id="block_no">
                                 </div>
                             </div>
-                        </div>
-                        <div class="tab-pane" id="settings">
-                            <form role="form" method="post" action="{{url('user/address/add')}}">
-                                @csrf
-                                <div class="form-group">
-                                    <label for="area">area</label>
-                                    <input type="text" name="area" id="FullName"
-                                           class="form-control">
-                                    <label for="FullName">block no</label>
-                                    <input type="text" name="block_no" id="FullName"
-                                           class="form-control">
-                                    <label for="FullName">building type</label>
-                                    <input type="text" name="building_type"  id="FullName"
-                                           class="form-control">
-                                    <label for="FullName">street no</label>
-                                    <input type="text" name="street_no"  id="FullName"
-                                           class="form-control">
-                                    <label for="FullName">house no</label>
-                                    <input type="text" name="house_no" id="FullName"
-                                           class="form-control">
-                                    <label for="FullName">building no</label>
-                                    <input type="text" name="building_no"  id="FullName"
-                                           class="form-control">
-                                    <label for="FullName">floor no</label>
-                                    <input type="text" name="floor_no"  id="FullName"
-                                           class="form-control">
-                                    <label for="FullName">flat no</label>
-                                    <input type="text" name="flat_no"  id="FullName"
-                                           class="form-control">
-                                    <label for="FullName">landmark</label>
-                                    <input type="text" name="landmark"  id="FullName"
-                                           class="form-control">
 
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label for="Country">street_no:</label>
+                                    <input type="text" class="form-control" name="street_no" id="street_no">
                                 </div>
-                                <button class="btn btn-primary waves-effect waves-light w-md" type="submit">Save
-                                </button>
-                            </form>
+                                <div class="form-group col-md-4">
+                                    <label for="Goal Score">building_type:</label>
+                                    <input type="text" class="form-control" name="building_type" id="building_type">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label for="Goal Score">house_no:</label>
+                                    <input type="text" class="form-control" name="house_no" id="house_no">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="Goal Score">building_no:</label>
+                                    <input type="text" class="form-control" name="building_no" id="building_no">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label for="Goal Score">floor_no:</label>
+                                    <input type="text" class="form-control" name="floor_no" id="floor_no">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="Goal Score">flat_no:</label>
+                                    <input type="text" class="form-control" name="flat_no" id="flat_no">
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="form-group col-md-4">
+                                    <label for="Goal Score">landmark:</label>
+                                    <input type="text" class="form-control" name="landmark" id="landmark">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button class="btn btn-success" id="ajaxSubmit">Save changes</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
-    <!-- row closed -->
-
 @endsection

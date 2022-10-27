@@ -25,6 +25,7 @@ class CreateUserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => bcrypt('password'),
             'mobile' => '05999999',
+            'add_by' => 'seeder',
 
         ]);
 //        $role = Role::create(['guard_name' => 'web','name' => 'user']);

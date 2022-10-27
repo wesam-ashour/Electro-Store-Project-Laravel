@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index()
     {
-        //
+        $transactions = Transaction::where('status','success')->paginate(10);
+        return view('admin.transactions.index',compact('transactions'));
     }
 
     /**

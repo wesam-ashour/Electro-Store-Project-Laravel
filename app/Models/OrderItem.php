@@ -31,4 +31,8 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Order::class);
     }
+    public function product()
+    {
+        return $this->hasOne(Product::class,'id');
+    }
 }

@@ -24,6 +24,9 @@ class Celebrity extends Authenticatable
         'username',
         'password',
         'mobile',
+        'add_by',
+        'status',
+
     ];
 
     /**

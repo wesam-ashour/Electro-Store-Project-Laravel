@@ -11,25 +11,28 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\StripeController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\OrderController;
 use App\Models\Product;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Route;
 
 /*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+ |--------------------------------------------------------------------------
+ | Web Routes
+ |--------------------------------------------------------------------------
+ |
+ | Here is where you can register web routes for your application. These
+ | routes are loaded by the RouteServiceProvider within a group which
+ | contains the "web" middleware group. Now create something great!
+ |
+ */
 
 Route::get('/', function () {
     $products = Product::with('category')->orderBy('id', 'ASC')->paginate(6);
-    return view('welcome',compact('products'));
+    return view('welcome', compact('products'));
 })->name('home.page');
 
 //home page without auth
@@ -65,29 +68,47 @@ Route::prefix('user')->middleware('auth')->group(function () {
     Route::post('favorite-add/{id}', [WishlistController::class, 'favoriteAdd'])->name('favorite.add');
     Route::delete('favorite-remove/{id}', [WishlistController::class, 'favoriteRemove'])->name('favorite.remove');
 
+    Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/details/{id}', [OrderController::class, 'show'])->name('orders.show');
+
 
     Route::get('profile', [UserController::class, 'profile'])->name('profile_user');
-    Route::get('profile/{user}', [UserController::class, 'edit_profile'])->name('edit_profile');
     Route::put('profile/update/{user}', [UserController::class, 'update_profile'])->name('update_profile');
+
+
     Route::post('address/add', [UserController::class, 'add_address'])->name('add_address');
     Route::get('address/{address}', [UserController::class, 'edit_address'])->name('edit_address');
-    Route::put('address/update/{address}', [UserController::class, 'update_address'])->name('update_address');
+    Route::put('address/update/{id}', [UserController::class, 'update_address'])->name('update_address');
     Route::delete('address/destroy/{address}', [UserController::class, 'destroy_address'])->name('destroy_address');
 });
 
 Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('home');
     Route::resource('users', UserController::class);
+
+    Route::resource('admins', AdminController::class);
+    Route::get('/subadmins/view', [AdminController::class, 'sub_admins'])->name('sub_admins');
+
+    Route::get('/celebrities/view', [CelebrityController::class, 'celebrities_view'])->name('celebrities_view');
+    Route::resource('celebrities', CelebrityController::class);
+
     Route::resource('roles', RoleController::class);
     Route::resource('ads', AdsController::class);
 
-    Route::get('profile', [UserController::class, 'profile'])->name('profile');
-    Route::get('profile/{user}', [UserController::class, 'edit_profile'])->name('edit_profile');
-    Route::put('profile/update/{user}', [UserController::class, 'update_profile'])->name('update_profile');
-    Route::post('address/add', [UserController::class, 'add_address'])->name('add_address');
-    Route::get('address/{address}', [UserController::class, 'edit_address'])->name('edit_address');
-    Route::put('address/update/{address}', [UserController::class, 'update_address'])->name('update_address');
-    Route::delete('address/destroy/{address}', [UserController::class, 'destroy_address'])->name('destroy_address');
+    Route::get('orders/user/{id}', [UserController::class, 'show_orders_user'])->name('show_orders_user');
+    Route::get('orders/user/show/{id}', [UserController::class, 'show_orders_details_user'])->name('show_orders_details_user');
+    Route::get('orders/user/edit/{id}', [UserController::class, 'edit_orders_user'])->name('edit_orders_user');
+    Route::get('orders/user/delete/{id}', [UserController::class, 'delete_orders_user'])->name('delete_orders_user');
+
+    Route::resource('transactions', TransactionController::class);
+
+    Route::get('profile', [UserController::class, 'profile'])->name('profile_admin');
+    // Route::get('profile/{user}', [UserController::class, 'edit_profile'])->name('edit_profile');
+    // Route::put('profile/update/{user}', [UserController::class, 'update_profile'])->name('update_profile');
+    // Route::post('address/add', [UserController::class, 'add_address'])->name('add_address');
+    // Route::get('address/{address}', [UserController::class, 'edit_address'])->name('edit_address');
+    // Route::put('address/update/{address}', [UserController::class, 'update_address'])->name('update_address');
+    // Route::delete('address/destroy/{address}', [UserController::class, 'destroy_address'])->name('destroy_address');
 });
 
 Route::prefix('celebrity')->middleware('auth:celebrity')->group(function () {
@@ -104,8 +125,8 @@ Route::prefix('celebrity')->middleware('auth:celebrity')->group(function () {
 });
 
 
-require __DIR__.'/celebrityauth.php';
+require __DIR__ . '/celebrityauth.php';
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
-require __DIR__.'/adminauth.php';
+require __DIR__ . '/adminauth.php';
