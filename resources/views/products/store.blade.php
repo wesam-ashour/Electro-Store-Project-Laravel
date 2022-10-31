@@ -13,8 +13,7 @@
                     <ul class="breadcrumb-tree">
                         <li><a href="#">Home</a></li>
                         <li><a href="#">All Categories</a></li>
-                        <li><a href="#">Accessories</a></li>
-                        <li class="active">Headphones (227,490 Results)</li>
+                        <li class="active"><a href="#">All Products</a></li>
                     </ul>
                 </div>
             </div>
@@ -40,130 +39,38 @@
                             <select name="category" id="category" class="form-control  nice-select  custom-select">
                                 <option value="0">--Select--</option>
                                 @foreach ($categories as $category)
-                                    <option value="{{$category['id']}}">{{$category->name}}</option>
+                                    <option value="{{ $category['id'] }}">{{ $category->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                     <!-- /aside Widget -->
 
-                    <!-- aside Widget -->
-                    <div class="aside">
-                        <h3 class="aside-title">Price</h3>
-                        <div class="price-filter">
-                            <div id="price-slider"></div>
-                            <div class="input-number price-min">
-                                <input id="price-min" type="number">
-                                <span class="qty-up">+</span>
-                                <span class="qty-down">-</span>
-                            </div>
-                            <span>-</span>
-                            <div class="input-number price-max">
-                                <input id="price-max" type="number">
-                                <span class="qty-up">+</span>
-                                <span class="qty-down">-</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /aside Widget -->
 
-                    <!-- aside Widget -->
-                    <div class="aside">
-                        <h3 class="aside-title">Brand</h3>
-                        <div class="checkbox-filter">
-                            <div class="input-checkbox">
-                                <input type="checkbox" id="brand-1">
-                                <label for="brand-1">
-                                    <span></span>
-                                    SAMSUNG
-                                    <small>(578)</small>
-                                </label>
-                            </div>
-                            <div class="input-checkbox">
-                                <input type="checkbox" id="brand-2">
-                                <label for="brand-2">
-                                    <span></span>
-                                    LG
-                                    <small>(125)</small>
-                                </label>
-                            </div>
-                            <div class="input-checkbox">
-                                <input type="checkbox" id="brand-3">
-                                <label for="brand-3">
-                                    <span></span>
-                                    SONY
-                                    <small>(755)</small>
-                                </label>
-                            </div>
-                            <div class="input-checkbox">
-                                <input type="checkbox" id="brand-4">
-                                <label for="brand-4">
-                                    <span></span>
-                                    SAMSUNG
-                                    <small>(578)</small>
-                                </label>
-                            </div>
-                            <div class="input-checkbox">
-                                <input type="checkbox" id="brand-5">
-                                <label for="brand-5">
-                                    <span></span>
-                                    LG
-                                    <small>(125)</small>
-                                </label>
-                            </div>
-                            <div class="input-checkbox">
-                                <input type="checkbox" id="brand-6">
-                                <label for="brand-6">
-                                    <span></span>
-                                    SONY
-                                    <small>(755)</small>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /aside Widget -->
+
+
 
                     <!-- aside Widget -->
                     <div class="aside">
                         <h3 class="aside-title">Top selling</h3>
-                        <div class="product-widget">
-                            <div class="product-img">
-                                <img src="./img/product01.png" alt="">
+                        @forelse ($topSellings as $topSelling)
+                            <div class="product-widget">
+                                <div class="product-img">
+                                    <img src="{{ asset('storage/' . $topSelling['cover']) }}" alt="">
+                                </div>
+                                <div class="product-body">
+                                    {{-- <p class="product-category">Category</p> --}}
+                                    <h3 class="product-name"><a
+                                            href="{{ route('product.show', $topSelling->id) }}">{{ $topSelling->title}}</a>
+                                    </h3>
+                                    <h4 class="product-price">${{ $topSelling->offer_price }}
+                                        <del class="product-old-price">${{ $topSelling->price }}</del>
+                                    </h4>
+                                </div>
                             </div>
-                            <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00
-                                    <del class="product-old-price">$990.00</del>
-                                </h4>
-                            </div>
-                        </div>
-
-                        <div class="product-widget">
-                            <div class="product-img">
-                                <img src="./img/product02.png" alt="">
-                            </div>
-                            <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00
-                                    <del class="product-old-price">$990.00</del>
-                                </h4>
-                            </div>
-                        </div>
-
-                        <div class="product-widget">
-                            <div class="product-img">
-                                <img src="./img/product03.png" alt="">
-                            </div>
-                            <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00
-                                    <del class="product-old-price">$990.00</del>
-                                </h4>
-                            </div>
-                        </div>
+                        @empty
+                            No products found
+                        @endforelse
                     </div>
                     <!-- /aside Widget -->
                 </div>
@@ -172,29 +79,7 @@
                 <!-- STORE -->
                 <div id="store" class="col-md-9">
                     <!-- store top filter -->
-                    <div class="store-filter clearfix">
-                        <div class="store-sort">
-                            <label>
-                                Sort By:
-                                <select class="input-select">
-                                    <option value="0">Popular</option>
-                                    <option value="1">Position</option>
-                                </select>
-                            </label>
-
-                            <label>
-                                Show:
-                                <select class="input-select">
-                                    <option value="0">20</option>
-                                    <option value="1">50</option>
-                                </select>
-                            </label>
-                        </div>
-                        <ul class="store-grid">
-                            <li class="active"><i class="fa fa-th"></i></li>
-                            <li><a href="#"><i class="fa fa-th-list"></i></a></li>
-                        </ul>
-                    </div>
+                    
                     <!-- /store top filter -->
 
                     <!-- store products -->
@@ -205,33 +90,36 @@
                                 <div class="col-md-4 col-xs-6">
                                     <div class="product">
                                         <div class="product-img">
-                                            <img src="{{asset('storage/'.$product['cover'])}}" alt="">
+                                            <img src="{{ asset('storage/' . $product['cover']) }}" alt="">
                                             <div class="product-label">
-                                                <span class="sale">-30%</span>
+                                                
                                                 <span class="new">NEW</span>
                                             </div>
                                         </div>
                                         <div class="product-body">
                                             <p class="product-category">
-                                                @foreach($product->category as $cats)
-                                                    {{$cats->name}}
+                                                @foreach ($product->category as $cats)
+                                                    {{ $cats->name }}
                                                 @endforeach
                                             </p>
                                             <h3 class="product-name"><a
-                                                    href="{{route('product.show',$product->id)}}">{{$product['title']}}</a>
+                                                    href="{{ route('product.show', $product->id) }}">{{ $product['title'] }}</a>
                                             </h3>
-                                            <h4 class="product-price">${{$product['offer_price']}}
-                                                <del class="product-old-price">${{$product['price']}}</del>
-                                            </h4>
-                                            <div class="product-rating">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
+                                            <h4 class="product-price">${{ $product['offer_price'] }}
+                                                <del class="product-old-price">${{ $product['price'] }}</del>
+                                            
+
+                                            @if (DB::table('markable_favorites')->where('markable_id',$product->id)->where('user_id',$user->id)->exists())
+                                            <div class="product-btns">
+                                                <button class="add-to-wishlist" disabled>
+                                                    <i class="fa fa-heart"></i>
+                                                    <span class="tooltipp">Addedd to wishlist</span>
+                                                </button>
                                             </div>
+                                            @else
+                                                
                                             <form action="{{ route('favorite.add', $product->id) }}" method="POST"
-                                                  enctype="multipart/form-data">
+                                                enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="product-btns">
                                                     <button class="add-to-wishlist">
@@ -240,6 +128,7 @@
                                                     </button>
                                                 </div>
                                             </form>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -256,7 +145,7 @@
                     <!-- store bottom filter -->
                     <div class="store-filter clearfix">
                         <ul>
-                            {{$products->links()}}
+                            {{ $products->links() }}
 
                         </ul>
                     </div>
@@ -271,4 +160,3 @@
     <!-- /SECTION -->
     <!-- /NEWSLETTER -->
 @endsection
-

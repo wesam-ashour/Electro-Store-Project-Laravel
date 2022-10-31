@@ -5,9 +5,8 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">transactions Sections</h4><span
-                    class="text-muted mt-1 tx-13 ml-2 mb-0">/
-                    Transactionslist</span>
+                <h4 class="content-title mb-0 my-auto">Orders Sections</h4><span class="text-muted mt-1 tx-13 ml-2 mb-0">/
+                    Orderlist</span>
             </div>
         </div>
     </div>
@@ -17,22 +16,16 @@
             <div class="card">
                 <div class="card-header pb-0">
                     <div class="d-flex justify-content-between">
-                        <h4 class="card-title mg-b-0">Transactions Table</h4>
+                        <h4 class="card-title mg-b-0">Orders Table</h4>
                         <i class="mdi mdi-dots-horizontal text-gray"></i>
                     </div>
-                    <p class="tx-12 tx-gray-500 mb-2">List of all transactions</p>
-                    <div class="row row-xs wd-xl-80p">
-                        <div class="pull-right">
-                            <a class="btn btn-primary-gradient btn-block" href="{{ route('admins.create') }}"> Create New
-                                Admin</a>
-                        </div>
-                    </div>
+                    <p class="tx-12 tx-gray-500 mb-2">List of all orders</p>
                 </div>
                 <div class="card-body">
                     <div style="display: inline-block;">
                         <form method="GET">
                             <div class="input-group mb-5">
-                                <form action="{{ route('admins.index') }}">
+                                <form action="{{ route('show_orders_all') }}">
                                     <input type="text" name="search" value="{{ request()->get('search') }}"
                                         class="form-control" placeholder="Search..." aria-label="Search"
                                         aria-describedby="button-addon2">&nbsp;&nbsp;
@@ -48,7 +41,7 @@
                                         <option {{ request()->input('filter') == 1 ? 'selected' : '' }} value="1">
                                             Alphabetical</option>
 
-
+    
 
                                         <option {{ request()->input('filter') == 2 ? 'selected' : '' }} value="2">
                                             Date of registration</option>
@@ -79,53 +72,71 @@
                         <table class="table card-table table-striped table-vcenter text-nowrap mb-0">
                             <thead>
                                 <tr>
-                                    <th class="wd-lg-20p"><span>User</span></th>
-                                    <th class="wd-lg-20p"><span>Order item id</span></th>
-                                    <th class="wd-lg-20p"><span>Order amount</span></th>
-                                    <th class="wd-lg-20p"><span>Total paid amount</span></th>
-                                    <th class="wd-lg-20p"><span>Payment method</span></th>
-                                    <th class="wd-lg-20p"><span>Status</span></th>
-                                    <th class="wd-lg-20p"><span>Created at</span></th>
+                                    <th class="wd-lg-20p"><span>order number</span></th>
+                                    <th class="wd-lg-20p"><span>created at</span></th>
+                                    <th class="wd-lg-20p"><span>user name</span></th>
+                                    <th class="wd-lg-20p"><span>email</span></th>
+                                    <th class="wd-lg-20p"><span>mobile</span></th>
+                                    <th class="wd-lg-20p"><span>status</span></th>
+                                    <th class="wd-lg-20p"><span>total</span></th>
+                                    <th class="wd-lg-20p"><span>payment method</span></th>
+                                    <th class="wd-lg-20p"><span>address</span></th>
 
+                                    <th class="wd-lg-20p">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($transactions as $key => $transaction)
+                                @foreach ($orders as $key => $order)
                                     <tr>
-                                        <td><a
-                                                href="{{ route('users.show', $transaction->user_id) }}">{{ \App\Models\User::find($transaction->user_id)->first_name . ' ' . \App\Models\User::find($transaction->user_id)->last_name }}</a>
+                                        <td>
+                                            <a>{{ $order->order_number }}</a>
                                         </td>
                                         <td>
-                                            <a
-                                                href="">{{ \App\Models\Order::find($transaction->order_id)->order_number }}</a>
+                                            <a>{{ $order->created_at }}</a>
+                                        </td>
+                                        <td>{{ \App\Models\User::find($order->user_id)->first_name . ' ' . \App\Models\User::find($order->user_id)->last_name }}</td>
+                                        <td>
+                                            <a>{{ \App\Models\User::find($order->user_id)->email }}</a>
                                         </td>
                                         <td>
-                                            <a>{{ \App\Models\Order::find($transaction->order_id)->item_count }}</a>
+                                            <a>{{ \App\Models\User::find($order->user_id)->mobile }}</a>
+                                        </td>
+                                        
+                                        <td>
+                                            <a><label class="badge badge-success">{{ $order->status }}</label></a>
                                         </td>
                                         <td>
-                                            <a>{{ \App\Models\Order::find($transaction->order_id)->grand_total }}</a>
+                                            <a>{{ $order->grand_total }}</a>
                                         </td>
                                         <td>
-                                            <a>{{ $transaction->payment_method }}</a>
+                                            <a>{{ $order->payment_method }}</a>
                                         </td>
-                                        <td class="text-center">
-                                            @if ($transaction->status == 'success')
+                                        <td>
+                                            <a href="{{route('address_for_order',$order->address_id)}}">Click</a>
+                                        </td>
+                                        {{-- <td class="text-center">
+                                            @if ($admin->status == '1')
                                                 <span class="label text-success d-flex">
-                                                    <div class="dot-label bg-success mr-1"></div> success
+                                                    <div class="dot-label bg-success mr-1"></div> Active
                                                 @else
                                                     <span class="label text-muted d-flex">
-                                                        <div class="dot-label bg-gray-300 mr-1"></div>failed
+                                                        <div class="dot-label bg-gray-300 mr-1"></div>Inactive
                                             @endif
-                                        </td>
+                                        </td> --}}
                                         <td>
-                                            <a>{{ $transaction->created_at }}</a>
+                                            <a href="{{ route('show_orders_all_details', $order->id) }}" class="btn btn-sm btn-primary">
+                                                <i class="las la-search"></i>
+                                            </a>
+                                            <a href="{{ route('edit_orders_status', $order->id) }}" class="btn btn-sm btn-info">
+                                                <i class="las la-pen"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
 
                         </table>
-                        {{ $transactions->links() }}
+                        {{ $orders->links() }}
                     </div>
                 </div>
             </div>

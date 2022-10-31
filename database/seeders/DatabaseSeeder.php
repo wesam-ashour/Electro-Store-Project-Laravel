@@ -26,5 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CreateCelebritySeeder::class);
         $this->call(CategorySeeder::class);
         $this->call(CountriesTableSeeder::class);
+        $this->call(AdminSocialSeeder::class);
+
     }
 }

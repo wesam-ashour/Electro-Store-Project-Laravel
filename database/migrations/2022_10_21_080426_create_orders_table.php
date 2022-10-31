@@ -17,25 +17,14 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('order_number')->unique();
             $table->foreignId('user_id')->constrained('users');
-
-
-            $table->enum('status', ['pending', 'processing', 'completed', 'decline'])->default('pending');
-            $table->decimal('grand_total', 20, 6);
+            $table->string('status')->default('pending');
+            $table->decimal('grand_total');
             $table->unsignedInteger('item_count');
-
             $table->boolean('payment_status')->default(1);
             $table->string('payment_method')->nullable();
-
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->text('address');
-            $table->string('city');
-            $table->string('country');
-            $table->string('post_code');
-            $table->string('phone_number');
+            $table->foreignId('address_id')->constrained('addresses');
             $table->text('notes')->nullable();
             $table->foreignId('coupon_id')->nullable()->constrained('coupons');
-
             $table->timestamps();
         });
     }

@@ -15,6 +15,11 @@ return new class extends Migration
     {
         Schema::create('lookups', function (Blueprint $table) {
             $table->id();
+            $table->string('facebook_url');
+            $table->string('instagram_url');
+            $table->string('twitter_url');
+            $table->string('snapchat_url');
+            $table->bigInteger('whatsApp_number');   
             $table->timestamps();
         });
     }

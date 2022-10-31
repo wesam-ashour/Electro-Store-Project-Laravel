@@ -22,7 +22,7 @@ class OrderItem extends Model
     /**
      * @var array
      */
-    protected $fillable = ['order_id','product_id', 'quantity', 'price','notes'];
+    protected $fillable = ['order_id','product_id', 'quantity', 'price','notes','color_id','size_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

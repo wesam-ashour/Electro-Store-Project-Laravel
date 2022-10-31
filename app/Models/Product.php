@@ -49,6 +49,10 @@ class Product extends Model
     protected static $marks = [
         Favorite::class,
     ];
+    public function order()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 
 
 

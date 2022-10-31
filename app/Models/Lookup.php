@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Lookup extends Model
 {
     use HasFactory;
+
+    protected $table = 'lookups';
+
+    protected $fillable = [
+        'facebook_url', 'instagram_url', 'twitter_url', 'snapchat_url', 'whatsApp_number'
+    ];
 }

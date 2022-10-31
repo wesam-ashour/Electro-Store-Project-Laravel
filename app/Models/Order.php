@@ -13,8 +13,11 @@ class Order extends Model
 
     protected $fillable = [
         'order_number', 'user_id', 'status', 'grand_total', 'item_count', 'payment_status', 'payment_method',
-        'first_name', 'last_name', 'address', 'city', 'country', 'post_code', 'phone_number', 'notes','coupon_id'
+        'address_id', 'notes', 'coupon_id'
     ];
+
+    public const STATUS = ['pending', 'canceled', 'being bagged', 'on the way', 'delivered'];
+
 
     public function user()
     {
@@ -25,4 +28,5 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+    
 }

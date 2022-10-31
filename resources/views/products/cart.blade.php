@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-    <meta name="_token" content="{{ csrf_token() }}"/>
+    <meta name="_token" content="{{ csrf_token() }}" />
     <br>
     <style>
         .shopping-cart {
@@ -136,7 +136,6 @@
                 text-align: center;
             }
         }
-
     </style>
     <main class="page">
         <section class="shopping-cart dark">
@@ -149,172 +148,176 @@
                         <p class="text-green-800">{{ $message }}</p>
                     </div>
                 @endif
-            
+
                 @php $total = 0 @endphp
                 <div class="content">
-                        <div class="row">
-                            <div class="col-md-12 col-lg-8">
-                                <div class="items">
-                                    @forelse($cart as $id => $details)
-                                        <div class="product">
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <img class="img-fluid mx-auto d-block image"
-                                                         style="height: 180px;width: 180px"
-                                                         src="{{asset('storage/'. \App\Models\Product::find($details['id'])->cover)}}">
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <div class="info">
-                                                        <div class="row">
-                                                            <div class="col-md-5 product-name">
-                                                                <div class="product-name">
-                                                                    <a href="#">{{ \App\Models\Product::find($details['id'])->title}}</a>
-                                                                    <div class="product-info">
-                                                                        <div><span class="value"><a style="color: red"
-                                                                                                    href="{{route('checkout.details',$details['id'])}}">Details</a></span>
-                                                                        </div>
+                    <div class="row">
+                        <div class="col-md-12 col-lg-8">
+                            <div class="items">
+                                @forelse($cart as $id => $details)
+                                    <div class="product">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <img class="img-fluid mx-auto d-block image"
+                                                    style="height: 180px;width: 180px"
+                                                    src="{{ asset('storage/' . \App\Models\Product::find($details['id'])->cover) }}">
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="info">
+                                                    <div class="row">
+                                                        <div class="col-md-5 product-name">
+                                                            <div class="product-name">
+                                                                <a
+                                                                    href="#">{{ \App\Models\Product::find($details['id'])->title }}</a>
+                                                                <div class="product-info">
+                                                                    <div><span class="value"><a style="color: red"
+                                                                                href="{{ route('checkout.details', $details['id']) }}">Details</a></span>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <form action="" method="POST">
-                                                                @csrf
-                                                                <div class="col-md-4 quantity">
-                                                                    <label for="quantity">Quantity:</label>
-                                                                    {{--                                                            <input type="hidden" name="id" value="{{ $item->id}}" >--}}
-                                                                        <?php $sum = 0?>
-                                                                    @foreach($details['color_items'] as $key=> $c)
-                                                                            <?php $sum += $c['quantity']?>
-                                                                    @endforeach
-                                                                    <input disabled type="number" value="{{ $sum }}"
-                                                                           class="form-control">
-
-                                                                </div>
-                                                            </form>
-
-                                                            <div class="col-md-3">
-                                                                <span>Price: ${{ \App\Models\Product::find($details['id'])->price }}</span>
-                                                            </div>
-                                                            <br>
-                                                            <div class="col-md-3">
-                                                                <span>Subtotal: ${{ \App\Models\Product::find($details['id'])->price * $sum }}</span>
-                                                            </div>
-
                                                         </div>
+                                                        <form action="" method="POST">
+                                                            @csrf
+                                                            <div class="col-md-4 quantity">
+                                                                <label for="quantity">Quantity:</label>
+                                                                <?php $sum = 0; ?>
+                                                                @foreach ($details['color_items'] as $key => $c)
+                                                                    <?php $sum += $c['quantity']; ?>
+                                                                @endforeach
+                                                                <input disabled type="number" value="{{ $sum }}"
+                                                                    class="form-control">
+
+                                                            </div>
+                                                        </form>
+
+                                                        <div class="col-md-3">
+                                                            <span>Price:
+                                                                ${{ \App\Models\Product::find($details['id'])->offer_price }}</span>
+                                                        </div>
+                                                        <br>
+                                                        <div class="col-md-3">
+                                                            <span>Subtotal:
+                                                                ${{ \App\Models\Product::find($details['id'])->offer_price * $sum }}</span>
+                                                        </div>
+
                                                     </div>
                                                 </div>
-                                                <form action="{{route('remove.from.cart')}}">
-                                                    <input type="hidden" id="myid" data-item-id="{{ $id }}"
-                                                           value="{{ $id}}" name="id">
-                                                    <button class="px-4 py-2 text-white bg-red-600 remove-from-cart">x
-                                                    </button>
-                                                </form>
                                             </div>
+                                            <form action="{{ route('remove.from.cart') }}">
+                                                <input type="hidden" id="myid" data-item-id="{{ $id }}"
+                                                    value="{{ $id }}" name="id">
+                                                <button class="px-4 py-2 text-white bg-red-600 remove-from-cart">x
+                                                </button>
+                                            </form>
                                         </div>
-                                        @php $total += \App\Models\Product::find($details['id'])->price * $sum @endphp
-                                    @empty
-                                        No products found in cart!
-                                    @endforelse
-                                </div>
-                            </div>
-                            <div class="col-md-12 col-lg-4">
-                                <div class="summary">
-                                    <h3>Summary</h3>
-                                    <div class="summary-item"><span class="text">Subtotal</span><span
-                                            class="price">${{$total}}</span></div>
-                                            @if (count($remains))
-                                            <div class="summary-item show_coupon_code"><span class="text">Coupon code&nbsp; <a
-                                                style="color: red;size: 1px;" href="{{route('removeCouponCode')}}">Remove</a>
-                                            </span><span class="price" id="code">{{$remains['code']}}</span></div>
-                                            <div class="summary-item show_coupon_code"><span
-                                                class="text">Discount</span><span class="price" id="value">%{{$remains['value']}}</span></div>
-                                    
-                                            @endif
-                                            <div class="summary-item hide show_coupon_code"><span class="text">Coupon code&nbsp; <a
-                                                style="color: red;size: 1px;" href="{{route('removeCouponCode')}}">Remove</a>
-                                            </span><span class="price" id="code"></span>
                                     </div>
-                                    <div class="summary-item hide show_coupon_code"><span
-                                        class="text">Discount</span><span class="price" id="value"></span></div>
-    
-                                    {{-- <div class="summary-item hide show_coupon_code"><span
-                                            class="text">Discount</span><span class="price" id="value"></span></div> --}}
-                                    <div class="summary-item"><span class="text">Shipping</span><span
-                                            class="price">$0</span></div>
-                                            @if (count($remains))
-                                    <div class="summary-item"><span class="text">Total</span><span class="price" id="total_price">${{$remains['remain']}}</span></div>
-                                        @else
-                                            <div class="summary-item"><span class="text">Total</span><span class="price" id="total_price">${{$total}}</span></div>
-                                        @endif
-                                    
+                                    @php $total += \App\Models\Product::find($details['id'])->offer_price * $sum @endphp
+                                @empty
+                                    No products found in cart!
+                                @endforelse
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-4">
+                            <div class="summary">
+                                <h3>Summary</h3>
+                                <div class="summary-item"><span class="text">Subtotal</span><span
+                                        class="price">${{ $total }}</span></div>
+                                @if (count($remains))
+                                    <div class="summary-item show_coupon_code"><span class="text">Coupon code&nbsp; <a
+                                                style="color: red;size: 1px;"
+                                                href="{{ route('removeCouponCode') }}">Remove</a>
+                                        </span><span class="price" id="code">{{ $remains['code'] }}</span></div>
+                                    <div class="summary-item show_coupon_code"><span class="text">Discount</span><span
+                                            class="price" id="value">%{{ $remains['value'] }}</span></div>
+                                @endif
+                                <div class="summary-item hide show_coupon_code"><span class="text">Coupon code&nbsp; <a
+                                            style="color: red;size: 1px;" href="{{ route('removeCouponCode') }}">Remove</a>
+                                    </span><span class="price" id="code"></span>
+                                </div>
+                                <div class="summary-item hide show_coupon_code"><span class="text">Discount</span><span
+                                        class="price" id="value"></span></div>
 
-                                    <form action="{{route('checkout.index')}}" method="post">
-                                        @csrf
-                                        <input type="hidden" name="total" value="{{$total}}">
+                                {{-- <div class="summary-item hide show_coupon_code"><span
+                                            class="text">Discount</span><span class="price" id="value"></span></div> --}}
+                                <div class="summary-item"><span class="text">Shipping</span><span class="price">$0</span>
+                                </div>
+                                @if (count($remains))
+                                    <div class="summary-item"><span class="text">Total</span><span class="price"
+                                            id="total_price">${{ $remains['remain'] }}</span></div>
+                                @else
+                                    <div class="summary-item"><span class="text">Total</span><span class="price"
+                                            id="total_price">${{ $total }}</span></div>
+                                @endif
+
+
+                                <form action="{{ route('checkout.index') }}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="total" value="{{ $total }}">
                                     <button class="btn btn-primary btn-lg btn-block">Checkout</button>
 
 
                                     <div>
-                                        <a href="{{route('clearCart')}}" class="px-6 py-2 text-red-800 bg-red-300">Remove
+                                        <a href="{{ route('clearCart') }}" class="px-6 py-2 text-red-800 bg-red-300">Remove
                                             All Cart</a>
                                     </div>
                                     <br>
                                     @if (count($cart))
-                                    <div class="column">
-                                        <form class="coupon-form" method="post">
-                                            @csrf
-                                            <input class="form-control" type="text" name="coupon_code" id="coupon_code"
-                                                   placeholder="Coupon code">
-                                            <button class="btn btn-outline-primary" type="button"
+                                        <div class="column">
+                                            <form class="coupon-form" method="post">
+                                                @csrf
+                                                <input class="form-control" type="text" name="coupon_code"
+                                                    id="coupon_code" placeholder="Coupon code">
+                                                <button class="btn btn-outline-primary" type="button"
                                                     onclick="applyCouponCode()">Apply Coupon
-                                            </button>
-                                            <div style="color: red" id="coupon_code_msg"></div>
-                                        </form>
-                                    </div>
+                                                </button>
+                                                <div style="color: red" id="coupon_code_msg"></div>
+                                            </form>
+                                        </div>
                                     @endif
-                                    </form>
-                                </div>
+                                </form>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 @endsection
 
-@if(count(session()->get('cart', []))>0)
-<script type="text/javascript">
-    function applyCouponCode(){
-        var coupon_code = jQuery('#coupon_code').val();
-        if(coupon_code!== ''){
-            jQuery.ajax({
-                headers: {'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')},
-                type: 'post',
-                url: '{{route('applyCouponCode')}}',
-                data: {
-                    coupon_code: coupon_code,
-                    total: '{{$total}}'
-                },
-                success:function (result){
-                    var respons = result;
-                    var totals = respons.remain;
-                    if(respons.status === 'success'){
-                        jQuery('.show_coupon_code').removeClass('hide');
-                        jQuery('#coupon_code_str').html(coupon_code);
-                        jQuery('#code').html(respons.code);
-                        jQuery('#value').html('%'+respons.value);
-                        jQuery('#total_price').html('$'+respons.remain);
-                        jQuery('#coupon_code_msg').html(respons.msg);
-                       
-                    }else {
-                        jQuery('#coupon_code_msg').html(respons.msg);
-                    }
-                },
-            });
-        }else{
-            jQuery('#coupon_code_msg').html('Please inter coupon code');
+@if (count(session()->get('cart', [])) > 0)
+    <script type="text/javascript">
+        function applyCouponCode() {
+            var coupon_code = jQuery('#coupon_code').val();
+            if (coupon_code !== '') {
+                jQuery.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    },
+                    type: 'post',
+                    url: '{{ route('applyCouponCode') }}',
+                    data: {
+                        coupon_code: coupon_code,
+                        total: '{{ $total }}'
+                    },
+                    success: function(result) {
+                        var respons = result;
+                        var totals = respons.remain;
+                        if (respons.status === 'success') {
+                            jQuery('.show_coupon_code').removeClass('hide');
+                            jQuery('#coupon_code_str').html(coupon_code);
+                            jQuery('#code').html(respons.code);
+                            jQuery('#value').html('%' + respons.value);
+                            jQuery('#total_price').html('$' + respons.remain);
+                            jQuery('#coupon_code_msg').html(respons.msg);
+
+                        } else {
+                            jQuery('#coupon_code_msg').html(respons.msg);
+                        }
+                    },
+                });
+            } else {
+                jQuery('#coupon_code_msg').html('Please inter coupon code');
+            }
         }
-    }
-
-</script>
-
+    </script>
 @endif

@@ -5,6 +5,7 @@ use App\Http\Controllers\AdsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CelebrityController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\ProductController;
@@ -15,6 +16,9 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\LookupController;
+
+use App\Models\Lookup;
 use App\Models\Product;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Route;
@@ -31,7 +35,7 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/', function () {
-    $products = Product::with('category')->orderBy('id', 'ASC')->paginate(6);
+    $products = Product::with('category')->orderBy('id', 'DESC')->paginate(6);  
     return view('welcome', compact('products'));
 })->name('home.page');
 
@@ -44,18 +48,23 @@ Route::get('/products/filter/', [ProductController::class, 'view'])->name('filte
 //cart
 Route::get('cart', [ProductController::class, 'cart'])->name('cart');
 Route::post('add-to-cart/{id}', [ProductController::class, 'addToCart'])->name('add.to.cart');
-Route::patch('update-cart', [ProductController::class, 'updateCart'])->name('update.cart');
+
+Route::get('/checkout/details/{id}', [ProductController::class, 'checkoutDetails'])->name('checkout.details');
+Route::put('update-cart/{id}', [ProductController::class, 'updateCart'])->name('update.cart');
+Route::delete('clearCartItems/{id}', [ProductController::class, 'removeCartItems'])->name('clearCartItems');
+
 Route::delete('remove-from-cart', [ProductController::class, 'remove'])->name('remove.from.cart');
 Route::get('clearCart', [ProductController::class, 'clearCart'])->name('clearCart');
-Route::get('clearCartItems', [ProductController::class, 'removeCartItems'])->name('clearCartItems');
 
 Route::post('applyCouponCode', [ProductController::class, 'applyCouponCode'])->name('applyCouponCode');
 Route::get('removeCouponCode', [ProductController::class, 'removeCouponCode'])->name('removeCouponCode');
 
+Route::get('contact/view/', [ContactController::class, 'send_submisions'])->name('send_submisions');
+Route::post('contact/send/', [ContactController::class, 'store_submisions'])->name('store_submisions');
+
 
 //checkout
 Route::post('/checkout', [ProductController::class, 'getCheckout'])->name('checkout.index');
-Route::get('/checkout/details/{id}', [ProductController::class, 'checkoutDetails'])->name('checkout.details');
 Route::post('stripe', [ProductController::class, 'placeOrder'])->name('stripe.post');
 
 
@@ -101,6 +110,16 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::get('orders/user/delete/{id}', [UserController::class, 'delete_orders_user'])->name('delete_orders_user');
 
     Route::resource('transactions', TransactionController::class);
+    Route::get('orders/view/', [OrderController::class, 'show_orders_all'])->name('show_orders_all');
+    Route::get('orders/view/edit/{id}', [OrderController::class, 'edit_orders_status'])->name('edit_orders_status');
+    Route::put('orders/view/edit/update/{order}', [OrderController::class, 'update_orders_status'])->name('update_orders_status');
+    Route::get('orders/view/details/{id}', [OrderController::class, 'show_orders_all_details'])->name('show_orders_all_details');
+    Route::get('orders/view/details/address/{id}', [OrderController::class, 'address_for_order'])->name('address_for_order');
+
+    Route::resource('lookups', LookupController::class);
+
+    Route::resource('contact', ContactController::class);
+    
 
     Route::get('profile', [UserController::class, 'profile'])->name('profile_admin');
     // Route::get('profile/{user}', [UserController::class, 'edit_profile'])->name('edit_profile');
@@ -121,10 +140,13 @@ Route::prefix('celebrity')->middleware('auth:celebrity')->group(function () {
 
     Route::get('GetSubCatAgainstMainCatEdit/{id}', [ProductController::class, 'GetSubCatAgainstMainCatEdit']);
     Route::get('GetSubCatAgainstMainCatEdit/{id}', [ProductController::class, 'GetSubCatAgainstMainCatEdit']);
-
+    
 });
 
 
+// Route::fallback(function () {
+//     return redirect()->back()->with('error', 'There is no page like this!');
+// });
 require __DIR__ . '/celebrityauth.php';
 
 require __DIR__ . '/auth.php';

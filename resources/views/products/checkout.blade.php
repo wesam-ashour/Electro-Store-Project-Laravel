@@ -32,8 +32,8 @@
         <div class="container">
             <!-- row -->
             <div class="row">
-                <form role="form" action="{{ route('stripe.post') }}" method="post"
-                    data-cc-on-file="false" data-stripe-publishable-key="{{ env('STRIPE_KEY') }}" id="payment-form">
+                <form role="form" action="{{ route('stripe.post') }}" method="post" data-cc-on-file="false"
+                    data-stripe-publishable-key="{{ env('STRIPE_KEY') }}" id="payment-form">
                     @csrf
                     <div class="col-md-7">
                         <!-- Billing Details -->
@@ -44,48 +44,31 @@
                             <div class="form-group">
                                 <label>First name</label>
                                 <label></label>
-                                <input class="input" type="text" value="{{ auth()->user()->first_name }}"
-                                    name="first_name" placeholder="First Name">
+                                <input class="input" type="text" value="{{ auth()->user()->first_name }}" disabled
+                                    placeholder="First Name">
                             </div>
                             <div class="form-group">
                                 <label>Last name</label>
-                                <input class="input" type="text" value="{{ auth()->user()->last_name }}"
-                                    name="last_name" placeholder="Last Name">
+                                <input class="input" type="text" value="{{ auth()->user()->last_name }}" disabled
+                                    placeholder="Last Name">
                             </div>
                             <div class="form-group">
                                 <label>Email</label>
-                                <input class="input" type="email" value="{{ auth()->user()->email }}" name="email"
+                                <input class="input" type="email" value="{{ auth()->user()->email }}" disabled
                                     placeholder="Email">
                             </div>
                             <div class="form-group">
                                 <label>Address</label>
-                                <input class="input" type="text" name="address" placeholder="Address">
-                            </div>
-                            <div class="form-group">
-                                <label>City</label>
-                                <input class="input" type="text" name="city" placeholder="City">
-                            </div>
-                            <div class="form-group">
-                                <label>Country</label>
-                                <input class="input" type="text" name="country" placeholder="Country">
-                            </div>
-                            <div class="form-group">
-                                <label>Post Code</label>
-                                <input class="input" type="text" name="post_code" placeholder="Post Code">
-                            </div>
-                            <div class="form-group">
-                                <label>Mobile</label>
-                                <input class="input" type="tel" value="{{ auth()->user()->mobile }}"
-                                    name="phone_number" placeholder="Telephone">
+                                <select name="address" class="form-control">
+                                    @forelse ($addresss as $address)
+                                        <option value="{{ $address->id }}">{{$address->street_no}}
+                                        </option>
+                                    @empty
+                                        No address found
+                                    @endforelse
+                                </select>
                             </div>
                         </div>
-                        <!-- /Billing Details -->
-
-                        <!-- Shiping Details -->
-
-                        <!-- /Shiping Details -->
-
-                        <!-- Order notes -->
                         <div class="order-notes">
                             <label>Notes</label>
                             <textarea class="input" name="notes" placeholder="Order Notes"></textarea>
@@ -115,9 +98,9 @@
                                             @endforeach {{ $sum }}x
                                             {{ \App\Models\Product::find($item['id'])->title }}
                                         </div>
-                                        <div>${{ \App\Models\Product::find($item['id'])->price * $sum }}</div>
+                                        <div>${{ \App\Models\Product::find($item['id'])->offer_price * $sum }}</div>
                                     </div>
-                                    @php $total += \App\Models\Product::find($item['id'])->price * $sum @endphp
+                                    @php $total += \App\Models\Product::find($item['id'])->offer_price * $sum @endphp
                                 @endforeach
                             </div>
                             <div class="order-col">
@@ -136,44 +119,45 @@
                         <div class="payment-method">
 
                             <div class="input-radio">
-								<input type="radio" name="payment" id="payment-1">
-								<label for="payment-1">
-									<span></span>
-									Credit Card
-								</label>
-								<div class="caption">
+                                <input type="radio" name="payment" id="payment-1">
+                                <label for="payment-1">
+                                    <span></span>
+                                    Credit Card
+                                </label>
+                                <div class="caption">
                                     <form action="/charge" method="post" id="payment-form">
 
                                         <div class="form-row">
-                                      
-                                          <div id="card-element">
-                                      
-                                            <!-- a Stripe Element will be inserted here. -->
-                                      
-                                          </div>
-                                      
-                                          <!-- Used to display form errors -->
-                                      
-                                          <div id="card-errors"></div>
-                                      
+
+                                            <div id="card-element">
+
+                                                <!-- a Stripe Element will be inserted here. -->
+
+                                            </div>
+
+                                            <!-- Used to display form errors -->
+
+                                            <div id="card-errors"></div>
+
                                         </div>
-                                      
+
                                         {{-- <input type="submit" class="submit" value="Submit Payment"> --}}
-                                      
-                                      </form>
+
+                                    </form>
                                 </div>
-							</div>
-							<div class="input-radio">
-								<input type="radio" name="payment" value="CODE" id="payment-2">
-								<label for="payment-2">
-									<span></span>
-									Cash On Delevery
-								</label>
-								<div class="caption">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-								</div>
-							</div>
-							
+                            </div>
+                            <div class="input-radio">
+                                <input type="radio" name="payment" value="CODE" id="payment-2">
+                                <label for="payment-2">
+                                    <span></span>
+                                    Cash On Delevery
+                                </label>
+                                <div class="caption">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                        incididunt ut labore et dolore magna aliqua.</p>
+                                </div>
+                            </div>
+
 
                             <button type="submit" class="primary-btn order-submit">Place order</a>
                         </div>

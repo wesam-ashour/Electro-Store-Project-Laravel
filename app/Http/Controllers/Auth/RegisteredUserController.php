@@ -48,7 +48,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'mobile' => $request->mobile,
-            'status' => 'Active',
+            'status' => '1',
             'add_by' => 'App',
         ]);
 

@@ -23,7 +23,7 @@
 
 </head>
 
-<body class="main-body app sidebar-mini dark-theme">
+<body class="main-body app sidebar-mini light-theme">
 
 <!-- Loader -->
 <div id="global-loader">

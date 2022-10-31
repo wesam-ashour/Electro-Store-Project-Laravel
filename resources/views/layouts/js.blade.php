@@ -1,3 +1,4 @@
+
 <!-- jQuery Plugins -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
@@ -32,63 +33,63 @@
     });
 </script>
 <script type="text/javascript">
-    $(".update-cart").change(function(e) {
-        e.preventDefault();
-        var myspan = document.getElementById('myspan');
-        var myid = document.getElementById('myid');
-        var inputValue = $('#qty').val();
-        var ele = $(this);
-        $.ajax({
-            url: '{{ route('update.cart') }}',
-            method: "patch",
-            data: {
-                _token: '{{ csrf_token() }}',
-                idItem: myid.getAttribute('data-item-id'),
-                idCart: myspan.getAttribute('data-cart-id'),
-                quantity: inputValue,
-            },
-            success: function(response) {
-                window.location.reload();
-            }
-        });
-    });
-    $(".remove-from-cart").click(function(e) {
+    // $(".update-cart").change(function(e) {
+    //     e.preventDefault();
+    //     var myspan = document.getElementById('myspan');
+    //     var myid = document.getElementById('myid');
+    //     var inputValue = $('#qty').val();
+    //     var ele = $(this);
+    //     $.ajax({
+    //         url: ,
+    //         method: "patch",
+    //         data: {
+    //             _token: '{{ csrf_token() }}',
+    //             idItem: myid.getAttribute('data-item-id'),
+    //             idCart: myspan.getAttribute('data-cart-id'),
+    //             quantity: inputValue,
+    //         },
+    //         success: function(response) {
+    //             window.location.reload();
+    //         }
+    //     });
+    // });
+    // $(".remove-from-cart").click(function(e) {
 
-        e.preventDefault();
-
-
-
-        var ele = $(this);
-        var myid = document.getElementById('myid');
+    //     e.preventDefault();
 
 
-        if (confirm("Are you sure want to remove?")) {
 
-            $.ajax({
+    //     var ele = $(this);
+    //     var myid = document.getElementById('myid');
 
-                url: '{{ route('remove.from.cart') }}',
 
-                method: "DELETE",
+    //     if (confirm("Are you sure want to remove?")) {
 
-                data: {
+    //         $.ajax({
 
-                    _token: '{{ csrf_token() }}',
+    //             url: '{{ route('remove.from.cart') }}',
 
-                    id: myid.getAttribute('data-item-id'),
+    //             method: "DELETE",
 
-                },
+    //             data: {
 
-                success: function(response) {
+    //                 _token: '{{ csrf_token() }}',
 
-                    window.location.reload();
+    //                 id: myid.getAttribute('data-item-id'),
 
-                }
+    //             },
 
-            });
+    //             success: function(response) {
 
-        }
+    //                 window.location.reload();
 
-    });
+    //             }
+
+    //         });
+
+    //     }
+
+    // });
 </script>
 
 <script type="text/javascript" src="https://js.stripe.com/v3/"></script>

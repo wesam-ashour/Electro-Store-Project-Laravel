@@ -16,19 +16,22 @@ class CategorySeeder extends Seeder
     public function run()
     {
         Category::create([
-            'name' => 'Category1',
+            'name' => 'Women’s Apparel',
         ]);
         Category::create([
-            'name' => 'Category2',
+            'name' => 'Gifts',
         ]);
         Category::create([
-            'name' => 'Category3',
+            'name' => 'Jewerlly & Accessories',
         ]);
         Category::create([
-            'name' => 'Category4',
+            'name' => 'Shoes',
         ]);
         Category::create([
-            'name' => 'Category5',
+            'name' => 'Handbags',
+        ]);
+        Category::create([
+            'name' => 'Sale',
         ]);
 //        Category::create([
 //            'name' => 'subCategory1',

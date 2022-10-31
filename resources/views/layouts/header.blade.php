@@ -17,7 +17,7 @@
                             onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();"><i
                                 class="fa fa-sign-out"></i> logout</a></li>
-                   
+
 
                     <li><a href="{{ route('profile_user') }}"><i class="fa fa-user-o"></i>
                             {{ $user->first_name . ' ' . $user->last_name }}</a></li>
@@ -144,7 +144,8 @@
                                 </div>
                                 <div class="cart-btns">
                                     <a href="{{ route('cart') }}">View Cart</a>
-                                    <a href="#">Checkout <i class="fa fa-arrow-circle-right"></i></a>
+                                    <a href="{{ route('checkout.index') }}">Checkout <i
+                                            class="fa fa-arrow-circle-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -182,11 +183,8 @@
                         href="{{ url('/') }}">Home</a></li>
                 <li class="{{ Route::currentRouteNamed('product.view') ? 'active' : '' }}"> <a
                         href="{{ route('product.view') }}">Products</a></li>
-                {{--                <li><a href="#">Categories</a></li> --}}
-                {{--                <li><a href="#">Laptops</a></li> --}}
-                {{--                <li><a href="#">Smartphones</a></li> --}}
-                {{--                <li><a href="#">Cameras</a></li> --}}
-                {{--                <li><a href="#">Accessories</a></li> --}}
+                <li class="{{ Route::currentRouteNamed('send_submisions') ? 'active' : '' }}"> <a
+                        href="{{ route('send_submisions') }}">Contact Us</a></li>
             </ul>
             <!-- /NAV -->
         </div>

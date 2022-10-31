@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Admin;
+use App\Models\Lookup;
 use Darryldecode\Cart\Cart;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('*',function($view) {
             $view->with('user', Auth::user());
             $view->with('cartItems', session()->get('cart', []));
+
             Paginator::useBootstrap();
 //            $view->with('social', Social::all());
         });

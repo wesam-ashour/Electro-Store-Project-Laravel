@@ -12,20 +12,25 @@
                         <input class="input" type="email" placeholder="Enter Your Email">
                         <button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
                     </form>
+                    @foreach (\App\Models\Lookup::where('id',1)->get() as $one)
                     <ul class="newsletter-follow">
                         <li>
-                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="{{$one->facebook_url}}"><i class="fa fa-facebook"></i></a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="{{$one->twitter_url}}"><i class="fa fa-twitter"></i></a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="{{$one->instagram_url}}"><i class="fa fa-instagram"></i></a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                            <a href="{{$one->snapchat_url}}"><i class="fa fa-snapchat"></i></a>
+                        </li>
+                        <li>
+                            <a type="tel" value="{{$one->whatsApp_number}}" ><i class="fa fa-whatsapp"></i></a>
                         </li>
                     </ul>
+                    @endforeach
                 </div>
             </div>
         </div>
