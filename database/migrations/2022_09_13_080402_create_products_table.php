@@ -23,8 +23,8 @@ return new class extends Migration
             $table->string('price');
             $table->string('offer_price');
             $table->string('cover');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

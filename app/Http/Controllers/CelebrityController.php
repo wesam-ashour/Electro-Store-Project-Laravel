@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Exports\CelebrityExport;
 use App\Models\Admin;
 use App\Models\Celebrity;
+use App\Models\OrderItem;
+use App\Models\Product;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
+use Stripe\Order;
 
 class CelebrityController extends Controller
 {
@@ -290,6 +293,22 @@ class CelebrityController extends Controller
         
         $user->update($input);
 
+        if ($request->status == 0) {
+            $products = Product::where('celebrity_id',$id)->get();
+            foreach ($products as $key => $product) {
+                $product->status = 0;
+                $product->save();
+            }
+        }
+
+        if ($request->status == 1) {
+            $products = Product::where('celebrity_id',$id)->get();
+            foreach ($products as $key => $product) {
+                $product->status = 1;
+                $product->save();
+            }
+        }
+
         return redirect()->route('celebrities_view')
             ->with('success', 'Celebrity updated successfully');
 
@@ -306,5 +325,14 @@ class CelebrityController extends Controller
         Celebrity::find($id)->delete();
         return redirect()->route('celebrities_view')
             ->with('success', 'Celebrity deleted successfully');
+    }
+
+    public function get_all_orders()
+    {
+        $id = Auth::user()->id;
+        $celebrity_id = Celebrity::find($id)->id;
+        $orders = OrderItem::where('celebrity_id',$celebrity_id)->paginate(10);
+       
+       return view('celebrity.orders.index',compact('orders'));
     }
 }

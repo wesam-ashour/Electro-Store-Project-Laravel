@@ -24,7 +24,9 @@ class StoreColorRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:3|max:20',
+            'name_en' => 'required|min:3|max:20',
+            'name_ar' => 'required|min:3|max:20',
+
             'color' => [
                 'required',
                 'min:3',

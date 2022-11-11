@@ -17,10 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('path');
-            $table->foreignId('celebrity_id')->nullable()->constrained('celebrities')->cascadeOnDelete();
-            $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
-            $table->foreignId('product_id')->nullable()->constrained('products')->cascadeOnDelete();
+            $table->foreignId('celebrity_id')->nullable()->constrained('celebrities');
+            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->foreignId('product_id')->nullable()->constrained('products');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('material_id')->constrained();
             $table->foreignId('product_id')->constrained();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

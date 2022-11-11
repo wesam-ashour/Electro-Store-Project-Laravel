@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ads;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Intervention\Image\Facades\Image;
 
 
 class AdsController extends Controller
@@ -12,30 +13,41 @@ class AdsController extends Controller
 
     public function index()
     {
-        $ads = Ads::paginate(5);
-        return view('celebrity.ads.index', compact('ads'));
+        $ads = Ads::orderBy('order', 'asc')->get();
+        return view('admin.ads.index', compact('ads'));
     }
 
     public function store(Request $request)
     {
+         
         $this->validate($request, [
             'name' => 'required',
             'status' => 'required',
             'image' => 'required|file|image|mimes:jpeg,png,gif,jpg|max:2048',
-            'priority' => 'required',
         ]);
 
         $input = $request->all();
+        // dd($input);
         $input['celebrity_id'] = Auth::user()->id;
         $file = $request->file('image');
+        $resized_img = Image::make($file);
+        $resized_img->fit(720,90)->save($file);
         $fileName = 'ads-' . time() . '.' . $file->getClientOriginalExtension();
         $path = $file->storeAs('files', $fileName);
         $input['image'] = $path;
+        $input['order'] = rand(0, 99999);
 
         $user = Ads::create($input);
 
         return redirect()->route('ads.index')
             ->with('success', 'Ads created successfully');
+    }
+    public function updateOrder(Request $request)
+    {
+        foreach ($request->order as $key => $order) {
+            $post = Ads::find($order['id'])->update(['order' => $order['order']]);
+        }
+        return response('Update Successfully.', 200);
     }
 
     public function create()
@@ -60,7 +72,6 @@ class AdsController extends Controller
             'name' => 'required',
             'status' => 'required',
             'image' => 'sometimes|file|image|mimes:jpeg,png,gif,jpg|max:2048',
-            'priority' => 'required',
         ]);
 
         if ($request->hasFile('image')) {
@@ -76,7 +87,7 @@ class AdsController extends Controller
                 'name' => $request->name,
                 'status' => $request->status,
                 'image' => $path,
-                'priority' => $request->priority,
+                // 'priority' => $request->priority,
             ]);
 
         } else {
@@ -84,7 +95,7 @@ class AdsController extends Controller
             $brand->update([
                 'name' => $request->name,
                 'status' => $request->status,
-                'priority' => $request->priority,
+                // 'priority' => $request->priority,
             ]);
         }
 

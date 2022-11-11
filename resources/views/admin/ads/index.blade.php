@@ -1,15 +1,27 @@
 @extends('admin.layouts.master')
 @section('content')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- breadcrumb -->
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">Ads Sections</h4><span class="text-muted mt-1 tx-13 ml-2 mb-0">/ RolesList</span>
+                <h4 class="content-title mb-0 my-auto">Ads Sections</h4><span class="text-muted mt-1 tx-13 ml-2 mb-0">/
+                    RolesList</span>
             </div>
         </div>
     </div>
     <!-- breadcrumb -->
     <!-- row opened -->
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="row row-sm">
         <!--div-->
         <div class="col-xl-12">
@@ -30,53 +42,54 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive border-top userlist-table">
-                        <table class="table card-table table-striped table-vcenter text-nowrap mb-0">
+                        <table class="table table-bordered">
                             <thead>
-                            <tr>
-                                <th class="wd-lg-20p"><span>Image</span></th>
-                                <th class="wd-lg-20p"><span>Name</span></th>
-                                <th class="wd-lg-20p"><span>Status</span></th>
-                                <th class="wd-lg-20p"><span>Priority</span></th>
-                                <th class="wd-lg-20p">Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($ads as $ad)
                                 <tr>
-                                    <td>
-                                        <img alt="avatar" class="rounded-circle avatar-md mr-2" src="{{asset('/storage/'. $ad->image)}}">
-                                    </td>
-                                    <td>{{$ad->name}}</td>
-                                    <td class="text-center">
-                                        @if($ad->status == "Active")
-                                            <span class="label text-success d-flex"><div class="dot-label bg-success mr-1"></div>
-                                        @else
-                                                    <span class="label text-muted d-flex"><div class="dot-label bg-gray-300 mr-1"></div>
-                                        @endif
-                                        {{$ad->status}}
-                                    </td>
-                                    <td>
-                                        <a>{{$ad->priority}}</a>
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('ads.edit',$ad->id) }}" class="btn btn-sm btn-info">
-                                            <i class="las la-pen"></i>
-                                        </a>
-                                        <form action="{{ route('ads.destroy', $ad->id) }}"
-                                              method="post" style="display: inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">
-                                                <i class="las la-trash"></i>
-                                            </button>
-                                        </form>
-                                    </td>
+                                    <th width="30px">#</th>
+                                    <th>Image</th>
+                                    <th>Title</th>
+                                    <th>Status</th>
+                                    <th>Created at</th>
+                                    <th>Action</th>
                                 </tr>
-                            @endforeach
+                            </thead>
+                            <tbody id="tablecontents">
+                                @foreach ($ads as $ad)
+                                    <tr class="row1" data-id="{{ $ad->id }}">
+                                        <td class="pl-3"><i class="fa fa-sort"></i></td>
+                                        <td>
+                                            <img alt="avatar"
+                                                style="object-fit: cover;
+                                        width: 150x;
+                                        height: 50px;"
+                                                src="{{ asset('/storage/' . $ad->image) }}">
+                                        </td>
+                                        <td>{{ $ad->name }}</td>
+                                        <td>
+                                            @if ($ad->status == 1)
+                                                Active
+                                            @else
+                                                Inactive
+                                            @endif
+                                        </td>
+                                        <td>{{ $ad->created_at }}</td>
+                                        <td>
+                                            <a href="{{ route('ads.edit', $ad->id) }}" class="btn btn-sm btn-info">
+                                                <i class="las la-pen"></i>
+                                            </a>
+                                            <form action="{{ route('ads.destroy', $ad->id) }}" method="post"
+                                                style="display: inline-block;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="las la-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
-
                         </table>
-                        {{$ads->links()}}
                     </div>
                 </div><!-- bd -->
             </div><!-- bd -->

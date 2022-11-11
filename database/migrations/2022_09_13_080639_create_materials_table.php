@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('celebrity_id')->nullable()->constrained('celebrities')->cascadeOnDelete();
+            $table->foreignId('celebrity_id')->nullable()->constrained('celebrities');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

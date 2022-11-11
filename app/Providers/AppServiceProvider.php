@@ -30,8 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
         view()->composer('*',function($view) {
             $view->with('user', Auth::user());
-            $view->with('cartItems', session()->get('cart', []));
-
+//            $view->with('cartItems', session()->get('cart', []));
             Paginator::useBootstrap();
 //            $view->with('social', Social::all());
         });

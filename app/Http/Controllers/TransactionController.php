@@ -11,7 +11,7 @@ class TransactionController extends Controller
     
     public function index()
     {
-        $transactions = Transaction::where('status','success')->paginate(10);
+        $transactions = Transaction::where('status','1')->paginate(10);
         return view('admin.transactions.index',compact('transactions'));
     }
 

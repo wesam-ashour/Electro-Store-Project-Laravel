@@ -39,12 +39,17 @@ class ContactController extends Controller
         $this->validate($request, [
             'name' => 'required|max:100|min:5',
             'email' => 'required|email|max:100',
-            'mobile' => 'required|string|max:20|min:5',
+            'mobile' => 'required|digits_between:10,20',
             'message' => 'required|max:500|min:10',
         ]);
         $submision = Contact::create($request->all('name', 'email', 'mobile', 'message'));
         toastr()->success('Created Successfully', 'Create');
         return redirect()->back();
+    }
+
+    public function about_us()
+    {
+        return view('aboutUs');
     }
 
     /**

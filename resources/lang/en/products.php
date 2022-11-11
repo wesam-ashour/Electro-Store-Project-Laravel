@@ -1,0 +1,21 @@
+<?php
+return [
+    'Home' => 'Home',
+    'All_Products' => 'All Products',
+    'Categories' => 'Categories',
+    'select' => '--Select--',
+    'Top_selling' => 'Top_selling',
+    'NEW' => 'NEW',
+    'add_to_wishlist' => 'add to wishlist',
+    'Addedd_to_wishlist' => 'Addedd to wishlist',
+    'Size' => 'Size',
+    'Color' => 'Color',
+    'Out_of_stock' => 'Out of stock',
+    'Qty' => 'quantity',
+    'add_to_cart' => 'add to cart',
+    'In_Stock' => 'In Stock',
+    'Category' => 'Category',
+    'Description' => 'Description',
+    'Related_Products' => 'Related Products',
+    'No_Products_Found' => 'No Products Found',
+];

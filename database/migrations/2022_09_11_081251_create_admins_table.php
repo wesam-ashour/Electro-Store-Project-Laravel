@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('status')->default(1);
             $table->integer('sub_admin');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

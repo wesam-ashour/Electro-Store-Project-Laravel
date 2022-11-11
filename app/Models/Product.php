@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Maize\Markable\Markable;
 use Maize\Markable\Models\Favorite;
-
+use Spatie\Translatable\HasTranslations;
 class Product extends Model
 {
-    use HasFactory,SoftDeletes,Markable;
+    use HasFactory,SoftDeletes,Markable, SoftDeletes;
+    use HasTranslations;
     protected $with =['color_product'];
-    
+
     protected $fillable = [
         'title',
         'description',
@@ -23,9 +24,11 @@ class Product extends Model
         'in_stock_quantity',
         'cover',
     ];
+    public $translatable = ['title', 'description'];
+
     public function images(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Image::class);
+        return $this->hasMany(Images::class);
     }
 //    public function category() {
 //        return $this->belongsToMany(Category::class);

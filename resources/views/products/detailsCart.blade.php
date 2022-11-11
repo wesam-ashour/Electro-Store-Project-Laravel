@@ -180,6 +180,7 @@
                                                                             </div>
                                                                             <div><span
                                                                                     class="value">{{ \App\Models\Color::find($details['color'])->name }}</span>
+                                                                                    <input type="hidden" name="color" value="{{$details['color']}}">
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -225,6 +226,8 @@
                                         @method('DELETE')
                                         <input type="hidden" value="{{ $key }}" name="idItem">
                                         <input type="hidden" value="{{ $carts['id'] }}" name="idCart">
+                                        <input type="hidden" value="{{$id}}" name="id">
+
                                         <button type="submit" class="btn btn-danger-gradient">x</button>
                                     </form>
                             </div>

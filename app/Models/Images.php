@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Image extends Model
+class Images extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         'name',
         'path',
@@ -24,6 +25,6 @@ class Image extends Model
         return $this->belongsTo(Admin::class,'admin_id');
     }
     public function product(){
-        return $this->hasMany(Image::class);
+        return $this->hasMany(Images::class);
     }
 }

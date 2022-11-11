@@ -32,15 +32,16 @@
                                     @foreach (App\Models\User::STATUS as $status)
                                         <option value="{{ $status }}"
                                             {{ (old('status') ? old('status') : $ads->status ?? '') == $status ? 'selected' : '' }}>
-                                            {{ ucfirst($status) }}</option>
+                                            @if ($status == 1)
+                                                Active
+                                            @else
+                                                Inactive
+                                            @endif
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label>Priority</label>
-                                <input type="text" name="priority" class="form-control" placeholder="Enter priority"
-                                    value="{{ $ads->priority }}">
-                            </div>
+                            
                             <div class="form-group">
                                 <label>Image</label>
                                 <div class="col-sm-12 col-md-4">

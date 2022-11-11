@@ -11,13 +11,19 @@
                     <form method="POST" action="{{route('sizes.store')}}">
                         @csrf
                         <div class="">
-                            <div class="form-group">
-                                <label>Name</label>
-                                <input type="text" name="name" class="form-control"
-                                       placeholder="Enter Color name">
-                                @error('name')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                            <div class="row row-sm">
+                                <div class="col-lg-6">
+                                    <label>Size Name (EN)</label>
+                                    <input type="text" name="name_en" class="form-control"
+                                        placeholder="Enter Size name english">
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <label>Size Name (AR)</label>
+                                    <input type="text" name="name_ar" class="form-control"
+                                        placeholder="Enter Size name arabic">
+                                </div>
+
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary mt-3 mb-0">Submit</button>

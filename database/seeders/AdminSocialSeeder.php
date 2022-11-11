@@ -16,11 +16,11 @@ class AdminSocialSeeder extends Seeder
     public function run()
     {
         $user = Lookup::create([
-            'facebook_url' => 'https://www.itsolutionstuff.com/',
-            'instagram_url' => 'https://www.itsolutionstuff.com/',
-            'twitter_url' => 'https://www.itsolutionstuff.com/',
-            'snapchat_url' => 'https://www.itsolutionstuff.com/',
-            'whatsApp_number' => '059999999',
+            'facebook_url' => 'https://www.facebokk.com/',
+            'instagram_url' => 'https://www.instegram.com/',
+            'twitter_url' => 'https://www.twitter.com/',
+            'snapchat_url' => 'https://www.snapchat.com/',
+            'whatsApp_number' => 'https://api.whatsapp.com/send?phone=970599999999',
         ]);
     }
 }

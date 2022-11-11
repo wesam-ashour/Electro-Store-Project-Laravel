@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('is_one_time')->nullable();
             $table->integer('status')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

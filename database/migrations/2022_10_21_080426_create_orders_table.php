@@ -25,7 +25,9 @@ return new class extends Migration
             $table->foreignId('address_id')->constrained('addresses');
             $table->text('notes')->nullable();
             $table->foreignId('coupon_id')->nullable()->constrained('coupons');
+            $table->string('charge_id')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

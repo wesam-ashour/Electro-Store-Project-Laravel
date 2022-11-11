@@ -109,12 +109,15 @@
                                             <a>{{ $transaction->payment_method }}</a>
                                         </td>
                                         <td class="text-center">
-                                            @if ($transaction->status == 'success')
+                                            @if ($transaction->status == '1')
                                                 <span class="label text-success d-flex">
                                                     <div class="dot-label bg-success mr-1"></div> success
-                                                @else
+                                                @elseif($transaction->status == '2')
                                                     <span class="label text-muted d-flex">
                                                         <div class="dot-label bg-gray-300 mr-1"></div>failed
+                                                    @else
+                                                        <span class="label text-muted d-flex">
+                                                            <div class="dot-label bg-gray-300 mr-1"></div>refunded
                                             @endif
                                         </td>
                                         <td>

@@ -8,7 +8,7 @@
                     <div class="main-contact-info-header pt-3">
                         <div class="media">
 
-                            <h5>Address info</h5>
+                            <h5>Order details info</h5>
                         </div>
                     </div>
 
@@ -18,7 +18,27 @@
                                 <div class="media">
                                     <div class="media-body">
                                         <div>
-                                            <label>Mobile</label> <span class="tx-medium">{{ $address->area }}</span>
+                                            <label>Full Name</label> <span class="tx-medium">{{ \App\Models\User::find($order->user_id)->first_name . ' ' . \App\Models\User::find($order->user_id)->last_name }}</span>
+                                        </div>
+                                        <div>
+                                            <label>status</label> <span class="tx-medium">@if( \App\Models\User::find($order->user_id)->status == 1) active @else Not active @endif</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="media">
+                                    <div class="media-body">
+                                        <div>
+                                            <label>Mobile</label> <span class="tx-medium">{{ \App\Models\User::find($order->user_id)->mobile }}</span>
+                                        </div>
+                                        <div>
+                                            <label>Email</label> <span class="tx-medium">{{ \App\Models\User::find($order->user_id)->email }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="media">
+                                    <div class="media-body">
+                                        <div>
+                                            <label>area</label> <span class="tx-medium">{{ $address->area }}</span>
                                         </div>
                                         <div>
                                             <label>block no</label> <span class="tx-medium">{{ $address->block_no }}</span>

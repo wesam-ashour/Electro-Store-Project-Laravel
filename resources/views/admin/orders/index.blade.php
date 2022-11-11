@@ -41,7 +41,7 @@
                                         <option {{ request()->input('filter') == 1 ? 'selected' : '' }} value="1">
                                             Alphabetical</option>
 
-    
+
 
                                         <option {{ request()->input('filter') == 2 ? 'selected' : '' }} value="2">
                                             Date of registration</option>
@@ -74,14 +74,11 @@
                                 <tr>
                                     <th class="wd-lg-20p"><span>order number</span></th>
                                     <th class="wd-lg-20p"><span>created at</span></th>
-                                    <th class="wd-lg-20p"><span>user name</span></th>
-                                    <th class="wd-lg-20p"><span>email</span></th>
-                                    <th class="wd-lg-20p"><span>mobile</span></th>
-                                    <th class="wd-lg-20p"><span>status</span></th>
                                     <th class="wd-lg-20p"><span>total</span></th>
                                     <th class="wd-lg-20p"><span>payment method</span></th>
-                                    <th class="wd-lg-20p"><span>address</span></th>
-
+                                    <th class="wd-lg-20p"><span>payment status</span></th>
+                                    <th class="wd-lg-20p"><span>status</span></th>
+                                    <th class="wd-lg-20p"><span>Details</span></th>
                                     <th class="wd-lg-20p">Action</th>
                                 </tr>
                             </thead>
@@ -94,17 +91,6 @@
                                         <td>
                                             <a>{{ $order->created_at }}</a>
                                         </td>
-                                        <td>{{ \App\Models\User::find($order->user_id)->first_name . ' ' . \App\Models\User::find($order->user_id)->last_name }}</td>
-                                        <td>
-                                            <a>{{ \App\Models\User::find($order->user_id)->email }}</a>
-                                        </td>
-                                        <td>
-                                            <a>{{ \App\Models\User::find($order->user_id)->mobile }}</a>
-                                        </td>
-                                        
-                                        <td>
-                                            <a><label class="badge badge-success">{{ $order->status }}</label></a>
-                                        </td>
                                         <td>
                                             <a>{{ $order->grand_total }}</a>
                                         </td>
@@ -112,24 +98,87 @@
                                             <a>{{ $order->payment_method }}</a>
                                         </td>
                                         <td>
-                                            <a href="{{route('address_for_order',$order->address_id)}}">Click</a>
-                                        </td>
-                                        {{-- <td class="text-center">
-                                            @if ($admin->status == '1')
-                                                <span class="label text-success d-flex">
-                                                    <div class="dot-label bg-success mr-1"></div> Active
+                                            <a>
+                                                @if ($order->payment_status == 1)
+                                                    Success
+                                                @elseif ($order->payment_status == 0)
+                                                    Pending
+                                                @elseif ($order->payment_status == 4)
+                                                    Refunded
                                                 @else
-                                                    <span class="label text-muted d-flex">
-                                                        <div class="dot-label bg-gray-300 mr-1"></div>Inactive
-                                            @endif
-                                        </td> --}}
+                                                    canceled
+                                                @endif
+                                            </a>
+                                        </td>
                                         <td>
-                                            <a href="{{ route('show_orders_all_details', $order->id) }}" class="btn btn-sm btn-primary">
+                                            @if ($order->status == '1')
+                                                <a class="badge badge-danger" href="#">canceled</a>
+                                            @elseif ($order->status == '2')
+                                                <a class="badge badge-warning" href="#">new order</a>
+                                            @elseif ($order->status == '3')
+                                                <a class="badge badge-secondary" href="#">pending</a>
+                                            @elseif ($order->status == '4')
+                                                <a class="badge badge-info" href="#">being bagged</a>
+                                            @elseif ($order->status == '5')
+                                                <a class="badge badge-primary" href="#">on the way</a>
+                                            @elseif ($order->status == '6')
+                                                <a class="badge badge-success" href="#">delivered</a>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('address_for_order', $order->id) }}">Details</a>
+                                        </td>
+
+                                        <td>
+                                            @if ($order->status == '2' || $order->status == '3')
+                                                <a href="{{ route('orders.cancel', $order->id) }}"
+                                                    class="btn btn-sm btn-danger">
+                                                    <i class="las la-trash"></i>
+                                                </a>
+                                            @else
+                                                <a class="btn btn-sm">
+                                                    <i class="fa fa-ban" aria-hidden="true"></i>
+                                                </a>
+                                            @endif
+
+                                            <a href="{{ route('show_orders_all_details', $order->id) }}"
+                                                class="btn btn-sm btn-primary">
                                                 <i class="las la-search"></i>
                                             </a>
-                                            <a href="{{ route('edit_orders_status', $order->id) }}" class="btn btn-sm btn-info">
+                                            {{-- <a href="{{ route('edit_orders_status', $order->id) }}" class="btn btn-sm btn-info">
                                                 <i class="las la-pen"></i>
-                                            </a>
+                                            </a> --}}
+                                            <form method="POST" action="{{ route('update_orders_status', $order) }}"
+                                                style="display: inline-block">
+                                                @csrf
+                                                @method('PUT')
+
+                                                <div class="col-sm-6 col-md-3 mg-t-10 mg-sm-t-0">
+                                                    <div class="dropdown dropleft">
+                                                        <button aria-expanded="false" aria-haspopup="true"
+                                                            class="btn ripple btn-secondary dropdown-toggle"
+                                                            data-toggle="dropdown" id="dropleftMenuButton"
+                                                            type="button">Change status</button>
+                                                        <div aria-labelledby="dropleftMenuButton"
+                                                            class="dropdown-menu tx-13">
+                                                            @if ($order->status == 'refunded' || $order->status == '1' || $order->status == '6')
+                                                                <a class="dropdown-item"> No Actions</a>
+                                                            @else
+                                                                <button class="dropdown-item" name="status"
+                                                                    value="{{ \App\Models\Status::where('id', '>', $order->status)->orderBy('id')->first()->id }}">
+
+                                                                    {{ \App\Models\Status::where('id', '>', $order->status)->orderBy('id')->first()->status }}
+                                                                </button>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </form>
+
+
+
+
                                         </td>
                                     </tr>
                                 @endforeach

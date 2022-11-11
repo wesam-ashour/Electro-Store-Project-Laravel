@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('payment_method');
             $table->string('status');
             $table->longText('response');
-
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

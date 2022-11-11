@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMaterialRequest;
+use App\Http\Requests\UpdateMaterialRequest;
 use App\Models\Color;
 use App\Models\Material;
 use Illuminate\Http\Request;
@@ -19,14 +20,14 @@ class MaterialController extends Controller
 
     public function create()
     {
-        $colors = Color::all();
-        return view('celebrity.materials.create',compact('colors'));
+        return view('celebrity.materials.create');
     }
 
     public function store(StoreMaterialRequest $request)
     {
+        $request['name']= ['en' => $request->name_en, 'ar' => $request->name_ar];
         $request['celebrity_id']=Auth::user()->id;
-        $materials = Material::create($request->all('name','colors_id','celebrity_id'));
+        $materials = Material::create($request->all('name','celebrity_id'));
         toastr()->success('Created Successfully', 'Create');
         return redirect()->route('materials.index');
     }
@@ -42,8 +43,9 @@ class MaterialController extends Controller
         return view('celebrity.materials.edit', compact('materials'));
     }
 
-    public function update(Request $request, Material $material)
+    public function update(UpdateMaterialRequest $request, Material $material)
     {
+        $request['name']= ['en' => $request->name_en, 'ar' => $request->name_ar];
         Material::where('id', $material->id)->update($request->all('name'));
         toastr()->info('Updated Successfully', 'Update');
         return redirect()->route('materials.index');

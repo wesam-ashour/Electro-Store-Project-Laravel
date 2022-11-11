@@ -17,7 +17,13 @@
                     @foreach ($orderDetails as $order)
                         <tr>
                             <th scope="row">{{ $loop->iteration }}</th>
-                            <th>{{ \App\Models\Product::find($order->product_id)->title }}</th>
+                            @if (\App\Models\Product::withTrashed()->find($order->product_id))
+                            <th>{{ \App\Models\Product::withTrashed()->find($order->product_id)->title}}</th>
+
+                            @else
+                            <th>{{ \App\Models\Product::find($order->product_id)->title}}</th>
+
+                            @endif
                             <th>{{ $order->quantity }}</th>
                             <th>{{ $order->price }}</th>
                         </tr>

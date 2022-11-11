@@ -13,7 +13,7 @@ class UpdateMaterialRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class UpdateMaterialRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name_en' => 'required|min:3|max:20',
+            'name_ar' => 'required|min:3|max:20',
         ];
     }
 }

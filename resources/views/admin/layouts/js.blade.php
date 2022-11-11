@@ -82,3 +82,47 @@
 <script src="{{asset('assets/plugins/fancyuploder/jquery.fancy-fileupload.js')}}"></script>
 <script src="{{asset('/assets/plugins/fancyuploder/fancy-uploader.js')}}"></script>
 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        $("#tablecontents").sortable({
+            items: "tr",
+            cursor: 'move',
+            opacity: 0.6,
+            update: function(e) {
+                updatePostOrder();
+            }
+        });
+
+        function updatePostOrder() {
+            var order = [];
+            var token = $('meta[name="csrf-token"]').attr('content');
+            $('tr.row1').each(function(index, element) {
+                order.push({
+                    id: $(this).attr('data-id'),
+                    order: index
+                });
+            });
+            
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "{{ route('orderpriority') }}",
+                data: {
+                    order: order,
+                    _token: token
+                },
+                success: function(response) {
+                    if (response.status === "success") {
+                        console.log(response);
+                        alert();
+                    } else {
+                        console.log(response);
+                    }
+                }
+            });
+        }
+    });
+</script>

@@ -1,6 +1,310 @@
 @extends('layouts.master')
 @section('content')
     <meta name="_token" content="{{ csrf_token() }}" />
+
+    <style>
+        .title {
+            margin-bottom: 5vh;
+        }
+
+        @media(max-width:767px) {
+            .card {
+                margin: 3vh auto;
+            }
+        }
+
+        .cart {
+            background-color: #fff;
+            padding: 4vh 5vh;
+            border-bottom-left-radius: 1rem;
+            border-top-left-radius: 1rem;
+        }
+
+        @media(max-width:767px) {
+            .cart {
+                padding: 4vh;
+                border-bottom-left-radius: unset;
+                border-top-right-radius: 1rem;
+            }
+        }
+
+        .summary {
+            background-color: #ddd;
+            border-top-right-radius: 1rem;
+            border-bottom-right-radius: 1rem;
+            padding: 4vh;
+            color: rgb(65, 65, 65);
+        }
+
+        @media(max-width:767px) {
+            .summary {
+                border-top-right-radius: unset;
+                border-bottom-left-radius: 1rem;
+            }
+        }
+
+        .summary .col-2 {
+            padding: 0;
+        }
+
+        .summary .col-10 {
+            padding: 0;
+        }
+
+        .row {
+            margin: 0;
+        }
+
+        .title b {
+            font-size: 2.5rem;
+        }
+
+        .main {
+            margin: 0;
+            padding: 2vh 0;
+            width: 100%;
+        }
+
+        .col-2,
+        .col {
+            padding: 0 1vh;
+        }
+
+        .close {
+            /* margin-left: auto; */
+            /* font-size: 0.7rem; */
+        }
+
+        .back-to-shop {
+            margin-top: 4.5rem;
+        }
+
+        h5 {
+            margin-top: 4vh;
+        }
+
+        hr {
+            margin-top: 1.25rem;
+        }
+
+        .selects {
+            border: 1px solid rgba(0, 0, 0, 0.137);
+            padding: 1.5vh 1vh;
+            margin-bottom: 4vh;
+            outline: none;
+            width: 100%;
+            background-color: rgb(247, 247, 247);
+        }
+
+        input {
+            border: 1px solid rgba(0, 0, 0, 0.137);
+            padding: 1vh;
+            outline: none;
+            width: 100%;
+            background-color: rgb(247, 247, 247);
+        }
+
+        input:focus::-webkit-input-placeholder {
+            color: transparent;
+        }
+
+        .btn {
+            background-color: #000;
+            border-color: #000;
+            color: white;
+            width: 100%;
+            font-size: 1.3rem;
+            margin-top: 4vh;
+            padding: 1vh;
+            border-radius: 0;
+        }
+
+        .btn:focus {
+            box-shadow: none;
+            outline: none;
+            box-shadow: none;
+            color: white;
+            -webkit-box-shadow: none;
+            -webkit-user-select: none;
+            transition: none;
+        }
+
+        .btn:hover {
+            color: white;
+        }
+
+        a {
+            color: black;
+        }
+
+        a:hover {
+            color: black;
+            text-decoration: none;
+        }
+
+        /* #code {
+                background-image: linear-gradient(to left, rgba(255, 255, 255, 0.253), rgba(255, 255, 255, 0.185)), url("https://img.icons8.com/small/16/000000/long-arrow-right.png");
+                background-repeat: no-repeat;
+                background-position-x: 95%;
+                background-position-y: center;
+            } */
+    </style>
+    <!-- SECTION -->
+    <div class="section">
+        <!-- container -->
+        <div class="container">
+            <!-- card -->
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-8 cart">
+                        <div class="title">
+                            <div class="row">
+                                <div class="col">
+                                    <h4><b>Shopping Cart</b></h4>
+                                </div>
+                                <div class="col align-self-center text-right text-muted">{{count($cart)}} items</div>
+                            </div>
+                        </div>
+                        @if ($message = Session::get('success'))
+                            <div class="p-4 mb-3 bg-green-400 rounded">
+                                <p class="text-green-800">{{ $message }}</p>
+                            </div>
+                        @endif
+
+                        @php $total = 0 @endphp
+                        @forelse($cart as $id => $details)
+                            <div class="row border-top border-bottom">
+
+
+                                <div class="row main align-items-center">
+                                    <div class="col-2"><img class="img-fluid"
+                                            src="{{ asset('storage/' . \App\Models\Product::find($details['id'])->cover) }}">
+                                    </div>
+                                    <div class="col">
+                                        <div class="row text-muted">{{ \App\Models\Product::find($details['id'])->title }}
+                                        </div>
+                                        <div class="row">Cotton T-shirt</div>
+                                    </div>
+                                    <div class="col">
+                                        <?php $sum = 0; ?>
+                                        @foreach ($details['color_items'] as $key => $c)
+                                            <?php $sum += $c['quantity']; ?>
+                                        @endforeach
+                                        <div class="col">{{ $sum }} items
+                                            <div><a style="color: red"
+                                                    href="{{ route('checkout.details', $details['id']) }}">Details</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">&dollar;
+                                        {{ \App\Models\Product::find($details['id'])->offer_price }}
+                                    </div>
+
+
+                                    <form action="{{ route('remove.from.cart') }}" method="POST" class="col">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="hidden" value="{{ $details['id'] }}" name="id">
+                                        <button class="close">&#10005;</button>
+
+                                    </form>
+
+                                    {{-- <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div> --}}
+
+
+                                </div>
+                            </div>
+                            @php $total += \App\Models\Product::find($details['id'])->offer_price * $sum @endphp
+                        @empty
+                            No products found in cart!
+                        @endforelse
+
+                        <div class="back-to-shop" style=position:absolute;bottom:10px;"><a href="{{route('product.view')}}">&leftarrow;</a><span class="text-muted">Back to
+                                shop</span></div>
+                    </div>
+                    <div class="col-md-4 summary">
+                        <div>
+                            <h5><b>Summary</b></h5>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col" style="padding-left:0;">Subtotal</div>
+                            <div class="col text-right">${{ $total }}</div>
+                        </div>
+                        @if (count($remains))
+                            <div class="row">
+                                <div class="col" style="padding-left:0;">Coupon code
+                                    <a style="color: red;size: 1px;" href="{{ route('removeCouponCode') }}">(Remove)</a>
+                                </div>
+                                <div class="col text-right" id="code">{{ $remains['code'] }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col" style="padding-left:0;">Discount</div>
+                                <div class="col text-right" id="value">%{{ $remains['value'] }}</div>
+                            </div>
+                        @endif
+                        <div class="row">
+                            <div class="col hide show_coupon_code" style="padding-left:0;">Coupon code
+                                <a style="color: red;size: 1px;" href="{{ route('removeCouponCode') }}">(Remove)</a>
+                            </div>
+                            <div class="col text-right" id="code"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col hide show_coupon_code" style="padding-left:0;">Discount</div>
+                            <div class="col text-right" id="value"></div>
+                        </div>
+                        @if (count($remains))
+                            <div class="row">
+                                <div class="col" style="padding-left:0;">Total</div>
+                                <div class="col text-right" id="total_price">${{ $remains['remain'] }}</div>
+                            </div>
+                        @else
+                            <div class="row">
+                                <div class="col" style="padding-left:0;">Total</div>
+                                <div class="col text-right" id="total_price">${{ $total }}</div>
+                            </div>
+                        @endif
+
+
+
+
+                        <hr>
+                        <form action="{{ route('checkout.index') }}" method="post">
+                            @csrf
+                            @method('GET')
+                            <input type="hidden" name="total" value="{{ $total }}">
+
+                            <div>
+                                <a href="{{ route('clearCart') }}" class="px-6 py-2 text-red-800 bg-red-300">Remove
+                                    All Cart</a>
+                            </div>
+                            <button class="btn">CHECKOUT</button>
+
+                            <br>
+                            <br>
+                            <br>
+                            @if (count($cart))
+                                <form class="coupon-form" method="post">
+                                    @csrf
+                                    <p>GIVE Coupon CODE</p>
+                                    <input placeholder="Enter your code" name="coupon_code" id="coupon_code"
+                                        placeholder="Coupon code">
+                                    <button class="btn btn-outline-primary" type="button" onclick="applyCouponCode()">Apply
+                                        Coupon
+                                    </button>
+                                    <div style="color: red" id="coupon_code_msg"></div>
+                                </form>
+                            @endif
+
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {{-- <meta name="_token" content="{{ csrf_token() }}" />
     <br>
     <style>
         .shopping-cart {
@@ -184,8 +488,8 @@
                                                                 @foreach ($details['color_items'] as $key => $c)
                                                                     <?php $sum += $c['quantity']; ?>
                                                                 @endforeach
-                                                                <input disabled type="number" value="{{ $sum }}"
-                                                                    class="form-control">
+                                                                <input disabled type="number"
+                                                                    value="{{ $sum }}" class="form-control">
 
                                                             </div>
                                                         </form>
@@ -203,9 +507,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <form action="{{ route('remove.from.cart') }}">
-                                                <input type="hidden" id="myid" data-item-id="{{ $id }}"
-                                                    value="{{ $id }}" name="id">
+                                            <form action="{{ route('remove.from.cart') }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <input type="hidden" value="{{ $id }}" name="id">
                                                 <button class="px-4 py-2 text-white bg-red-600 remove-from-cart">x
                                                 </button>
                                             </form>
@@ -227,19 +532,23 @@
                                                 style="color: red;size: 1px;"
                                                 href="{{ route('removeCouponCode') }}">Remove</a>
                                         </span><span class="price" id="code">{{ $remains['code'] }}</span></div>
-                                    <div class="summary-item show_coupon_code"><span class="text">Discount</span><span
-                                            class="price" id="value">%{{ $remains['value'] }}</span></div>
+
+                                    <div class="summary-item show_coupon_code"><span class="text">Discount
+                                        </span><span class="price" id="value">%{{ $remains['value'] }}</span>
+                                    </div>
                                 @endif
                                 <div class="summary-item hide show_coupon_code"><span class="text">Coupon code&nbsp; <a
-                                            style="color: red;size: 1px;" href="{{ route('removeCouponCode') }}">Remove</a>
+                                            style="color: red;size: 1px;"
+                                            href="{{ route('removeCouponCode') }}">Remove</a>
                                     </span><span class="price" id="code"></span>
                                 </div>
                                 <div class="summary-item hide show_coupon_code"><span class="text">Discount</span><span
                                         class="price" id="value"></span></div>
 
-                                {{-- <div class="summary-item hide show_coupon_code"><span
-                                            class="text">Discount</span><span class="price" id="value"></span></div> --}}
-                                <div class="summary-item"><span class="text">Shipping</span><span class="price">$0</span>
+                                <div class="summary-item hide show_coupon_code"><span class="text">Discount</span><span
+                                        class="price" id="value"></span></div>
+                                <div class="summary-item"><span class="text">Shipping</span><span
+                                        class="price">$0</span>
                                 </div>
                                 @if (count($remains))
                                     <div class="summary-item"><span class="text">Total</span><span class="price"
@@ -257,7 +566,8 @@
 
 
                                     <div>
-                                        <a href="{{ route('clearCart') }}" class="px-6 py-2 text-red-800 bg-red-300">Remove
+                                        <a href="{{ route('clearCart') }}"
+                                            class="px-6 py-2 text-red-800 bg-red-300">Remove
                                             All Cart</a>
                                     </div>
                                     <br>
@@ -281,7 +591,7 @@
                 </div>
             </div>
         </section>
-    </main>
+    </main> --}}
 @endsection
 
 @if (count(session()->get('cart', [])) > 0)

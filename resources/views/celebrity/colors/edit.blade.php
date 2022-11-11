@@ -18,20 +18,30 @@
                         @csrf
                         @method('PUT')
                         <div class="">
-                            <div class="form-group">
-                                <label>Name</label>
-                                <input type="text" name="name" class="form-control"
-                                       placeholder="Enter color name" value="{{$color->name}}">
-                                @error('name')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                            <div class="row row-sm">
+                                <div class="col-lg-6">
+                                    <label>Color Name (EN)</label>
+                                    <input type="text" name="name_en" class="form-control"
+                                        placeholder="Enter Color name english" value="{{$color->getTranslation('name','en')}}">
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <label>Color Name (AR)</label>
+                                    <input type="text" name="name_ar" class="form-control"
+                                        placeholder="Enter Color name arabic" value="{{$color->getTranslation('name','ar')}}">
+                                </div>
+
                             </div>
-                            <label>Color</label>
-                            <input type="text" name="color" class="form-control colorpicker"
-                                   placeholder="Press to select color" value="{{$color->color}}">
-                            @error('color')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
+                            <br>
+                            <div class="row row-sm">
+                                <div class="col-lg-1">
+                                    <div class="form-group">
+                                        <label>Color</label>
+                                        <input type="color" name="color" class="form-control colorpicker"
+                                            placeholder="Press to display select picker" value="{{$color->color}}">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary mt-3 mb-0">Submit</button>
                     </form>

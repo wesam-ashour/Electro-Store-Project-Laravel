@@ -17,8 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('color');
-            $table->foreignId('celebrity_id')->nullable()->constrained('celebrities')->cascadeOnDelete();
+            $table->foreignId('celebrity_id')->nullable()->constrained('celebrities');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

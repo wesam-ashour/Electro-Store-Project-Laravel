@@ -26,6 +26,7 @@ return new class extends Migration
             $table->enum('type', array('registered_user','guest_user'));
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

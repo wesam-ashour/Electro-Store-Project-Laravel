@@ -1,22 +1,90 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    .topnav {
+        overflow: hidden;
+        background-color: rgb(21, 22, 29);
+    }
+
+    .topnav a {
+        float: left;
+        display: block;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+    }
+
+    .topnav a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+
+    .topnav a.active {
+        background-color: #04AA6D;
+        color: white;
+    }
+
+    .topnav .icon {
+        display: none;
+    }
+
+    @media screen and (max-width: 600px) {
+        .topnav a:not(:first-child) {
+            display: none;
+        }
+
+        .topnav a.icon {
+            float: right;
+            display: block;
+        }
+    }
+
+    @media screen and (max-width: 600px) {
+        .topnav.responsive {
+            position: relative;
+        }
+
+        .topnav.responsive .icon {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .topnav.responsive a {
+            float: none;
+            display: block;
+            text-align: left;
+        }
+    }
+</style>
 <header>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- TOP HEADER -->
     <div id="top-header">
         <div class="container">
             <ul class="header-links pull-left">
-                <li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
-                <li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
-                <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+                <li><a href="#"><i class="fa fa-phone"></i> 059-99999999</a></li>
+                <li><a href="#"><i class="fa fa-envelope-o"></i> admin@admin.com</a></li>
+                <li><a href="#"><i class="fa fa-map-marker"></i> {{ __('welcome.Palestine_Gaza_Strip') }}</a></li>
+                <select class="select changeLang" data-width="fit">
+                    <option value="en" data-content='<span class="flag-icon flag-icon-us"></span> English'
+                        {{ session()->get('locale') == 'en' ? 'selected' : '' }} class="bfh-selectbox bfh-languages"
+                        data-language="en_US" data-available="en_US,fr_CA,es_MX" data-flags="true">EN</option>
+                    <option value="ar" data-content='<span class="flag-icon flag-icon-ksa"></span> Arabic'
+                        {{ session()->get('locale') == 'ar' ? 'selected' : '' }}>AR</option>
+
+                </select>
             </ul>
             <ul class="header-links pull-right">
-                <li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
                 @if (\Illuminate\Support\Facades\Auth::guest())
-                    <li><a href="{{ route('login') }}"><i class="fa fa-user-o"></i> My Account</a></li>
+                    <li><a href="{{ route('login') }}"><i class="fa fa-user-o"></i>{{ __('welcome.My_Account') }}</a>
+                    </li>
                 @else
                     <li><a href="{{ route('logout') }}"
                             onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();"><i
-                                class="fa fa-sign-out"></i> logout</a></li>
+                                class="fa fa-sign-out"></i>{{ __('welcome.logout') }}</a></li>
 
 
                     <li><a href="{{ route('profile_user') }}"><i class="fa fa-user-o"></i>
@@ -51,12 +119,10 @@
                     <div class="header-search">
                         <form>
                             <select class="input-select">
-                                <option value="0">All Categories</option>
-                                <option value="1">Category 01</option>
-                                <option value="1">Category 02</option>
+                                <option value="0">{{ __('welcome.All_Categories') }}</option>
                             </select>
-                            <input class="input" placeholder="Search here">
-                            <button class="search-btn">Search</button>
+                            <input class="input" placeholder="{{ __('welcome.Search_here') }}">
+                            <button class="search-btn">{{ __('welcome.Search') }}</button>
                         </form>
                     </div>
                 </div>
@@ -69,7 +135,7 @@
                         <div>
                             <a href="{{ route('wishlist') }}">
                                 <i class="fa fa-heart-o"></i>
-                                <span>Your Wishlist</span>
+                                <span>{{ __('welcome.Your_Wishlist') }}</span>
                                 @if (\Illuminate\Support\Facades\Auth::check())
                                     <div class="qty">{{ \App\Models\Product::whereHasFavorite($user)->count() }}
                                     </div>
@@ -83,10 +149,10 @@
                             <div>
                                 <a href="{{ route('orders.index') }}">
                                     <i class="fa fa-th-list"></i>
-                                    <span>Your Orders</span>
+                                    <span>{{ __('welcome.Your_Orders') }}</span>
                                     @if (\Illuminate\Support\Facades\Auth::check())
                                         <div class="qty">
-                                            {{ \App\Models\Order::where('user_id', $user->id)->where('status', 'pending')->count() }}
+                                            {{ \App\Models\Order::where('user_id', $user->id)->count() }}
                                         </div>
                                     @else
                                         <div class="qty">0</div>
@@ -99,14 +165,18 @@
                         <div class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                 <i class="fa fa-shopping-cart"></i>
-                                <span>Your Cart</span>
-                                <div class="qty">{{ count($cartItems) }}</div>
+                                <span>{{ __('welcome.Your_Cart') }}</span>
+                                @if (count(session()->get('cart', [])) != 0)
+                                    <div class="qty">{{ count(session()->get('cart', [])) }}</div>
+                                @else
+                                    <div class="qty">0</div>
+                                @endif
                             </a>
                             <?php $total = 0; ?>
                             <div class="cart-dropdown">
                                 <div class="cart-list">
-                                    @if (count($cartItems) != 0)
-                                        @foreach ($cartItems as $id => $item)
+                                    @if (count(session()->get('cart', [])) != 0)
+                                        @foreach (session()->get('cart', []) as $id => $item)
                                             <div class="product-widget">
                                                 <div class="product-img">
                                                     <img src="{{ asset('storage/' . \App\Models\Product::find($item['id'])->cover) }}"
@@ -122,43 +192,35 @@
                                                                 <?php $sum += $c['quantity']; ?>
                                                             @endforeach
                                                             {{ $sum }}x
-                                                        </span>${{ \App\Models\Product::find($item['id'])->price * $sum }}
+                                                        </span>${{ \App\Models\Product::find($item['id'])->offer_price * $sum }}
                                                     </h4>
                                                 </div>
-                                                <form action="#" method="POST">
+                                                <form action="{{ route('remove.from.cart') }}" method="POST">
                                                     @csrf
-                                                    {{--                                            <input type="hidden" value="{{ $item->id }}" name="id"> --}}
+                                                    @method('DELETE')
+                                                    <input type="hidden" value="{{ $item['id'] }}" name="id">
                                                     <button class="delete"><i class="fa fa-close"></i></button>
                                                 </form>
                                             </div>
-                                            @php $total += \App\Models\Product::find($item['id'])->price * $sum @endphp
+                                            @php $total += \App\Models\Product::find($item['id'])->offer_price * $sum @endphp
                                         @endforeach
                                     @else
-                                        There is no products in cart!
+                                        {{ __('welcome.No_Product_cart') }}
                                     @endif
 
                                 </div>
                                 <div class="cart-summary">
-                                    <small>{{ count($cartItems) }} Item(s) selected</small>
-                                    <h5>SUBTOTAL: ${{ $total }}</h5>
+                                    <small>{{ count(session()->get('cart', [])) . ' ' . __('welcome.item_selected') }}</small>
+                                    <h5>{{ __('welcome.SUBTOTAL') }}{{ $total }}</h5>
                                 </div>
                                 <div class="cart-btns">
-                                    <a href="{{ route('cart') }}">View Cart</a>
-                                    <a href="{{ route('checkout.index') }}">Checkout <i
-                                            class="fa fa-arrow-circle-right"></i></a>
+                                    <a href="{{ route('cart') }}"
+                                        style="width:30.5rem">{{ __('welcome.View_Cart') }}</a>
+
                                 </div>
                             </div>
                         </div>
                         <!-- /Cart -->
-
-                        <!-- Menu Toogle -->
-                        <div class="menu-toggle">
-                            <a href="#">
-                                <i class="fa fa-bars"></i>
-                                <span>Menu</span>
-                            </a>
-                        </div>
-                        <!-- /Menu Toogle -->
                     </div>
                 </div>
                 <!-- /ACCOUNT -->
@@ -171,25 +233,27 @@
 </header>
 <!-- /HEADER -->
 
-<!-- NAVIGATION -->
-<nav id="navigation">
-    <!-- container -->
+<div class="topnav" id="myTopnav">
     <div class="container">
-        <!-- responsive-nav -->
-        <div id="responsive-nav">
-            <!-- NAV -->
-            <ul class="main-nav nav navbar-nav">
-                <li class="{{ Route::currentRouteNamed('home.page') ? 'active' : '' }}"><a
-                        href="{{ url('/') }}">Home</a></li>
-                <li class="{{ Route::currentRouteNamed('product.view') ? 'active' : '' }}"> <a
-                        href="{{ route('product.view') }}">Products</a></li>
-                <li class="{{ Route::currentRouteNamed('send_submisions') ? 'active' : '' }}"> <a
-                        href="{{ route('send_submisions') }}">Contact Us</a></li>
-            </ul>
-            <!-- /NAV -->
-        </div>
-        <!-- /responsive-nav -->
+        <a href="{{ url('/') }}"
+            class="{{ Route::currentRouteNamed('home.page') ? 'active' : '' }}">{{ __('welcome.Home') }}</a>
+        <a href="{{ route('product.view') }}"
+            class="{{ Route::currentRouteNamed('product.view') ? 'active' : '' }}">{{ __('welcome.Products') }}</a>
+        <a href="{{ route('send_submisions') }}"
+            class="{{ Route::currentRouteNamed('send_submisions') ? 'active' : '' }}">{{ __('welcome.Contact_Us') }}</a>
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+        </a>
     </div>
-    <!-- /container -->
-</nav>
-<!-- /NAVIGATION -->
+</div>
+
+<script>
+    function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+            x.className += " responsive";
+        } else {
+            x.className = "topnav";
+        }
+    }
+</script>

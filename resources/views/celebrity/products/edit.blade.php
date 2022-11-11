@@ -1,6 +1,6 @@
 @extends('celebrity.layouts.master')
 @section('content')
-    <meta name="csrf-token" content="{{ csrf_token() }}"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <div class="row row-sm" style="padding-top: 25px;">
         <div class="col-lg-12 col-xl-10 col-md-12 col-sm-12">
@@ -18,181 +18,204 @@
                             </ul>
                         </div>
                     @endif
-                    <form method="POST" action="{{route('products.update',$product->id)}}"
-                          enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('products.update', $product->id) }}"
+                        enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="">
-                            <div class="form-group">
-                                <label>title</label>
-                                <input type="text" name="title" class="form-control"
-                                       placeholder="title" value="{{$product->title}}">
-                            </div>
-                            @error('title')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                            <div class="form-group">
-                                <label>description</label>
-                                <input type="text" name="description" class="form-control"
-                                       placeholder="description" value="{{$product->description}}">
-                            </div>
-                            @error('description')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                            <div class="form-group">
-                                <label>status</label>
-                                <input type="text" name="status" class="form-control"
-                                       placeholder="status" value="{{$product->status}}">
-                            </div>
-                            @error('status')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                            <label for="category_id">Main Category</label>
-                            <select class="form-control" id="sub_category_name" required>
-                                {{--                                <option value="0">Select a Category</option>--}}
-                                @foreach ($categories as $id => $category)
-                                    <option
-                                        value="{{ $category->id }}" {{ (old($r) ? old($r) : $category->id ?? '') == $r ? 'selected' : '' }}>{{ $category->name }}</option>
-                                @endforeach
-                                @error('category_id')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </select>
-                            <br>
-                            <label for="category_id">Sub Category</label>
-                            <select class="form-control" name="category_id[]" placeholder="Select Sub Category"
-                                    id="sub_category" required multiple>
-                                @foreach($product->category as $id => $entry)
-                                    <option
-                                        value="{{ $entry->id }}"
-                                        selected="selected">{{ $entry->name }}</option>
-                                @endforeach
-                                @error('category_id')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </select>
-                            <br>
-
-                            <label for="category_id">Material</label>
-                            @if(count($materials))
-                                <select class="form-control" id="sub_category_name" name="material_id[]" multiple
-                                        required>
-                                    @foreach($materials as $material)
-                                        <option value="{{$material->id}}"
-                                                @foreach($product->material as $p) @if($material->id == $p->id)selected="selected"@endif @endforeach>{{$material->name}}</option>
-                                    @endforeach
-                                    @error('material_id')
+                            <div class="row row-sm">
+                                <div class="col-lg-6">
+                                    <label>Title (EN)</label>
+                                    <input type="text" name="title_en" class="form-control" placeholder="title"
+                                        value="{{ $product->getTranslation('title', 'en') }}">
+                                </div>
+                                @error('title')
                                     <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </select>
-                            @else
-                                <p>No materials.. please insert new material
-                                    <a class="btn btn-primary-gradient" style="padding: 3px;"
-                                       href="{{ route('materials.create') }}"> Create New
-                                        Material</a>
-                                </p>
-                            @endif
-                            <br>
-
-                            <label for="">Sizes</label>
-                            @if(count($sizes))
-                                <select class="form-control" name="size_id[]" multiple required>
-                                    @foreach($sizes as $size)
-                                        <option value="{{$size->id}}"
-                                                @foreach($product->size as $p) @if($size->id == $p->id)selected="selected"@endif @endforeach>{{$size->name}}</option>
-                                    @endforeach
-                                    @error('size_id')
+                                @enderror
+                                <div class="col-lg-6">
+                                    <label>Title (AR)</label>
+                                    <input type="text" name="title_ar" class="form-control" placeholder="title"
+                                        value="{{ $product->getTranslation('title', 'ar') }}">
+                                </div>
+                                @error('title')
                                     <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </select>
-                            @else
-                                <p>No sizes.. please insert new size
-                                    <a class="btn btn-primary-gradient" style="padding: 3px;"
-                                       href="{{ route('sizes.create') }}"> Create New
-                                        Material</a>
-                                </p>
-                            @endif
-
+                                @enderror
+                            </div>
                             <br>
-                            <label for="">Colors with images</label>
-                            <div class="form-group">
-                                @foreach($colorssd as $color)
+                            <div class="row row-sm">
+                                <div class="col-lg-6">
+                                    <label>Description (EN)</label>
+                                    <input type="text" name="description_en" class="form-control"
+                                        placeholder="description"
+                                        value="{{ $product->getTranslation('description', 'en') }}">
+                                </div>
+                                @error('description')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                                <div class="col-lg-6">
+                                    <label>Description (AR)</label>
+                                    <input type="text" name="description_ar" class="form-control"
+                                        placeholder="description"
+                                        value="{{ $product->getTranslation('description', 'ar') }}">
+                                </div>
+                                @error('description')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <br>
 
-                                    <div class="p-2 border mb-1">
-                                        <div style="display: inline-flex; width: 800px;">
-                                            {{$loop->iteration}}-
-                                            <div class="col-sm-2">
-                                                <label class="ch">
-                                                    <input type="checkbox"
-                                                           name="product_colors[{{$color->id}}][color]"
-                                                           value="{{$color->id}}"
-                                                           @foreach($product->color_product as $p)
-                                                               @if($color->id == $p->color_id) checked="checked" @endif
-                                                        @endforeach>
-                                                    <span>{{$color->name}}</span>
-                                                </label>
-                                            </div>
-
-
-                                            <label>quantity:&nbsp;&nbsp;</label>
-                                            <input class="form-control form-control-sm mg-b-10" style="width: 200px;"
-                                                   type=number name="product_colors[{{$color->id}}][quantity]"
-                                                   @foreach($product->color_product as $p)
-                                                       @if($color->id == $p->color_id)
-                                                           value="{{$p->quantity}}"
-                                                @endif
-                                                @endforeach
-                                            >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-                                            <label>image:&nbsp;&nbsp;</label>
-                                            <input class="form-control form-control-sm" id="formFileSm"
-                                                   type="file" name="product_colors[{{$color->id}}][logo]"
-                                                   accept="image/*"
-                                                   @foreach($product->color_product as $p)
-                                                       @if($color->id == $p->color_id)
-                                                           value="{{$p->logo}}"
-                                                @endif
-                                                @endforeach>
+                            <div class="row row-sm">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Price</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">$</span>
+                                            </div><input name="price" aria-label="price" class="form-control"
+                                                type="number" value="{{ $product->price }}">
                                         </div>
                                     </div>
+                                </div>
+                                @error('price')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Offer price</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">$</span>
+                                            </div><input name="offer_price" placeholder="offer price"aria-label="price"
+                                                class="form-control" type="number" value="{{ $product->offer_price }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                @error('offer_price')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <br>
 
-                                @endforeach
+                            <br>
+                            <div class="row row-sm">
+                                <div class="col-lg-6">
+                                    <label for="category_id">Main Category</label>
+                                    <select class="form-control" id="sub_category_name" required>
+                                        @foreach ($categories as $id => $category)
+                                            <option value="{{ $category->id }}"
+                                                {{ (old($r) ? old($r) : $category->id ?? '') == $r ? 'selected' : '' }}>
+                                                {{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('category_id')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                                <div class="col-lg-6">
+                                    <label for="category_id">Sub Category</label>
+                                    <select class="form-control" name="category_id[]" placeholder="Select Sub Category"
+                                        id="sub_category" required multiple>
+                                        @foreach ($product->category as $id => $entry)
+                                            <option value="{{ $entry->id }}" selected="selected">{{ $entry->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('category_id')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                             </div>
-                            <div class="form-group">
-                                <label>price</label>
-                                <input type="text" name="price" class="form-control"
-                                       placeholder="price" value="{{$product->price}}">
+                            <br>
+
+                            <div class="row row-sm">
+                                <div class="col-lg-6">
+                                    <label for="category_id">Material</label>
+                                    @if (count($materials))
+                                        <select class="form-control" id="sub_category_name" name="material_id[]" multiple
+                                            required>
+                                            @foreach ($materials as $material)
+                                                <option value="{{ $material->id }}"
+                                                    @foreach ($product->material as $p) @if ($material->id == $p->id)selected="selected"@endif @endforeach>
+                                                    {{ $material->name }}</option>
+                                            @endforeach
+                                            @error('material_id')
+                                                <div class="alert alert-danger">{{ $message }}</div>
+                                            @enderror
+                                        </select>
+                                    @else
+                                        <p>No materials.. please insert new material
+                                            <a class="btn btn-primary-gradient" style="padding: 3px;"
+                                                href="{{ route('materials.create') }}"> Create New
+                                                Material</a>
+                                        </p>
+                                    @endif
+                                </div>
+                                @error('material_id')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                                <div class="col-lg-6">
+                                    <label for="">Sizes</label>
+                                    @if (count($sizes))
+                                        <select class="form-control" name="size_id[]" multiple required>
+                                            @foreach ($sizes as $size)
+                                                <option value="{{ $size->id }}"
+                                                    @foreach ($product->size as $p) @if ($size->id == $p->id)selected="selected"@endif @endforeach>
+                                                    {{ $size->name }}</option>
+                                            @endforeach
+                                            @error('size_id')
+                                                <div class="alert alert-danger">{{ $message }}</div>
+                                            @enderror
+                                        </select>
+                                    @else
+                                        <p>No sizes.. please insert new size
+                                            <a class="btn btn-primary-gradient" style="padding: 3px;"
+                                                href="{{ route('sizes.create') }}"> Create New
+                                                Material</a>
+                                        </p>
+                                    @endif
+                                </div>
+                                @error('size_id')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                             </div>
-                            @error('price')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                            <div class="form-group">
-                                <label>offer price</label>
-                                <input type="text" name="offer_price" class="form-control"
-                                       placeholder="offer price" value="{{$product->offer_price}}">
-                            </div>
-                            @error('offer_price')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                            <div class="form-group">
-                                <label>slider images</label>
-                                <div class="col-sm-12 col-md-4">
-                                    <input type="file" name="slider_images[]" data-height="200" multiple/>
+
+                            <br>
+                            <div class="row row-sm">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Cover images</label>
+
+                                        <div class="input-group file-browser">
+                                            <input type="text" class="form-control browse-file" placeholder="choose"
+                                                readonly>
+                                            <label class="input-group-btn">
+                                                <span class="btn btn-default">
+                                                    upload <input type="file" name="cover" accept="image/*"
+                                                        style="display: none;">
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <select name="status" class="form-control">
+                                            @foreach (\App\Models\User::STATUS as $status)
+                                                <option value="{{ $status }}"
+                                                    {{ (old('status') ? old('status') : $product->status ?? '') == $status ? 'selected' : '' }}>
+                                                    @if ($status == 1)
+                                                        Active
+                                                    @else
+                                                        Inactive
+                                                    @endif
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                            @error('slider_images')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                            <div class="form-group">
-                                <label>cover image</label>
-                                <div class="col-sm-12 col-md-4">
-                                    <input type="file" value="{{$product->cover}}" name="cover" data-height="200"/>
-                                </div>
-                            </div>
-                            @error('cover')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-
                         </div>
                         <button type="submit" class="btn btn-primary mt-3 mb-0">Submit</button>
                     </form>
@@ -201,4 +224,3 @@
         </div>
     </div>
 @endsection
-

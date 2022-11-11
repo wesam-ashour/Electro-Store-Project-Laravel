@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OrderItem extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * @var string
@@ -22,7 +23,7 @@ class OrderItem extends Model
     /**
      * @var array
      */
-    protected $fillable = ['order_id','product_id', 'quantity', 'price','notes','color_id','size_id'];
+    protected $fillable = ['order_id','product_id', 'quantity', 'price','notes','color_id','size_id','celebrity_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

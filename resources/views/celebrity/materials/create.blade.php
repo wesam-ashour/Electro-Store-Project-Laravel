@@ -8,16 +8,20 @@
                     <h4 class="card-title mb-1">Create New Material</h4>
                 </div>
                 <div class="card-body pt-0">
-                    <form method="POST" action="{{route('materials.store')}}">
+                    <form method="POST" action="{{ route('materials.store') }}">
                         @csrf
                         <div class="">
-                            <div class="form-group">
-                                <label>Name</label>
-                                <input type="text" name="name" class="form-control"
-                                       placeholder="Enter Color name" required>
-                                @error('name')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                            <div class="row row-sm">
+                                <div class="col-lg-6">
+                                    <label>Material Name (EN)</label>
+                                    <input type="text" name="name_en" class="form-control"
+                                        placeholder="Enter Material name english">
+                                </div>
+                                <div class="col-lg-6">
+                                    <label>Material Name (AR)</label>
+                                    <input type="text" name="name_ar" class="form-control"
+                                        placeholder="Enter Material name arabic">
+                                </div>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary mt-3 mb-0">Submit</button>

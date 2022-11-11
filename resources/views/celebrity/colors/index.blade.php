@@ -14,7 +14,8 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">Colors Sections</h4><span class="text-muted mt-1 tx-13 ml-2 mb-0">/ RolesList</span>
+                <h4 class="content-title mb-0 my-auto">Colors Sections</h4><span class="text-muted mt-1 tx-13 ml-2 mb-0">/
+                    RolesList</span>
             </div>
         </div>
     </div>
@@ -42,38 +43,34 @@
                     <div class="table-responsive">
                         <table class="table table-striped mg-b-0 text-md-nowrap">
                             <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Name</th>
-                                <th>Color</th>
-                                <th>Action</th>
-                            </tr>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Name</th>
+                                    <th>Color</th>
+                                    <th>Action</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            @foreach ($colors as $color)
-                                <tr>
-                                    <td>{{$loop->iteration}}</td>
-                                    <td>{{$color->name}}</td>
-
-                                    <td class="dott" style="background-color:{{ $color->color }}"></td>
-                                    <td>
-                                        <a class="btn btn-secondary-gradient"
-                                           href="{{ route('colors.edit',$color->id) }}"><i
-                                                class="typcn typcn-edit"></i></a>
-                                        <form action="{{ route('colors.destroy', $color->id) }}"
-                                              method="post" style="display: inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger-gradient">
-                                                <i
-                                                    class="typcn typcn-trash"></i>
-                                            </button>
-                                        </form>
-                                        {{--                                        <a class="btn btn-danger-gradient" href="{{ route('users.destroy',$user->id) }}"> <i--}}
-                                        {{--                                                class="typcn typcn-trash"></i></a>--}}
-                                    </td>
-                                </tr>
-                            @endforeach
+                                @foreach ($colors as $color)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $color->name }}</td>
+                                        <td class="dott" style="background-color:{{ $color->color }}"></td>
+                                        <td>
+                                            <a class="btn btn-secondary-gradient"
+                                                href="{{ route('colors.edit', $color->id) }}"><i
+                                                    class="typcn typcn-edit"></i></a>
+                                            <form action="{{ route('colors.destroy', $color->id) }}" method="post"
+                                                style="display: inline-block;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger-gradient">
+                                                    <i class="typcn typcn-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div><!-- bd -->

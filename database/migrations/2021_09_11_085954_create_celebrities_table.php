@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('add_by');
             $table->integer('status')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

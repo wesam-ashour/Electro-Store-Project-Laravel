@@ -22,6 +22,7 @@
     <link href="{{asset('assets/css-rtl/style-dark.css')}}" rel="stylesheet">
     <!---Skinmodes css-->
     <link href="{{asset('assets/css-rtl/skin-modes.css')}}" rel="stylesheet"/>
+    
 @endif
 
 <!--  Owl-carousel css-->
@@ -35,3 +36,29 @@
 
 <!-- Maps css -->
 <link href="{{asset('assets/plugins/jqvmap/jqvmap.min.css')}}" rel="stylesheet">
+
+
+
+
+
+<!-- Internal Select2 css -->
+<link href="{{asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
+
+<!--Internal  Datetimepicker-slider css -->
+<link href="{{asset('assets/plugins/amazeui-datetimepicker/css/amazeui.datetimepicker.css')}}" rel="stylesheet">
+<link href="{{asset('assets/plugins/jquery-simple-datetimepicker/jquery.simple-dtpicker.css')}}" rel="stylesheet">
+<link href="{{asset('assets/plugins/pickerjs/picker.min.css')}}" rel="stylesheet">
+
+<!-- Internal Spectrum-colorpicker css -->
+<link href="{{asset('assets/plugins/spectrum-colorpicker/spectrum.css')}}" rel="stylesheet">
+
+
+<!--  Left-Sidebar css -->
+{{-- <link rel="stylesheet" href="{{asset('assets/css/closed-sidemenu.css')}}"> --}}
+
+<!--- Dark-mode css --->
+{{-- <link href="{{asset('assets/css/style-dark.css')}}" rel="stylesheet"> --}}
+
+
+<!--- Animations css-->
+<link href="{{asset('assets/css/animate.css')}}" rel="stylesheet">

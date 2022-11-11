@@ -1,9 +1,5 @@
 @extends('celebrity.layouts.master')
 @section('content')
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.1/css/bootstrap-colorpicker.min.css" rel="stylesheet">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.1/js/bootstrap-colorpicker.min.js"></script>
-
     <!-- row -->
     <div class="row row-sm" style="padding-top: 25px;">
         <div class="col-lg-7 col-xl-7 col-md-12 col-sm-12">
@@ -16,14 +12,20 @@
                         @csrf
                         @method('PUT')
                         <div class="">
-                            <div class="form-group">
-                                <label>Name</label>
-                                <input type="text" name="name" class="form-control"
-                                       placeholder="Enter color name" value="{{$materials->name}}">
-                                @error('name')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            <div class="row row-sm">
+                                <div class="col-lg-6">
+                                    <label>Material Name (EN)</label>
+                                    <input type="text" name="name_en" class="form-control"
+                                        placeholder="Enter Material name english" value="{{$materials->getTranslation('name','en')}}">
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <label>Material Name (AR)</label>
+                                    <input type="text" name="name_ar" class="form-control"
+                                        placeholder="Enter Material name arabic" value="{{$materials->getTranslation('name','ar')}}">
+                                </div>
+
+                            </div>             
                         </div>
                         <button type="submit" class="btn btn-primary mt-3 mb-0">Submit</button>
                     </form>

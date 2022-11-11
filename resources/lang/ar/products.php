@@ -1,0 +1,21 @@
+<?php
+return [
+    'Home' => 'الصفحة الرئيسية',
+    'All_Products' => 'جميع المنتجات',
+    'Categories' => 'فئات',
+    'select' => '--اختار--',
+    'Top_selling' => 'الأكثر مبيعا',
+    'NEW' => 'جديد',
+    'add_to_wishlist' => 'أضف إلى قائمة الرغبات',
+    'Addedd_to_wishlist' => 'أضيفت إلى قائمة الرغبات',
+    'Size' => 'الحجم',
+    'Color' => 'اللون',
+    'Out_of_stock' => 'إنتهى من المخزن',
+    'Qty' => 'الكميه',
+    'add_to_cart' => 'أضف إلى السلة',
+    'In_Stock' => 'متوفر في المخزن',
+    'Category' => 'الفئة',
+    'Description' => 'وصف',
+    'Related_Products' => 'منتجات ذات صله',
+    'No_Products_Found' => 'لا توجد منتجات',
+];

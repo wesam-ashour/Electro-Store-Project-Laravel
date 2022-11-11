@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string("flat_no");
             $table->string("landmark");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

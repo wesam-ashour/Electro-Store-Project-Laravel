@@ -20,8 +20,9 @@ return new class extends Migration
             $table->string('name');
             $table->boolean('seeder')->default(0);
             $table->string('haveSub')->nullable();
-            $table->foreignId('celebrity_id')->nullable()->constrained('celebrities')->cascadeOnDelete();
+            $table->foreignId('celebrity_id')->nullable()->constrained('celebrities');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

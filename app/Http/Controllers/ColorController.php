@@ -20,6 +20,7 @@ class ColorController extends Controller
     public function store(StoreColorRequest $request)
     {
         $request['celebrity_id']=Auth::user()->id;
+        $request['name']= ['en' => $request->name_en, 'ar' => $request->name_ar];
         $color = Color::create($request->all('name', 'color','celebrity_id'));
         toastr()->success('Created Successfully','Create');
         return redirect()->route('colors.index');
@@ -42,6 +43,7 @@ class ColorController extends Controller
 
     public function update(UpdateColorRequest $request, Color $color)
     {
+        $request['name']= ['en' => $request->name_en, 'ar' => $request->name_ar];
         Color::where('id', $color->id)->update($request->all('name', 'color'));
         toastr()->info('Updated Successfully','Update');
         return redirect()->route('colors.index');
