@@ -84,7 +84,7 @@ class ProductController extends Controller
 
 
         }
-        $topSellings = Product::withCount('order')->where('status', 1)->orderBy('order_count', 'desc')->get();
+        $topSellings = Product::withCount('order')->where('status', 1)->orderBy('order_count', 'desc')->take(4)->get();
         return view('products.store', compact('products', 'categories', 'topSellings'));
     }
 
@@ -114,9 +114,9 @@ class ProductController extends Controller
         $article->material()->attach($request->material_id);
         $article->size()->attach($request->size_id);
 
-        if (isset($object['color'], $object['quantity'], $object['logo'])) {
-            foreach ($request->product_colors as $index => $object) {
 
+        foreach ($request->product_colors as $index => $object) {
+            if (isset($object['color'], $object['quantity'], $object['logo'])) {
                 $key = $object['logo'];
                 $resized_img = Image::make($key);
                 $resized_img->fit(600, 600)->save($key);
@@ -669,6 +669,7 @@ class ProductController extends Controller
                     $sum = 0;
                     $total = 0;
                     $total = $remains['remain'];
+                    $money = $total;
                     $r = DB::table('coupons')->where(['code' => $remains['code']])->get();
                     foreach ($cart as $id => $details) {
                         foreach ($details['color_items'] as $key => $c) {
@@ -682,7 +683,7 @@ class ProductController extends Controller
                             'order_number' => 'ORD-' . strtoupper(uniqid()),
                             'user_id' => auth()->user()->id,
                             'status' => '2',
-                            'grand_total' => $total,
+                            'grand_total' => $money,
                             'item_count' => $sum,
                             'payment_status' => 0,
                             'payment_method' => 'COD',
@@ -727,7 +728,7 @@ class ProductController extends Controller
                         [
                             'user_id' => Auth()->user()->id,
                             'order_id' => $order->id,
-                            'order_amount' => $total,
+                            'order_amount' => $money,
                             'payment_method' => 'COD',
                             'response' => 'No response',
                             'status' => 'pending'
@@ -866,7 +867,7 @@ class ProductController extends Controller
                 try {
                     $total = $remains['remain'];
                     $r = DB::table('coupons')->where(['code' => $remains['code']])->get();
-
+                    $money = $total;
                     $stripe = new \Stripe\StripeClient(
                         'sk_test_51LrHn8Lw9BmBv7zE61pS9iDdrgVW1hK03LoUwvsVhBpIhwFtFUqXxahbT1MHI6PlWLo43hWpOa4wvKuZLZiNbF7Q00EF0ytbDt'
                     );
@@ -893,7 +894,7 @@ class ProductController extends Controller
                             'order_number' => 'ORD-' . strtoupper(uniqid()),
                             'user_id' => auth()->user()->id,
                             'status' => '2',
-                            'grand_total' => $total,
+                            'grand_total' => $money,
                             'item_count' => $sum,
                             'payment_status' => 1,
                             'payment_method' => 'credit card',
@@ -936,7 +937,7 @@ class ProductController extends Controller
                         [
                             'user_id' => Auth()->user()->id,
                             'order_id' => $order->id,
-                            'order_amount' => $total,
+                            'order_amount' => $money,
                             'payment_method' => 'credit card',
                             'response' => $response,
                             'status' => '1'

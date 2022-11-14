@@ -347,7 +347,6 @@ class OrderController extends Controller
             return redirect()->back();
         }
 
-        toastr()->success('Updated Successfully', 'Update');
         return redirect()->back();
     }
     public function show_orders_all_details($id)
