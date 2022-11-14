@@ -26,16 +26,12 @@
                                     <label>Title (EN)</label>
                                     <input type="text" name="title_en" class="form-control" placeholder="title">
                                 </div>
-                                @error('title')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                                 <div class="col-lg-6">
                                     <label>Title (AR)</label>
                                     <input type="text" name="title_ar" class="form-control" placeholder="title">
                                 </div>
-                                @error('title')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                             </div>
                             <br>
                             <div class="row row-sm">
@@ -43,16 +39,12 @@
                                     <label>Description (EN)</label>
                                     <input type="text" name="description_en" class="form-control" placeholder="description">
                                 </div>
-                                @error('description')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                                 <div class="col-lg-6">
                                     <label>Description (AR)</label>
                                     <input type="text" name="description_ar" class="form-control" placeholder="description">
                                 </div>
-                                @error('description')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                               
                             </div>
                             <br>
                             <div class="row row-sm">
@@ -67,9 +59,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @error('price')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Offer price</label>
@@ -81,9 +71,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @error('offer_price')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                             </div>
                             <br>
                             <div class="row row-sm">
@@ -96,18 +84,14 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                @error('category_id')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                                 <div class="col-lg-6">
                                     <label for="category_id">Sub Category</label>
                                     <select class="form-control" name="category_id[]" placeholder="Select Sub Category"
                                         id="sub_category" required multiple>
                                     </select>
                                 </div>
-                                @error('category_id')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                             </div>
                             <br>
                             <div class="row row-sm">
@@ -120,9 +104,7 @@
                                                 <option value="{{ $material->id }}">{{ $material->name }}
                                                 </option>
                                             @endforeach
-                                            @error('material_id')
-                                                <div class="alert alert-danger">{{ $message }}</div>
-                                            @enderror
+                                            
                                         </select>
                                     @else
                                         <p>No materials.. please insert new material
@@ -133,9 +115,7 @@
                                         </p>
                                     @endif
                                 </div>
-                                @error('material_id')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                                 <div class="col-lg-6">
                                     <label for="">Sizes</label>
                                     @if (count($sizes))
@@ -144,9 +124,7 @@
                                                 <option value="{{ $size->id }}">{{ $size->name }}
                                                 </option>
                                             @endforeach
-                                            @error('size_id')
-                                                <div class="alert alert-danger">{{ $message }}</div>
-                                            @enderror
+                                            
                                         </select>
                                     @else
                                         <p>No sizes.. please insert new size
@@ -156,14 +134,11 @@
                                         </p>
                                     @endif
                                 </div>
-                                @error('size_id')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                             </div>
                             <br>
 
                             <label for="">Colors with images</label>
-                            {{-- @forelse($colorssd as $color) --}}
                             <div class="row">
                                 @foreach ($colorssd as $color)
                                     <div class="col-12 col-sm-6 col-lg-6 col-xl-4">
@@ -231,9 +206,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @error('cover')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                                 <div class="col-lg-6">
                                     <label>Status</label>
                                     <select name="status" class="form-control">

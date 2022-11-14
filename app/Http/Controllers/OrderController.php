@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\OrdersExport;
 use App\Mail\CancelMail;
 use App\Mail\CompleteMail;
 use App\Mail\StatusMail;
@@ -16,7 +17,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-
+use Exception;
+use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 class OrderController extends Controller
 {
 
@@ -64,7 +68,7 @@ class OrderController extends Controller
 
             foreach (OrderItem::where('order_id', $id)->get() as $key => $value) {
                 $qty = $value->quantity;
-                $res = ProductColor::where('product_id', $value->product_id)->where('color_id',$value->color_id)->increment('quantity', $qty);
+                $res = ProductColor::where('product_id', $value->product_id)->where('color_id', $value->color_id)->increment('quantity', $qty);
             }
 
             if ($order->payment_method == 'credit card') {
@@ -72,7 +76,7 @@ class OrderController extends Controller
 
                 $stripe = new \Stripe\StripeClient(
                     'sk_test_51LrHn8Lw9BmBv7zE61pS9iDdrgVW1hK03LoUwvsVhBpIhwFtFUqXxahbT1MHI6PlWLo43hWpOa4wvKuZLZiNbF7Q00EF0ytbDt'
-                    );
+                );
                 $stripe->refunds->create(
                     [
                         'charge' => $order->charge_id,
@@ -84,15 +88,19 @@ class OrderController extends Controller
                 $transaction->status = 3;
                 $transaction->save();
             }
-
-            $mailData = [
-                'title' => 'Mail from Store',
-                'body' => 'Update order status',
-                'order_number' => $order->order_number,
-            ];
-
-            Mail::to($user_email)->send(new CancelMail($mailData));
             toastr()->success('Order Canceled Successfully', 'Canceled');
+            try {
+                $mailData = [
+                    'title' => 'Mail from Store',
+                    'body' => 'Update order status',
+                    'order_number' => $order->order_number,
+                ];
+
+                Mail::to($user_email)->send(new CancelMail($mailData));
+            } catch
+            (Exception $e) {
+                return redirect()->back();
+            }
             return redirect()->back();
 
         } else {
@@ -107,21 +115,24 @@ class OrderController extends Controller
         $user_email = User::find($user)->email;
         $order = Order::find($id);
         $transaction = Transaction::where('order_id', $order->id)->first();
-        // dd($transaction);
         if ($order->status = '5') {
             $order->status = '6';
             $order->payment_status = 1;
             $order->save();
             $transaction->status = 1;
             $transaction->save();
-            $mailData = [
-                'title' => 'Mail from Store',
-                'body' => 'Update order status',
-                'order_number' => $order->order_number,
-            ];
-
-            Mail::to($user_email)->send(new CompleteMail($mailData));
             toastr()->success('Order complete Successfully', 'Success');
+            try {
+                $mailData = [
+                    'title' => 'Mail from Store',
+                    'body' => 'Update order status',
+                    'order_number' => $order->order_number,
+                ];
+                Mail::to($user_email)->send(new CompleteMail($mailData));
+            } catch
+            (Exception $e) {
+                return redirect()->back();
+            }
             return redirect()->back();
         } else {
             toastr()->error('There is something error', 'Erorr');
@@ -131,10 +142,84 @@ class OrderController extends Controller
 
     }
 
-    public function show_orders_all()
+    public function show_orders_all(Request $request)
     {
-        $orders = Order::orderBy('id', 'ASC')->paginate(10);
+        $orders = Order::orderBy('id', 'DESC')->paginate(10);
         $status = Status::all();
+
+        if ($request->filled('search')) {
+            $orders = Order::where(
+                    function ($query) {
+                        return $query
+                            ->where('order_number', 'Like', '%' . request('search') . '%');       
+                    }
+                )->paginate(10);
+            
+        } elseif ($request->filled('filter')) {
+
+            if ($request->filter == 1 and $request->export == 1) {
+            
+                $orders = Order::where("created_at",">", Carbon::now()->subMonths(3))->get();
+                $pdf = Pdf::loadView('admin.orders.myPDF', compact('orders'));
+                return $pdf->download('Order.pdf');
+            } elseif ($request->filter == 1 and $request->export == 2) {
+                $orders = Order::where("created_at",">", Carbon::now()->subMonths(3))->get();
+                return Excel::download(new OrdersExport($orders), 'Order-collection.xlsx');
+            } elseif ($request->filter == 1 and $request->export == 3) {
+                $orders = Order::where("created_at",">", Carbon::now()->subMonths(3))->get();
+                return (new OrdersExport($orders))->download('Order.csv', \Maatwebsite\Excel\Excel::CSV);
+            } elseif ($request->filter == 1) {
+                $orders = Order::where("created_at",">", Carbon::now()->subMonths(3))->paginate(10);
+
+
+            } elseif ($request->filter == 2 and $request->export == 1) {
+                $orders = Order::where("created_at",">", Carbon::now()->subMonths(6))->get();
+                $pdf = Pdf::loadView('admin.orders.myPDF', compact('orders'));
+                return $pdf->download('orders.pdf');
+            } elseif ($request->filter == 2 and $request->export == 2) {
+                $orders = Order::where("created_at",">", Carbon::now()->subMonths(6))->get();
+                return Excel::download(new OrdersExport($orders), 'orders-collection.xlsx');
+            } elseif ($request->filter == 2 and $request->export == 3) {
+                $orders = Order::where("created_at",">", Carbon::now()->subMonths(6))->get();
+                return (new OrdersExport($orders))->download('orders.csv', \Maatwebsite\Excel\Excel::CSV);
+            } elseif ($request->filter == 2) {
+                $orders = Order::where("created_at",">", Carbon::now()->subMonths(6))->paginate(10);
+
+
+            } elseif ($request->filter == 3 and $request->export == 1) {
+                $orders = Order::where("created_at",">", Carbon::now()->subMonths(9))->get();
+                $pdf = Pdf::loadView('admin.orders.myPDF', compact('orders'));
+                return $pdf->download('orders.pdf');
+            } elseif ($request->filter == 3 and $request->export == 2) {
+                $orders = Order::where("created_at",">", Carbon::now()->subMonths(9))->get();
+                return Excel::download(new OrdersExport($orders), 'orders-collection.xlsx');
+            } elseif ($request->filter == 3 and $request->export == 3) {
+                $orders = Order::where("created_at",">", Carbon::now()->subMonths(9))->get();
+                return (new OrdersExport($orders))->download('orders.csv', \Maatwebsite\Excel\Excel::CSV);
+            } elseif ($request->filter == 3) {
+                $orders = Order::where("created_at",">", Carbon::now()->subMonths(9))->paginate(10);
+
+
+
+            } elseif ($request->filter == 0 and $request->export == 1) {
+                $orders = Order::all();
+                $pdf = Pdf::loadView('admin.orders.myPDF', compact('orders'));
+                return $pdf->download('orders.pdf');
+            } elseif ($request->filter == 0 and $request->export == 2) {
+                $orders = Order::all();
+                return Excel::download(new OrdersExport($orders), 'orders-collection.xlsx');
+            } elseif ($request->filter == 0 and $request->export == 3) {
+                $orders = Order::all();
+                return (new OrdersExport($orders))->download('orders.csv', \Maatwebsite\Excel\Excel::CSV);
+            } elseif ($request->filter == 0) {
+                $orders = Order::paginate(10);
+            }
+
+        } else {
+            $orders = Order::paginate(10);
+        }
+
+
         return view('admin.orders.index', compact('orders', 'status'));
     }
     public function edit_orders_status($id)
@@ -153,12 +238,18 @@ class OrderController extends Controller
         if ($request->status == '3') {
             $status->status = '3';
             $status->save();
-            $mailData = [
-                'title' => 'Mail from Store',
-                'body' => 'Update order status : pending',
-                'order_number' => $status->order_number,
-            ];
-            Mail::to($user_email)->send(new StatusMail($mailData));
+            toastr()->success('Updated Successfully', 'Update');
+            try {
+                $mailData = [
+                    'title' => 'Mail from Store',
+                    'body' => 'Update order status : pending',
+                    'order_number' => $status->order_number,
+                ];
+                Mail::to($user_email)->send(new StatusMail($mailData));
+            } catch
+            (Exception $e) {
+                return redirect()->back();
+            }
         } elseif ($request->status == '1') {
 
             if ($status->payment_method == 'COD') {
@@ -173,14 +264,14 @@ class OrderController extends Controller
 
             foreach (OrderItem::where('order_id', $order->id)->get() as $key => $value) {
                 $qty = $value->quantity;
-                $res = ProductColor::where('product_id', $value->product_id)->where('color_id',$value->color_id)->increment('quantity', $qty);
+                $res = ProductColor::where('product_id', $value->product_id)->where('color_id', $value->color_id)->increment('quantity', $qty);
             }
 
             if ($status->payment_method == 'credit card') {
 
                 $stripe = new \Stripe\StripeClient(
                     'sk_test_51LrHn8Lw9BmBv7zE61pS9iDdrgVW1hK03LoUwvsVhBpIhwFtFUqXxahbT1MHI6PlWLo43hWpOa4wvKuZLZiNbF7Q00EF0ytbDt'
-                    );
+                );
                 $stripe->refunds->create(
                     [
                         'charge' => $status->charge_id,
@@ -193,51 +284,69 @@ class OrderController extends Controller
                 $transaction->save();
 
             }
-
-            $mailData = [
-                'title' => 'Mail from Store',
-                'body' => 'Update order status : canceled',
-                'order_number' => $status->order_number,
-            ];
-            Mail::to($user_email)->send(new StatusMail($mailData));
+            toastr()->success('Updated Successfully', 'Update');
+            try {
+                $mailData = [
+                    'title' => 'Mail from Store',
+                    'body' => 'Update order status : canceled',
+                    'order_number' => $status->order_number,
+                ];
+                Mail::to($user_email)->send(new StatusMail($mailData));
+            } catch
+            (Exception $e) {
+                return redirect()->back();
+            }
         } elseif ($request->status == '4') {
             $status->status = '4';
             $status->save();
-            $mailData = [
-                'title' => 'Mail from Store',
-                'body' => 'Update order status : being bagged',
-                'order_number' => $status->order_number,
-            ];
-            Mail::to($user_email)->send(new StatusMail($mailData));
+            toastr()->success('Updated Successfully', 'Update');
+            try {
+                $mailData = [
+                    'title' => 'Mail from Store',
+                    'body' => 'Update order status : being bagged',
+                    'order_number' => $status->order_number,
+                ];
+                Mail::to($user_email)->send(new StatusMail($mailData));
+            } catch
+            (Exception $e) {
+                return redirect()->back();
+            }
         } elseif ($request->status == '5') {
             $status->status = '5';
             $status->save();
-            $mailData = [
-                'title' => 'Mail from Store',
-                'body' => 'Update order status : on the way',
-                'order_number' => $status->order_number,
-            ];
-            Mail::to($user_email)->send(new StatusMail($mailData));
+            toastr()->success('Updated Successfully', 'Update');
+            try {
+                $mailData = [
+                    'title' => 'Mail from Store',
+                    'body' => 'Update order status : on the way',
+                    'order_number' => $status->order_number,
+                ];
+                Mail::to($user_email)->send(new StatusMail($mailData));
+            } catch
+            (Exception $e) {
+                return redirect()->back();
+            }
         } elseif ($request->status == '6') {
             $status->status = '6';
             $status->payment_status = 1;
             $status->save();
-            $mailData = [
-                'title' => 'Mail from Store',
-                'body' => 'Update order status : delivered',
-                'order_number' => $status->order_number,
-            ];
-            Mail::to($user_email)->send(new StatusMail($mailData));
+            toastr()->success('Updated Successfully', 'Update');
+            try {
+                $mailData = [
+                    'title' => 'Mail from Store',
+                    'body' => 'Update order status : delivered',
+                    'order_number' => $status->order_number,
+                ];
+                Mail::to($user_email)->send(new StatusMail($mailData));
+            } catch
+            (Exception $e) {
+                return redirect()->back();
+            }
         } else {
             toastr()->error('Something went error', 'Error');
             return redirect()->back();
         }
 
-
-
-        // $input = $request->all('status');
-        // $status = Order::find($order->id);
-        // $status->update($input);
         toastr()->success('Updated Successfully', 'Update');
         return redirect()->back();
     }
@@ -277,7 +386,7 @@ class OrderController extends Controller
 
     public function show(Order $order, $id)
     {
-        $orderDetails = DB::table('order_items')->where(['order_id' => $id])->get();
+        $orderDetails = OrderItem::where('order_id', $id)->get();
         return view('user.orders.show', compact('orderDetails'));
     }
 

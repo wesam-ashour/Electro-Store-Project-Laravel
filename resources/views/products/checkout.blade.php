@@ -9,10 +9,9 @@
             <!-- row -->
             <div class="row">
                 <div class="col-md-12">
-                    <h3 class="breadcrumb-header">Checkout</h3>
                     <ul class="breadcrumb-tree">
-                        <li><a href="#">Home</a></li>
-                        <li class="active">Checkout</li>
+                        <li><a href="#">{{ __('cart.Home') }}</a></li>
+                        <li class="active">{{ __('cart.Checkout') }}</li>
                     </ul>
                 </div>
             </div>
@@ -35,39 +34,57 @@
                         <!-- Billing Details -->
                         <div class="billing-details">
                             <div class="section-title">
-                                <h3 class="title">Billing address</h3>
+                                <h3 class="title">{{ __('cart.Billing') }}</h3>
                             </div>
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <div class="form-group">
-                                <label>First name</label>
+                                <label>{{ __('cart.First_name') }}</label>
                                 <label></label>
                                 <input class="input" type="text" value="{{ auth()->user()->first_name }}" disabled
                                     placeholder="First Name">
                             </div>
                             <div class="form-group">
-                                <label>Last name</label>
+                                <label>{{ __('cart.Last_name') }}</label>
                                 <input class="input" type="text" value="{{ auth()->user()->last_name }}" disabled
                                     placeholder="Last Name">
                             </div>
                             <div class="form-group">
-                                <label>Email</label>
+                                <label>{{ __('cart.Email') }}</label>
                                 <input class="input" type="email" value="{{ auth()->user()->email }}" disabled
                                     placeholder="Email">
                             </div>
                             <div class="form-group">
-                                <label>Address</label>
-                                <select name="address" class="form-control">
-                                    @forelse ($addresss as $address)
-                                        <option value="{{ $address->id }}">{{ $address->street_no }}
-                                        </option>
-                                    @empty
-                                        No address found
-                                    @endforelse
-                                </select>
+                                <label>{{ __('cart.Address') }}</label>
+
+                                @if (count($addresss) > 0)
+                                    <select name="address" class="form-control">
+                                        @forelse ($addresss as $address)
+                                            <option value="{{ $address->id }}">{{ $address->street_no }}
+                                            </option>
+                                        @empty
+                                            {{ __('cart.No') }}
+                                        @endforelse
+                                    </select>
+                                @else
+                                    <p>No address found.. please add new address
+                                        <a class="btn btn-primary-gradient" style="padding: 3px; color:blue"
+                                            href="{{ route('profile_user') }}"> Add new address</a>
+                                    </p>
+                                @endif
+
                             </div>
                         </div>
                         <div class="order-notes">
-                            <label>Notes</label>
-                            <textarea class="input" name="notes" placeholder="Order Notes"></textarea>
+                            <label>{{ __('cart.Notes') }}</label>
+                            <textarea class="input" name="notess" placeholder="{{ __('cart.OrderـNotes') }}"></textarea>
                         </div>
                         <!-- /Order notes -->
                     </div>
@@ -75,12 +92,12 @@
                     <!-- Order Details -->
                     <div class="col-md-5 order-details">
                         <div class="section-title text-center">
-                            <h3 class="title">Your Order</h3>
+                            <h3 class="title">{{ __('cart.Your_Order') }}</h3>
                         </div>
                         <div class="order-summary">
                             <div class="order-col">
-                                <div><strong>PRODUCT</strong></div>
-                                <div><strong>TOTAL</strong></div>
+                                <div><strong>{{ __('cart.PRODUCT') }}</strong></div>
+                                <div><strong>{{ __('cart.TOTAL') }}</strong></div>
                             </div>
                             <div class="order-products">
                                 @php
@@ -100,11 +117,11 @@
                                 @endforeach
                             </div>
                             <div class="order-col">
-                                <div>Shiping</div>
-                                <div><strong>FREE</strong></div>
+                                <div>{{ __('cart.Shiping') }}</div>
+                                <div><strong>{{ __('cart.FREE') }}</strong></div>
                             </div>
                             <div class="order-col">
-                                <div><strong>TOTAL</strong></div>
+                                <div><strong>{{ __('cart.TOTAL') }}</strong></div>
                                 @if (count($remains))
                                     <div><strong class="order-total">${{ $remains['remain'] }}</strong></div>
                                 @else
@@ -115,10 +132,10 @@
                         <div class="payment-method">
 
                             <div class="input-radio">
-                                <input type="radio" name="payment" id="payment-1">
+                                <input type="radio" name="payment" required id="payment-1">
                                 <label for="payment-1">
                                     <span></span>
-                                    Credit Card
+                                    {{ __('cart.Credit') }}
                                 </label>
                                 <div class="caption">
                                     <form action="/charge" method="post" id="payment-form">
@@ -146,15 +163,15 @@
                                 <input type="radio" name="payment" value="CODE" id="payment-2">
                                 <label for="payment-2">
                                     <span></span>
-                                    Cash On Delevery
+                                    {{ __('cart.Cash') }}
                                 </label>
                                 <div class="caption">
-                                    <p>Pay when get your order!</p>
+                                    <p>{{ __('cart.Pay') }}</p>
                                 </div>
                             </div>
 
 
-                            <button type="submit" class="primary-btn order-submit">Place order</a>
+                            <button type="submit" class="primary-btn order-submit">{{ __('cart.Place') }} </a>
                         </div>
                         <!-- /Order Details -->
                     </div>
@@ -167,5 +184,3 @@
 
         <!-- /NEWSLETTER -->
     @endsection
-
-    

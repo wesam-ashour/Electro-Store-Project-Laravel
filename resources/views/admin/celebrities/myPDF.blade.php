@@ -1,24 +1,15 @@
 <!DOCTYPE html>
-
 <html>
 
 <head>
+    <title>PDF</title>
 
-    <title>Laravel 9 Generate PDF Example - ItSolutionStuff.com</title>
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body>
-
-    
-
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-
-    tempor incididunt ut labore et dolore magna aliqua.</p>
-
-  
+    <p>Data Table</p>
 
     <table class="table table-bordered">
 
@@ -33,31 +24,29 @@
 
         </tr>
 
-        @foreach($celebrities as $celebritt)
+        @foreach ($celebrities as $celebritt)
+            <tr>
 
-        <tr>
+                <td>{{ $loop->iteration }}</td>
 
-            <td>{{ $loop->iteration }}</td>
+                <td>{{ $celebritt->first_name . ' ' . $celebritt->last_name }}</td>
 
-            <td>{{ $celebritt->first_name . ' ' . $celebritt->last_name}}</td>
+                <td>{{ $celebritt->username }}</td>
+                <td>
+                    @if ($celebritt->status == 1)
+                        Active
+                    @else
+                        Inactive
+                    @endif
+                </td>
+                <td>{{ $celebritt->created_at }}</td>
 
-            <td>{{ $celebritt->username }}</td>
-            <td>
-                @if ($celebritt->status == 1)
-                    Active
-                @else
-                    Inactive
-                @endif
-            </td>
-            <td>{{ $celebritt->created_at }}</td>
-
-        </tr>
-
+            </tr>
         @endforeach
 
     </table>
 
-  
+
 
 </body>
 

@@ -7,7 +7,7 @@
         <div class="my-auto">
             <div class="d-flex">
                 <h4 class="content-title mb-0 my-auto">Ads Sections</h4><span class="text-muted mt-1 tx-13 ml-2 mb-0">/
-                    RolesList</span>
+                    AdsList</span>
             </div>
         </div>
     </div>
@@ -41,56 +41,60 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive border-top userlist-table">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th width="30px">#</th>
-                                    <th>Image</th>
-                                    <th>Title</th>
-                                    <th>Status</th>
-                                    <th>Created at</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tablecontents">
-                                @foreach ($ads as $ad)
-                                    <tr class="row1" data-id="{{ $ad->id }}">
-                                        <td class="pl-3"><i class="fa fa-sort"></i></td>
-                                        <td>
-                                            <img alt="avatar"
-                                                style="object-fit: cover;
+                    @if (count($ads) > 0)
+                        <div class="table-responsive border-top userlist-table">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th width="30px">#</th>
+                                        <th>Image</th>
+                                        <th>Title</th>
+                                        <th>Status</th>
+                                        <th>Created at</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablecontents">
+                                    @foreach ($ads as $ad)
+                                        <tr class="row1" data-id="{{ $ad->id }}">
+                                            <td class="pl-3"><i class="fa fa-sort"></i></td>
+                                            <td>
+                                                <img alt="avatar"
+                                                    style="object-fit: cover;
                                         width: 150x;
                                         height: 50px;"
-                                                src="{{ asset('/storage/' . $ad->image) }}">
-                                        </td>
-                                        <td>{{ $ad->name }}</td>
-                                        <td>
-                                            @if ($ad->status == 1)
-                                                Active
-                                            @else
-                                                Inactive
-                                            @endif
-                                        </td>
-                                        <td>{{ $ad->created_at }}</td>
-                                        <td>
-                                            <a href="{{ route('ads.edit', $ad->id) }}" class="btn btn-sm btn-info">
-                                                <i class="las la-pen"></i>
-                                            </a>
-                                            <form action="{{ route('ads.destroy', $ad->id) }}" method="post"
-                                                style="display: inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                    <i class="las la-trash"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                                                    src="{{ asset('/storage/' . $ad->image) }}">
+                                            </td>
+                                            <td>{{ $ad->name }}</td>
+                                            <td>
+                                                @if ($ad->status == 1)
+                                                    Active
+                                                @else
+                                                    Inactive
+                                                @endif
+                                            </td>
+                                            <td>{{ $ad->created_at }}</td>
+                                            <td>
+                                                <a href="{{ route('ads.edit', $ad->id) }}" class="btn btn-sm btn-info">
+                                                    <i class="las la-pen"></i>
+                                                </a>
+                                                <form action="{{ route('ads.destroy', $ad->id) }}" method="post"
+                                                    style="display: inline-block;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return myFunction();">
+                                                        <i class="las la-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        @else
+                        No Ads Found!
+                    @endif
                 </div><!-- bd -->
             </div><!-- bd -->
         </div>

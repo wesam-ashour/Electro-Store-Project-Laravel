@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('code')->nullable();
             $table->string('value')->nullable();
             $table->string('type')->nullable();
-            $table->integer('min_order_amt')->nullable();
+            $table->string('min_order_amt')->nullable();
             $table->integer('is_one_time')->nullable();
             $table->integer('status')->nullable();
             $table->timestamps();

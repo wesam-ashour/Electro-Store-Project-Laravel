@@ -68,7 +68,8 @@
                                 </div>
                             </div>
                         @empty
-                            {{ __('products.No_products_found') }}
+                        {{ __('products.No') }}
+                            
                         @endforelse
                     </div>
                     <!-- /aside Widget -->
@@ -143,7 +144,7 @@
                                 </div>
                                 <!-- /product -->
                             @empty
-                                {{ __('products.No_products_found') }}
+                            {{ __('products.No') }}
                             @endforelse
                         </div>
                     </div>

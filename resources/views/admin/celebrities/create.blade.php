@@ -5,7 +5,7 @@
         <div class="col-lg-7 col-xl-7 col-md-12 col-sm-12">
             <div class="card  box-shadow-0 ">
                 <div class="card-header">
-                    <h4 class="card-title mb-1">Create New User</h4>
+                    <h4 class="card-title mb-1">Create New Celebrity</h4>
                 </div>
                 <div class="card-body pt-0">
                     @if ($errors->any())

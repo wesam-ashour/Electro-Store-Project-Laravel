@@ -14,6 +14,15 @@
                     <h4 class="card-title mb-1">Edit color details</h4>
                 </div>
                 <div class="card-body pt-0">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form method="POST" action="{{route('colors.update',$color->id)}}">
                         @csrf
                         @method('PUT')

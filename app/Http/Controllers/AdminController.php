@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Exports\AdminExport;
 use App\Exports\UsersExport;
+use App\Http\Requests\StoreSubAdmins;
 use App\Models\Admin;
+use App\Models\Celebrity;
+use App\Models\Contact;
+use App\Models\Order;
+use App\Models\Transaction;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Console\Migrations\RefreshCommand;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -16,14 +22,18 @@ use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function index()
     {
-        return view('admin.home');
+        $users = User::all()->count();
+        $celebrities = Celebrity::all()->count();
+        $orders = Order::all()->count();
+        $transactions = Transaction::where('status',1)->count();
+        $newOrders = Order::orderBy('id','DESC')->take(4)->get();
+        $newTransactions = Transaction::where('status',1)->orderBy('id','DESC')->take(4)->get();
+        $newMesseages = Contact::orderBy('id','DESC')->take(4)->get();
+
+        return view('admin.home',compact('users','celebrities','orders','transactions','newOrders','newTransactions','newMesseages'));
     }
 
     public function sub_admins(Request $request)
@@ -39,7 +49,8 @@ class AdminController extends Controller
                             ->orwhere('last_name', 'Like', '%' . request('search') . '%')
                             ->orwhere('mobile', 'Like', '%' . request('search') . '%')
                             ->orwhere('email', 'Like', '%' . request('search') . '%');
-                    })->paginate(10);
+                    }
+                )->paginate(10);
             if ($request->filled('filter') or $request->filled('export')) {
 
                 if ($request->filter == 0 and $request->export == 1) {
@@ -67,7 +78,8 @@ class AdminController extends Controller
                                     ->orwhere('last_name', 'Like', '%' . request('search') . '%')
                                     ->orwhere('mobile', 'Like', '%' . request('search') . '%')
                                     ->orwhere('email', 'Like', '%' . request('search') . '%');
-                            })->orderBy('first_name')->paginate(10);
+                            }
+                        )->orderBy('first_name')->paginate(10);
                     $pdf = Pdf::loadView('admin.myPDF', compact('admins'));
                     return $pdf->download('itsolutionstuff.pdf');
                 } elseif ($request->filter == 1 and $request->export == 2) {
@@ -80,7 +92,8 @@ class AdminController extends Controller
                                     ->orwhere('last_name', 'Like', '%' . request('search') . '%')
                                     ->orwhere('mobile', 'Like', '%' . request('search') . '%')
                                     ->orwhere('email', 'Like', '%' . request('search') . '%');
-                            })->orderBy('first_name')->paginate(10);
+                            }
+                        )->orderBy('first_name')->paginate(10);
                     return Excel::download(new AdminExport($admins), 'users-collection.xlsx');
                 } elseif ($request->filter == 1 and $request->export == 3) {
                     $admins = Admin::where('sub_admin', '=', 0)
@@ -92,7 +105,8 @@ class AdminController extends Controller
                                     ->orwhere('last_name', 'Like', '%' . request('search') . '%')
                                     ->orwhere('mobile', 'Like', '%' . request('search') . '%')
                                     ->orwhere('email', 'Like', '%' . request('search') . '%');
-                            })->orderBy('first_name')->paginate(10);
+                            }
+                        )->orderBy('first_name')->paginate(10);
                     return (new AdminExport($admins))->download('Alphabetical.csv', \Maatwebsite\Excel\Excel::CSV);
                 } elseif ($request->filter == 1) {
                     $admins = Admin::where('sub_admin', '=', 0)
@@ -104,7 +118,8 @@ class AdminController extends Controller
                                     ->orwhere('last_name', 'Like', '%' . request('search') . '%')
                                     ->orwhere('mobile', 'Like', '%' . request('search') . '%')
                                     ->orwhere('email', 'Like', '%' . request('search') . '%');
-                            })->orderBy('first_name')->paginate(10);
+                            }
+                        )->orderBy('first_name')->paginate(10);
                 }
 
                 if ($request->filter == 2 and $request->export == 1) {
@@ -117,7 +132,8 @@ class AdminController extends Controller
                                     ->orwhere('last_name', 'Like', '%' . request('search') . '%')
                                     ->orwhere('mobile', 'Like', '%' . request('search') . '%')
                                     ->orwhere('email', 'Like', '%' . request('search') . '%');
-                            })->orderBy('id', 'DESC')->paginate(10);
+                            }
+                        )->orderBy('id', 'DESC')->paginate(10);
                     $pdf = Pdf::loadView('admin.myPDF', compact('admins'));
                     return $pdf->download('itsolutionstuff.pdf');
                 } elseif ($request->filter == 2 and $request->export == 2) {
@@ -130,7 +146,8 @@ class AdminController extends Controller
                                     ->orwhere('last_name', 'Like', '%' . request('search') . '%')
                                     ->orwhere('mobile', 'Like', '%' . request('search') . '%')
                                     ->orwhere('email', 'Like', '%' . request('search') . '%');
-                            })->orderBy('id', 'DESC')->paginate(10);
+                            }
+                        )->orderBy('id', 'DESC')->paginate(10);
                     return Excel::download(new AdminExport($admins), 'users-collection.xlsx');
                 } elseif ($request->filter == 2 and $request->export == 3) {
                     $admins = Admin::where('sub_admin', '=', 0)
@@ -142,7 +159,8 @@ class AdminController extends Controller
                                     ->orwhere('last_name', 'Like', '%' . request('search') . '%')
                                     ->orwhere('mobile', 'Like', '%' . request('search') . '%')
                                     ->orwhere('email', 'Like', '%' . request('search') . '%');
-                            })->orderBy('id', 'DESC')->paginate(10);
+                            }
+                        )->orderBy('id', 'DESC')->paginate(10);
                     return (new AdminExport($admins))->download('Alphabetical.csv', \Maatwebsite\Excel\Excel::CSV);
                 } elseif ($request->filter == 2) {
                     $admins = Admin::where('sub_admin', '=', 0)
@@ -154,7 +172,8 @@ class AdminController extends Controller
                                     ->orwhere('last_name', 'Like', '%' . request('search') . '%')
                                     ->orwhere('mobile', 'Like', '%' . request('search') . '%')
                                     ->orwhere('email', 'Like', '%' . request('search') . '%');
-                            })->orderBy('id', 'DESC')->paginate(10);
+                            }
+                        )->orderBy('id', 'DESC')->paginate(10);
                 }
             }
 
@@ -226,18 +245,8 @@ class AdminController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreSubAdmins $request)
     {
-        $this->validate($request, [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required',
-            'mobile' => 'required',
-            'status' => 'required',
-            'roles' => 'required'
-        ]);
-
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
         $input['sub_admin'] = 0;
@@ -246,10 +255,8 @@ class AdminController extends Controller
         $user = Admin::create($input);
 
         $user->assignRole($request->input('roles'));
-
-
         return redirect()->route('sub_admins')
-            ->with('success', 'User created successfully');
+            ->with('success', 'SubAdmin created successfully');
     }
 
     public function edit($id)
@@ -264,16 +271,14 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'first_name' => 'required',
-            'last_name' => 'required',
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
             'email' => 'required|email|unique:admins,email,' . $id,
             'password' => $request->password != null ? 'sometimes|required|min:8' : '',
-            'mobile' => 'required',
-            'status' => 'required',
+            'mobile' => ['required', 'string', 'max:15'],
+            'status'  => 'required|min:1|max:50',
             'roles' => 'required'
         ]);
-
-
 
         $input = $request->all();
         if (!empty($input['password'])) {
@@ -290,7 +295,7 @@ class AdminController extends Controller
         $user->assignRole($request->input('roles'));
 
         return redirect()->route('sub_admins')
-            ->with('success', 'User updated successfully');
+            ->with('success', 'SubAdmin updated successfully');
     }
 
     /**
@@ -302,6 +307,33 @@ class AdminController extends Controller
     public function destroy($id)
     {
         Admin::find($id)->delete();
-        return redirect()->route('sub_admins')->with('success', 'User deleted successfully');
+        return redirect()->route('sub_admins')->with('success', 'SubAdmin deleted successfully');
+    }
+    public function profile($id)
+    {
+       $admin =  Admin::find($id);
+        return view('admin.auth.profile',compact('admin'));
+    }
+    public function update_profile_admin(Request $request,$id)
+    {
+        $this->validate($request, [
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => 'required|email|unique:admins,email,' . $id,
+            'password' => $request->password != null ? 'sometimes|required|min:8' : '',
+            'mobile' => ['required', 'string', 'max:15'],
+        ]);
+
+        $input = $request->all();
+        if (!empty($input['password'])) {
+            $input['password'] = Hash::make($input['password']);
+        } else {
+            $input = Arr::except($input, array('password'));
+        }
+
+        $user = Admin::find($id);
+        $user->update($input);
+
+        return redirect()->back()->with('success', 'Admin Information updated successfully');
     }
 }

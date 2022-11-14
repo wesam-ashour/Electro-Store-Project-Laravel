@@ -8,6 +8,15 @@
                     <h4 class="card-title mb-1">Create New ad</h4>
                 </div>
                 <div class="card-body pt-0">
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                     <form method="POST" action="{{route('ads.store')}}" enctype="multipart/form-data">
                         @csrf
                         <div class="">
@@ -31,13 +40,20 @@
                                     @endforeach
                                 </select>
                             </div>
-                            
                             <div class="form-group">
-                                <label>Ad image</label>
-                                <div class="col-sm-12 col-md-4">
-                                    <input type="file" name="image"  data-height="200" />
+                                <label>Images</label>
+                                <div class="input-group file-browser">
+                                    <input type="text" class="form-control browse-file" placeholder="choose"
+                                        readonly>
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-default">
+                                            upload <input type="file" name="image" accept="image/*"
+                                                style="display: none;">
+                                        </span>
+                                    </label>
                                 </div>
                             </div>
+                            
                         </div>
                         <button type="submit" class="btn btn-primary mt-3 mb-0">Submit</button>
                     </form>

@@ -17,5 +17,5 @@ return [
     'Category' => 'الفئة',
     'Description' => 'وصف',
     'Related_Products' => 'منتجات ذات صله',
-    'No_Products_Found' => 'لا توجد منتجات',
+    'No' => 'لا توجد منتجات',
 ];

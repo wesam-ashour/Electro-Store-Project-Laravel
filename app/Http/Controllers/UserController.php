@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\UsersExport;
+use App\Http\Requests\StoreUsers;
 use App\Models\Address;
 use App\Models\Admin;
 use App\Models\Order;
@@ -178,38 +179,23 @@ class UserController extends Controller
         return view('admin.users.orders_details', compact('orderDetails'));
     }
 
-    public function store(Request $request)
+    public function store(StoreUsers $request)
     {
         $user = Auth::user()->id;
         $admin_username = 'Admin: ' . ' ' . Admin::find($user)->first_name . ' ' . Admin::find($user)->last_name;
-
-        $this->validate($request, [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required',
-            'mobile' => 'required',
-            'status' => 'sometimes',
-            // 'roles' => 'required|array|min:1'
-        ]);
 
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
         $input['add_by'] = $admin_username;
 
         $user = User::create($input);
-
-        // $user->assignRole($request->input('roles'));
-
-
         return redirect()->route('users.index')
             ->with('success', 'User created successfully');
     }
 
     public function create()
     {
-        $roles = Role::pluck('name', 'id');
-        return view('admin.users.create', compact('roles'));
+        return view('admin.users.create');
     }
 
     public function show($id)
@@ -222,22 +208,18 @@ class UserController extends Controller
     public function edit($id)
     {
         $users = User::find($id);
-        // $roles = Role::pluck('name', 'name')->all();
-        // $userRole = $user->roles->pluck('name', 'name')->all();
-
         return view('admin.users.edit', compact('users'));
     }
 
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'first_name' => 'required',
-            'last_name' => 'required',
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
             'email' => 'required|email|unique:users,email,' . $id,
             'password' => $request->password != null ? 'sometimes|required|min:8' : '',
-            'mobile' => 'sometimes',
-            'status' => 'sometimes',
-            'roles' => 'sometimes'
+            'mobile' => ['required', 'string', 'max:15'],
+            'status'  => 'required|min:1|max:50',
         ]);
 
         $input = $request->all();
@@ -246,13 +228,8 @@ class UserController extends Controller
         } else {
             $input = Arr::except($input, array('password'));
         }
-
         $user = User::find($id);
         $user->update($input);
-        // DB::table('model_has_roles')->where('model_id', $id)->delete();
-
-        // $user->assignRole($request->input('roles'));
-
         return redirect()->route('users.index')
             ->with('success', 'User updated successfully');
     }

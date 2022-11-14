@@ -97,29 +97,29 @@
         <!-- container -->
         <div class="container">
             <article class="card">
-                <header class="card-header"> My Orders / Tracking </header>
+                <header class="card-header">{{ __('welcome.My') }} </header>
                 <div class="card-body">
-                    <h6>Order ID: {{ $order->id }}</h6>
+                    <h6>{{ __('welcome.Order_ID') }}: {{ $order->id }}</h6>
                     <article class="card">
                         <div class="card-body row">
-                            <div class="col"> <strong>Order Number #:</strong> <br> {{ $order->order_number }} </div>
-                            <div class="col"> <strong>Status:</strong> <br>
+                            <div class="col"> <strong>{{ __('welcome.Order_Number') }} #:</strong> <br> {{ $order->order_number }} </div>
+                            <div class="col"> <strong>{{ __('welcome.Status') }}:</strong> <br>
                                 @if ($order->status == '1')
-                                    canceled
+                                {{ __('welcome.canceled') }}
                                 @elseif ($order->status == '2')
-                                    new order
+                                {{ __('welcome.new_order') }}
                                 @elseif ($order->status == '3')
-                                    pending
+                                {{ __('welcome.pending') }}
                                 @elseif ($order->status == '4')
-                                    being bagged
+                                {{ __('welcome.being_bagged') }}
                                 @elseif ($order->status == '5')
-                                    on the way
+                                {{ __('welcome.on_the_way') }}
                                 @elseif ($order->status == '6')
-                                    delivered
+                                {{ __('welcome.delivered') }}
                                 @endif
 
                             </div>
-                            <div class="col"> <strong>Address:</strong> <br>
+                            <div class="col"> <strong>{{ __('welcome.Address') }}:</strong> <br>
                                 {{ \App\Models\Address::find($order->address_id)->area }}, | <i class="fa fa-phone"></i>
                                 {{ \App\Models\User::find($user->id)->mobile }} </div>
                         </div>
@@ -128,41 +128,41 @@
                     <div class="track">
                         <ol class="progtrckr" data-progtrckr-steps="5">
                             @if ($order->status == '2')
-                                <li class="progtrckr-done">New Order</li>
-                                <li class="progtrckr-todo">Pending</li>
-                                <li class="progtrckr-todo">Being bagged</li>
-                                <li class="progtrckr-todo">on the way</li>
-                                <li class="progtrckr-todo">Delivered</li>
+                                <li class="progtrckr-done">{{ __('welcome.New_Order') }}</li>
+                                <li class="progtrckr-todo">{{ __('welcome.Pending') }}</li>
+                                <li class="progtrckr-todo">{{ __('welcome.being_bagged') }}</li>
+                                <li class="progtrckr-todo">{{ __('welcome.on_the_way') }}</li>
+                                <li class="progtrckr-todo">{{ __('welcome.delivered') }}</li>
                             @elseif($order->status == '3')
-                                <li class="progtrckr-done">New Order</li>
-                                <li class="progtrckr-done">Pending</li>
-                                <li class="progtrckr-todo">Being bagged</li>
-                                <li class="progtrckr-todo">on the way</li>
-                                <li class="progtrckr-todo">Delivered</li>
+                                <li class="progtrckr-done">{{ __('welcome.New_Order') }}</li>
+                                <li class="progtrckr-done">{{ __('welcome.Pending') }}</li>
+                                <li class="progtrckr-todo">{{ __('welcome.being_bagged') }}</li>
+                                <li class="progtrckr-todo">{{ __('welcome.on_the_way') }}</li>
+                                <li class="progtrckr-todo">{{ __('welcome.delivered') }}</li>
                             @elseif($order->status == '4')
-                                <li class="progtrckr-done">New Order</li>
-                                <li class="progtrckr-done">Pending</li>
-                                <li class="progtrckr-done">Being bagged</li>
-                                <li class="progtrckr-todo">on the way</li>
-                                <li class="progtrckr-todo">Delivered</li>
+                                <li class="progtrckr-done">{{ __('welcome.New_Order') }}</li>
+                                <li class="progtrckr-done">{{ __('welcome.Pending') }}</li>
+                                <li class="progtrckr-done">{{ __('welcome.being_bagged') }}</li>
+                                <li class="progtrckr-todo">{{ __('welcome.on_the_way') }}</li>
+                                <li class="progtrckr-todo">{{ __('welcome.delivered') }}</li>
                             @elseif($order->status == '5')
-                                <li class="progtrckr-done">New Order</li>
-                                <li class="progtrckr-done">Pending</li>
-                                <li class="progtrckr-done">Being bagged</li>
-                                <li class="progtrckr-done">on the way</li>
-                                <li class="progtrckr-todo">Delivered</li>
+                                <li class="progtrckr-done">{{ __('welcome.New_Order') }}</li>
+                                <li class="progtrckr-done">{{ __('welcome.Pending') }}</li>
+                                <li class="progtrckr-done">{{ __('welcome.being_bagged') }}</li>
+                                <li class="progtrckr-done">{{ __('welcome.on_the_way') }}</li>
+                                <li class="progtrckr-todo">{{ __('welcome.delivered') }}</li>
                             @elseif($order->status == '6')
-                                <li class="progtrckr-done">New Order</li>
-                                <li class="progtrckr-done">Pending</li>
-                                <li class="progtrckr-done">Being bagged</li>
-                                <li class="progtrckr-done">on the way</li>
-                                <li class="progtrckr-done">Delivered</li>
+                                <li class="progtrckr-done">{{ __('welcome.New_Order') }}</li>
+                                <li class="progtrckr-done">{{ __('welcome.Pending') }}</li>
+                                <li class="progtrckr-done">{{ __('welcome.being_bagged') }}</li>
+                                <li class="progtrckr-done">{{ __('welcome.on_the_way') }}</li>
+                                <li class="progtrckr-done">{{ __('welcome.delivered') }}</li>
                             @else
-                                <li class="progtrckr-cancel">Canceled</li>
-                                <li class="progtrckr-todo">Pending</li>
-                                <li class="progtrckr-todo">Being bagged</li>
-                                <li class="progtrckr-todo">on the way</li>
-                                <li class="progtrckr-todo">Delivered</li>
+                                <li class="progtrckr-cancel">{{ __('welcome.canceled') }}</li>
+                                <li class="progtrckr-todo">{{ __('welcome.Pending') }}</li>
+                                <li class="progtrckr-todo">{{ __('welcome.being_bagged') }}</li>
+                                <li class="progtrckr-todo">{{ __('welcome.on_the_way') }}</li>
+                                <li class="progtrckr-todo">{{ __('welcome.delivered') }}</li>
                             @endif
 
                         </ol>
@@ -172,16 +172,16 @@
                     <hr>
 
                     <a href="{{ route('orders.index') }}" class="btn btn-warning" data-abc="true"> <i
-                            class="fa fa-chevron-left"></i> Back to
-                        orders</a>
+                            class="fa fa-chevron-left"></i> 
+                            {{ __('welcome.Back_to_orders') }}</a>
                     @if ($order->status == '2' || $order->status == '3')
                         <form action="{{ route('orders.cancel', $order->id) }}" method="get"
                             style="display: inline-block;">
                             @csrf
                             @method('post')
                             <a href="{{ route('orders.cancel', $order->id) }}" type="submit" class="btn btn-danger"
-                                data-abc="true"> <i class="fa-solid fa-xmark"></i> Cancel
-                                Order</a>
+                                data-abc="true"> <i class="fa-solid fa-xmark"></i> 
+                                {{ __('welcome.Cancel_Order') }}  </a>
                         </form>
                     @endif
                     @if ($order->status == '5')
@@ -190,8 +190,8 @@
                             @csrf
                             @method('post')
                             <a class="btn btn-success" href="{{ route('orders.complete', $order->id) }}"
-                                type="submit">Complete
-                                Order</a>
+                                type="submit">
+                                {{ __('welcome.Complete_Order')}}</a>
                         </form>
                     @endif
                 </div>

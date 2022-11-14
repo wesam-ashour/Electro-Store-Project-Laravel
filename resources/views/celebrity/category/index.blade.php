@@ -211,39 +211,6 @@
                                                 </div>
                                             </form>
                                         </div>
-
-                                        <div class="card-header">
-                                            <h3>Create Sub-SubCategory</h3>
-                                        </div>
-                                        <div class="card-body">
-                                            <form action="{{ route('categories.store') }}" method="POST">
-                                                @csrf
-
-                                                <div class="form-group">
-                                                    <select class="form-control" name="parent_id">
-                                                        <option value="">Select Parent Category</option>
-
-                                                        @foreach ($categoriesChildes as $category)
-                                                            <option
-                                                                value="{{ $category->id }}">{{ $category->name }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <input type="text" name="name" class="form-control"
-                                                           value="{{ old('name') }}" placeholder="Category Name"
-                                                           required>
-                                                    <input type="hidden" name="haveSub" class="form-control"
-                                                           value="true"
-                                                           required>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <button type="submit" class="btn btn-primary">Create</button>
-                                                </div>
-                                            </form>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

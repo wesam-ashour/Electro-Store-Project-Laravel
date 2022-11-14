@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreOrder;
+use App\Http\Requests\StoreProducts;
+use App\Http\Requests\UpdateProducts;
 use App\Mail\PlaceOrderMail;
 use App\Models\Address;
 use App\Models\Category;
@@ -41,19 +44,22 @@ class ProductController extends Controller
                 'ASC'
             )
             ->paginate(
-                5
+                10
             );
         return view('celebrity.products.index', compact('products'));
     }
 
     public function view(Request $request)
     {
+
+
         $query = Product::query()->with('category')->with('material')->where('status', 1);
 
         if ($request->ajax()) {
             $categoryId = $request->category;
             $products = Product::whereHas(
-                'category', function ($Q) use ($categoryId) {
+                'category',
+                function ($Q) use ($categoryId) {
                     $Q->where('category_id', $categoryId)->where('status', 1);
                 }
             )->get(
@@ -68,33 +74,23 @@ class ProductController extends Controller
                 ]
             );
 
+        } elseif ($request->filled('search')) {
+            $categories = Category::whereNotNull('parent_id')->get();
+            $products = Product::with('category')->where('title', 'Like', '%' . request('search') . '%')->where('status', 1)->orderBy('id', 'ASC')->paginate(9);
         } else {
             $categories = Category::whereNotNull('parent_id')->get();
             $products = Product::with('category')->where('status', 1)->orderBy('id', 'ASC')->paginate(9);
+            // $products = $query->paginate(9);
 
 
         }
-        $products = $query->paginate(9);
         $topSellings = Product::withCount('order')->where('status', 1)->orderBy('order_count', 'desc')->get();
         return view('products.store', compact('products', 'categories', 'topSellings'));
     }
 
-    public function store(Request $request)
+    public function store(StoreProducts $request)
     {
-        $request->validate(
-            [
-                'title_en' => ['required', 'string', 'max:255'],
-                'title_ar' => ['required', 'string', 'max:255'],
-                'description_en' => ['required', 'string', 'max:255'],
-                'description_ar' => ['required', 'string', 'max:255'],
-                'status' => ['required', 'string', 'max:255'],
-                'price' => ['required', 'string', 'max:255'],
-                'offer_price' => ['required', 'string', 'max:255'],
-                'cover' => ['required'],
-                'material_id' => ['required'],
-                'size_id' => ['required'],
-            ]
-        );
+
 
         $file = $request->file('cover');
         $resized_img = Image::make($file);
@@ -118,9 +114,8 @@ class ProductController extends Controller
         $article->material()->attach($request->material_id);
         $article->size()->attach($request->size_id);
 
-        foreach ($request->product_colors as $index => $object) {
-
-            if (isset($object['color'], $object['quantity'], $object['logo'])) {
+        if (isset($object['color'], $object['quantity'], $object['logo'])) {
+            foreach ($request->product_colors as $index => $object) {
 
                 $key = $object['logo'];
                 $resized_img = Image::make($key);
@@ -218,8 +213,8 @@ class ProductController extends Controller
         // dd($request->file('logo'));
         $request->validate(
             [
-                'quantity' => ['required', 'integer'],
-                'logo' => ['sometimes'],
+                'quantity' => ['required', 'integer', 'min:0'],
+                'logo' => ['sometimes', 'mimes:jpeg,png,jpg,gif'],
             ]
         );
 
@@ -250,8 +245,8 @@ class ProductController extends Controller
     {
         $request->validate(
             [
-                'quantity' => ['required', 'integer'],
-                'logo' => ['required'],
+                'quantity' => ['required', 'integer', 'min:0'],
+                'logo' => ['required', 'mimes:jpeg,png,jpg,gif'],
             ]
         );
 
@@ -279,24 +274,8 @@ class ProductController extends Controller
 
     }
 
-    public function update(Request $request, Product $product)
+    public function update(UpdateProducts $request, Product $product)
     {
-
-        $request->validate(
-            [
-                'title_en' => ['required', 'string', 'max:255'],
-                'title_ar' => ['required', 'string', 'max:255'],
-                'description_en' => ['required', 'string', 'max:255'],
-                'description_ar' => ['required', 'string', 'max:255'],
-                'status' => ['required', 'string', 'max:255'],
-                'price' => ['required', 'string', 'max:255'],
-                'offer_price' => ['required', 'string', 'max:255'],
-                'category_id' => ['required'],
-                'cover' => ['sometimes'],
-                'material_id' => ['required'],
-                'size_id' => ['required'],
-            ]
-        );
 
         $input = $request->all();
         $input['celebrity_id'] = Auth::user()->id;
@@ -571,14 +550,14 @@ class ProductController extends Controller
 
     public function removeCartItems(Request $request)
     {
-        
+
         $carts = session()->get('cart');
         $cart = session()->get('cart', [])[$request->id]['color_items'];
         unset($cart[$request->idItem]);
         $carts[$request->id]['color_items'] = $cart;
         session()->put('cart', []);
         session()->put('cart', $carts);
-        
+
         if (count($carts[$request->id]['color_items']) == 0) {
             $carts = session()->get('cart');
             $cart = session()->get('cart', []);
@@ -608,7 +587,7 @@ class ProductController extends Controller
             $oldCart = session()->get('cart');
             $remains = session()->get('remain', []);
             $users = Auth::user()->id;
-            $addresss = Address::where('user_id', $users)->orderBy('id', 'ASC')->paginate(3);
+            $addresss = Address::where('user_id', $users)->orderBy('id', 'ASC')->get();
             if (Auth::check()) {
 
                 if (count($remains)) {
@@ -672,7 +651,7 @@ class ProductController extends Controller
         }
     }
 
-    public function placeOrder(Request $request)
+    public function placeOrder(StoreOrder $request)
     {
         // dd($request->input());
         $user = Auth::user()->id;
@@ -713,11 +692,7 @@ class ProductController extends Controller
                         ]
                     );
 
-                    $mailData = [
-                        'title' => 'Mail from Store',
-                        'body' => 'Placed Order',
-                        'order_number' => $order->order_number,
-                    ];
+
 
                     Coupons::find($r[0]->id)->decrement('min_order_amt');
 
@@ -741,7 +716,7 @@ class ProductController extends Controller
                                 ]
                             );
 
-                            $color = ProductColor::where('product_id', $details['id'])->where('color_id',$c['color'])->decrement('quantity', $c['quantity']);
+                            $color = ProductColor::where('product_id', $details['id'])->where('color_id', $c['color'])->decrement('quantity', $c['quantity']);
 
                             $order->items()->save($orderItem);
 
@@ -768,10 +743,15 @@ class ProductController extends Controller
                     }
 
                     try {
+                        $mailData = [
+                            'title' => 'Mail from Store',
+                            'body' => 'Placed Order',
+                            'order_number' => $order->order_number,
+                        ];
                         Mail::to($user_email)->send(new PlaceOrderMail($mailData));
                     } catch
                     (Exception $e) {
-                        return redirect(route('cart'));
+                        return redirect()->back();
                     }
 
                 } catch
@@ -809,12 +789,6 @@ class ProductController extends Controller
                         ]
                     );
 
-                    $mailData = [
-                        'title' => 'Mail from Store',
-                        'body' => 'Placed Order',
-                        'order_number' => $order->order_number,
-                    ];
-
                     $items = session()->get('cart');
 
                     foreach (session('cart') as $id => $details) {
@@ -834,7 +808,7 @@ class ProductController extends Controller
                                 ]
                             );
 
-                            $color = ProductColor::where('product_id', $details['id'])->where('color_id',$c['color'])->decrement('quantity', $c['quantity']);
+                            $color = ProductColor::where('product_id', $details['id'])->where('color_id', $c['color'])->decrement('quantity', $c['quantity']);
 
                             $order->items()->save($orderItem);
 
@@ -862,10 +836,15 @@ class ProductController extends Controller
                     }
 
                     try {
+                        $mailData = [
+                            'title' => 'Mail from Store',
+                            'body' => 'Placed Order',
+                            'order_number' => $order->order_number,
+                        ];
                         Mail::to($user_email)->send(new PlaceOrderMail($mailData));
                     } catch
                     (Exception $e) {
-                        return redirect(route('cart'));
+                        return redirect()->back();
                     }
 
                 } catch
@@ -890,7 +869,7 @@ class ProductController extends Controller
 
                     $stripe = new \Stripe\StripeClient(
                         'sk_test_51LrHn8Lw9BmBv7zE61pS9iDdrgVW1hK03LoUwvsVhBpIhwFtFUqXxahbT1MHI6PlWLo43hWpOa4wvKuZLZiNbF7Q00EF0ytbDt'
-                        );
+                    );
                     $res = $stripe->charges->create(
                         [
                             'amount' => 100 * $total,
@@ -925,12 +904,6 @@ class ProductController extends Controller
                         ]
                     );
 
-                    $mailData = [
-                        'title' => 'Mail from Store',
-                        'body' => 'Placed Order',
-                        'order_number' => $order->order_number,
-                    ];
-
                     Coupons::find($r[0]->id)->decrement('min_order_amt');
 
                     $items = session()->get('cart');
@@ -951,7 +924,7 @@ class ProductController extends Controller
                                 ]
                             );
 
-                            $color = ProductColor::where('product_id', $details['id'])->where('color_id',$c['color'])->decrement('quantity', $c['quantity']);
+                            $color = ProductColor::where('product_id', $details['id'])->where('color_id', $c['color'])->decrement('quantity', $c['quantity']);
 
 
                             $order->items()->save($orderItem);
@@ -979,10 +952,15 @@ class ProductController extends Controller
                     }
 
                     try {
+                        $mailData = [
+                            'title' => 'Mail from Store',
+                            'body' => 'Placed Order',
+                            'order_number' => $order->order_number,
+                        ];
                         Mail::to($user_email)->send(new PlaceOrderMail($mailData));
                     } catch
                     (Exception $e) {
-                        return redirect(route('cart'));
+                        return redirect()->back();
                     }
 
                 } catch
@@ -1007,7 +985,7 @@ class ProductController extends Controller
 
                     $stripe = new \Stripe\StripeClient(
                         'sk_test_51LrHn8Lw9BmBv7zE61pS9iDdrgVW1hK03LoUwvsVhBpIhwFtFUqXxahbT1MHI6PlWLo43hWpOa4wvKuZLZiNbF7Q00EF0ytbDt'
-                        );
+                    );
                     $res = $stripe->charges->create(
                         [
                             'amount' => 100 * $total,
@@ -1035,12 +1013,6 @@ class ProductController extends Controller
                         ]
                     );
 
-                    $mailData = [
-                        'title' => 'Mail from Store',
-                        'body' => 'Placed Order',
-                        'order_number' => $order->order_number,
-                    ];
-
                     $items = session()->get('cart');
 
                     foreach (session('cart') as $id => $details) {
@@ -1058,7 +1030,7 @@ class ProductController extends Controller
                                     'price' => Product::find($details['id'])->offer_price
                                 ]
                             );
-                            $color = ProductColor::where('product_id', $details['id'])->where('color_id',$c['color'])->decrement('quantity', $c['quantity']);
+                            $color = ProductColor::where('product_id', $details['id'])->where('color_id', $c['color'])->decrement('quantity', $c['quantity']);
                             // dd($color);
 
                             $order->items()->save($orderItem);
@@ -1086,18 +1058,21 @@ class ProductController extends Controller
                     }
 
                     try {
+                        $mailData = [
+                            'title' => 'Mail from Store',
+                            'body' => 'Placed Order',
+                            'order_number' => $order->order_number,
+                        ];
                         Mail::to($user_email)->send(new PlaceOrderMail($mailData));
                     } catch
                     (Exception $e) {
-                        return redirect(route('cart'));
+                        return redirect()->back();
                     }
 
                 } catch
                 (Exception $e) {
                     return redirect(route('cart'))->with('error', 'Invalid Activity!');
                 }
-
-
             }
         }
     }
@@ -1134,7 +1109,7 @@ class ProductController extends Controller
                 $msg = "coupon code deactivated";
             }
         } else {
-            $status = "error";
+            $status = "error1";
             $msg = "Please enter valid coupon code";
         }
 

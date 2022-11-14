@@ -1,36 +1,90 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+<!DOCTYPE html>
+<html lang="en">
 
-        <div class="mb-4 text-sm text-gray-600">
-            {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+<head>
+    <meta charset="utf-8" />
+    <title>{{ __('auth.headReset') }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+    <meta content="Coderthemes" name="author" />
+    <!-- App favicon -->
+
+    <!-- App css -->
+    <link href="{{ asset('assets/loginUser/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/loginUser/css/app.min.css') }}" rel="stylesheet" type="text/css" id="light-style" />
+    <link href="{{ asset('assets/loginUser/css/app-dark.min.css') }}" rel="stylesheet" type="text/css"
+        id="dark-style" />
+</head>
+
+<body class="authentication-bg pb-0" data-layout-config='{"darkMode":false}'>
+
+    <div class="auth-fluid">
+        <!--Auth fluid left content -->
+        <div class="auth-fluid-form-box">
+            <div class="align-items-center d-flex h-100">
+                <div class="card-body">
+
+                    <!-- Logo -->
+
+                    <!-- title-->
+                    <h4 class="mt-0">{{ __('auth.ResetـPassword') }}</h4>
+                    <p class="text-muted mb-4">{{ __('auth.Enter') }}</p>
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <!-- form -->
+                    <form method="POST" action="{{ route('password.email') }}">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="emailaddress" class="form-label">{{ __('auth.Email_address') }}</label>
+                            <input class="form-control" name="email" type="email" id="emailaddress" required=""
+                                placeholder="{{ __('auth.Enter_your_email') }}">
+                        </div>
+                        <div class="mb-0 text-center d-grid">
+                            <button class="btn btn-primary" type="submit"><i
+                                    class="mdi mdi-lock-reset"></i>{{ __('auth.Reset_Password') }}
+                            </button>
+                        </div>
+                    </form>
+                    <!-- end form-->
+
+                    <!-- Footer-->
+                    <footer class="footer footer-alt">
+                        <p class="text-muted">{{ __('auth.Back_to') }} <a href="{{route('login')}}"
+                                class="text-muted ms-1"><b>
+                                    {{ __('auth.Log_In') }} </b></a></p>
+                    </footer>
+
+                </div> <!-- end .card-body -->
+            </div> <!-- end .align-items-center.d-flex.h-100-->
         </div>
+        <!-- end auth-fluid-form-box-->
 
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
+        <!-- Auth fluid right content -->
+        <div class="auth-fluid-right text-center">
+            <div class="auth-user-testimonial">
+                <h2 class="mb-3">{{ __('auth.Try') }}</h2>
+                <p class="lead"><i class="mdi mdi-format-quote-open"></i>{{ __('auth.will') }} <i
+                        class="mdi mdi-format-quote-close"></i>
+                </p>
+                <p>
+                    {{ __('auth.Ecommerce') }}
+                </p>
+            </div> <!-- end auth-user-testimonial-->
+        </div>
+        <!-- end Auth fluid right content -->
+    </div>
+    <!-- end auth-fluid-->
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+    <!-- bundle -->
+    <script src="{{ asset('assets/loginUser/js/vendor.min.js') }}"></script>
+    <script src="{{ asset('assets/loginUser/js/app.min.js') }}"></script>
+</body>
 
-        <form method="POST" action="{{ route('password.email') }}">
-            @csrf
-
-            <!-- Email Address -->
-            <div>
-                <x-input-label for="email" :value="__('Email')" />
-
-                <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <x-primary-button>
-                    {{ __('Email Password Reset Link') }}
-                </x-primary-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>
+</html>

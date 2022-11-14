@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('sizes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->longText('name');
             $table->foreignId('celebrity_id')->nullable()->constrained('celebrities');
             $table->timestamps();
             $table->softDeletes();

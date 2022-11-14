@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAds;
+use App\Http\Requests\UpdateAds;
 use App\Models\Ads;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,14 +19,8 @@ class AdsController extends Controller
         return view('admin.ads.index', compact('ads'));
     }
 
-    public function store(Request $request)
-    {
-         
-        $this->validate($request, [
-            'name' => 'required',
-            'status' => 'required',
-            'image' => 'required|file|image|mimes:jpeg,png,gif,jpg|max:2048',
-        ]);
+    public function store(StoreAds $request)
+    {    
 
         $input = $request->all();
         // dd($input);
@@ -66,13 +62,8 @@ class AdsController extends Controller
         return view('admin.ads.edit', compact('ads'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateAds $request, $id)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'status' => 'required',
-            'image' => 'sometimes|file|image|mimes:jpeg,png,gif,jpg|max:2048',
-        ]);
 
         if ($request->hasFile('image')) {
 
@@ -87,7 +78,6 @@ class AdsController extends Controller
                 'name' => $request->name,
                 'status' => $request->status,
                 'image' => $path,
-                // 'priority' => $request->priority,
             ]);
 
         } else {
@@ -95,11 +85,8 @@ class AdsController extends Controller
             $brand->update([
                 'name' => $request->name,
                 'status' => $request->status,
-                // 'priority' => $request->priority,
             ]);
         }
-
-
         return redirect()->route('ads.index')
             ->with('success', 'Ads updated successfully');
     }

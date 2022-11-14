@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Storecoupons;
 use App\Models\Celebrity;
 use App\Models\Coupons;
 use Illuminate\Http\Request;
@@ -31,7 +32,7 @@ class CouponsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Storecoupons $request)
     {
         $request['is_one_time']= 0;
         $coupons = Coupons::create($request->all());

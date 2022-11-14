@@ -22,6 +22,9 @@
                     <p class="tx-12 tx-gray-500 mb-2">List of all orders</p>
                 </div>
                 <div class="card-body">
+                    @if (count($orders) > 0)
+                        
+                    
                     <div style="display: inline-block;">
                         <form method="GET">
                             <div class="input-group mb-5">
@@ -39,13 +42,14 @@
                                             -Select-</option>
 
                                         <option {{ request()->input('filter') == 1 ? 'selected' : '' }} value="1">
-                                            Alphabetical</option>
+                                            last 3 months</option>
 
 
 
                                         <option {{ request()->input('filter') == 2 ? 'selected' : '' }} value="2">
-                                            Date of registration</option>
-
+                                            last 6 months</option>
+                                        <option {{ request()->input('filter') == 3 ? 'selected' : '' }} value="3">
+                                            last 9 months</option>
                                     </select>&nbsp;&nbsp;
                                     <button type="submit" class="btn btn-warning">Sort</button>
                                     &nbsp;&nbsp;
@@ -187,6 +191,9 @@
                         </table>
                         {{ $orders->links() }}
                     </div>
+                    @else
+                        No Orders Found!
+                    @endif
                 </div>
             </div>
         </div><!-- COL END -->

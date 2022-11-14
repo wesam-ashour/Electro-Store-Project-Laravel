@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('instagram_url');
             $table->string('twitter_url');
             $table->string('snapchat_url');
-            $table->bigInteger('whatsApp_number');   
+            $table->string('whatsApp_number');   
             $table->timestamps();
         });
     }

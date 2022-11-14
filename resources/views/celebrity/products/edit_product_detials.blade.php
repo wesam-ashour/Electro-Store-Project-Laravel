@@ -6,7 +6,7 @@
         <div class="col-lg-7 col-xl-7 col-md-7 col-sm-7">
             <div class="card  box-shadow-0 ">
                 <div class="card-header">
-                    <h4 class="card-title mb-1">Edit New product</h4>
+                    <h4 class="card-title mb-1">Edit product color</h4>
                 </div>
                 <div class="card-body pt-0">
                     @if ($errors->any())
@@ -28,9 +28,7 @@
                                 <input type="number" name="quantity" class="form-control"
                                        placeholder="quantity" value="{{$productsColor[0]->quantity}}">
                             </div>
-                            @error('quantity')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
+                            
                             <div class="form-group">
                                 <label>Images</label>
 
@@ -44,9 +42,7 @@
                                     </label>
                                 </div>
                             </div>
-                            @error('logo')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
+                            
             
                         </div>
                         <button type="submit" class="btn btn-primary mt-3 mb-0">Submit</button>

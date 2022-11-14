@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateLookup;
 use App\Models\Lookup;
 use Illuminate\Http\Request;
 
@@ -59,9 +60,8 @@ class LookupController extends Controller
      * @param  \App\Models\Lookup  $lookup
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,$id)
+    public function update(UpdateLookup $request,$id)
     {
-        // dd($request->input());
         Lookup::find($id)->update($request->input());
         toastr()->info('Updated Successfully', 'Update');
         return redirect()->back();

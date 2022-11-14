@@ -43,9 +43,16 @@
                             </div>
                             
                             <div class="form-group">
-                                <label>Image</label>
-                                <div class="col-sm-12 col-md-4">
-                                    <input type="file" name="image" value="{{ $ads->image }}" data-height="200" />
+                                <label>Images</label>
+                                <div class="input-group file-browser">
+                                    <input type="text" class="form-control browse-file" placeholder="choose"
+                                        readonly>
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-default">
+                                            upload <input type="file" name="image" accept="image/*"
+                                                style="display: none;">
+                                        </span>
+                                    </label>
                                 </div>
                             </div>
                         </div>

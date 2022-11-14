@@ -29,17 +29,13 @@
                                     <input type="text" name="title_en" class="form-control" placeholder="title"
                                         value="{{ $product->getTranslation('title', 'en') }}">
                                 </div>
-                                @error('title')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                                 <div class="col-lg-6">
                                     <label>Title (AR)</label>
                                     <input type="text" name="title_ar" class="form-control" placeholder="title"
                                         value="{{ $product->getTranslation('title', 'ar') }}">
                                 </div>
-                                @error('title')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                             </div>
                             <br>
                             <div class="row row-sm">
@@ -49,18 +45,14 @@
                                         placeholder="description"
                                         value="{{ $product->getTranslation('description', 'en') }}">
                                 </div>
-                                @error('description')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                                 <div class="col-lg-6">
                                     <label>Description (AR)</label>
                                     <input type="text" name="description_ar" class="form-control"
                                         placeholder="description"
                                         value="{{ $product->getTranslation('description', 'ar') }}">
                                 </div>
-                                @error('description')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                             </div>
                             <br>
 
@@ -76,9 +68,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @error('price')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Offer price</label>
@@ -90,9 +80,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @error('offer_price')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                             </div>
                             <br>
 
@@ -108,9 +96,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                @error('category_id')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                                 <div class="col-lg-6">
                                     <label for="category_id">Sub Category</label>
                                     <select class="form-control" name="category_id[]" placeholder="Select Sub Category"
@@ -121,9 +107,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                @error('category_id')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                             </div>
                             <br>
 
@@ -138,9 +122,7 @@
                                                     @foreach ($product->material as $p) @if ($material->id == $p->id)selected="selected"@endif @endforeach>
                                                     {{ $material->name }}</option>
                                             @endforeach
-                                            @error('material_id')
-                                                <div class="alert alert-danger">{{ $message }}</div>
-                                            @enderror
+                                            
                                         </select>
                                     @else
                                         <p>No materials.. please insert new material
@@ -150,9 +132,7 @@
                                         </p>
                                     @endif
                                 </div>
-                                @error('material_id')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                                 <div class="col-lg-6">
                                     <label for="">Sizes</label>
                                     @if (count($sizes))
@@ -162,9 +142,7 @@
                                                     @foreach ($product->size as $p) @if ($size->id == $p->id)selected="selected"@endif @endforeach>
                                                     {{ $size->name }}</option>
                                             @endforeach
-                                            @error('size_id')
-                                                <div class="alert alert-danger">{{ $message }}</div>
-                                            @enderror
+                                            
                                         </select>
                                     @else
                                         <p>No sizes.. please insert new size
@@ -174,9 +152,7 @@
                                         </p>
                                     @endif
                                 </div>
-                                @error('size_id')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
+                                
                             </div>
 
                             <br>

@@ -24,8 +24,9 @@
                         </div>
                     </div>
                 </div>
-                @if (count($orders))
-                    <div class="card-body">
+
+                <div class="card-body">
+                    @if (count($orders))
                         <div class="table-responsive border-top userlist-table">
                             <table class="table card-table table-striped table-vcenter text-nowrap mb-0">
                                 <thead>
@@ -48,10 +49,14 @@
                                             <td>{{ $order->item_count }}</td>
                                             <td>
                                                 @if ($order->payment_status == 1)
-                                                    Success
-                                                @else
-                                                    Failure
-                                                @endif
+                                                Success
+                                            @elseif ($order->payment_status == 0)
+                                                Pending
+                                            @elseif ($order->payment_status == 4)
+                                                Refunded
+                                            @else
+                                                canceled
+                                            @endif
                                             </td>
                                             <td>{{ $order->payment_method }}</td>
                                             <td>{{ $order->created_at }}</td>
@@ -61,18 +66,7 @@
                                                     class="btn btn-sm btn-primary">
                                                     <i class="las la-search"></i>
                                                 </a>
-                                                <a href="{{ route('edit_orders_user', $order->id) }}"
-                                                    class="btn btn-sm btn-info">
-                                                    <i class="las la-pen"></i>
-                                                </a>
-                                                <form action="{{ route('delete_orders_user', $order->id) }}" method="post"
-                                                    style="display: inline-block;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger">
-                                                        <i class="las la-trash"></i>
-                                                    </button>
-                                                </form>
+                                                
                                             </td>
 
                                         </tr>
@@ -82,12 +76,11 @@
                             </table>
                             {{ $orders->links() }}
                         </div>
+                    @else
+                        No Orders Found!
+                    @endif
+                </div>
 
-                    </div>
-                @else
-                    <br>
-                    <h4>No Orders Found</h4>
-                @endif
             </div>
         </div><!-- COL END -->
     </div>

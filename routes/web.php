@@ -137,14 +137,8 @@ Route::prefix('admin')->middleware('auth:admin')->group(
 
         Route::resource('contact', ContactController::class);
 
-
-        Route::get('profile', [UserController::class, 'profile'])->name('profile_admin');
-        // Route::get('profile/{user}', [UserController::class, 'edit_profile'])->name('edit_profile');
-        // Route::put('profile/update/{user}', [UserController::class, 'update_profile'])->name('update_profile');
-        // Route::post('address/add', [UserController::class, 'add_address'])->name('add_address');
-        // Route::get('address/{address}', [UserController::class, 'edit_address'])->name('edit_address');
-        // Route::put('address/update/{address}', [UserController::class, 'update_address'])->name('update_address');
-        // Route::delete('address/destroy/{address}', [UserController::class, 'destroy_address'])->name('destroy_address');
+        Route::get('profile/{id}', [AdminController::class, 'profile'])->name('profile_admin');
+        Route::put('profile/update/{id}', [AdminController::class, 'update_profile_admin'])->name('update_profile_admin');
     }
 );
 
@@ -170,14 +164,12 @@ Route::prefix('celebrity')->middleware('auth:celebrity')->group(
 
         Route::get('get/all/orders/', [CelebrityController::class, 'get_all_orders'])->name('get_all_orders');
 
+        Route::get('profile/{id}', [CelebrityController::class, 'profile'])->name('profile_celebrity');
+        Route::put('profile/update/{id}', [CelebrityController::class, 'update_profile_celebrity'])->name('update_profile_celebrity');
 
     }
 );
 
-
-// Route::fallback(function () {
-//     return redirect()->back()->with('error', 'There is no page like this!');
-// });
 require __DIR__ . '/celebrityauth.php';
 
 require __DIR__ . '/auth.php';

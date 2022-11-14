@@ -91,7 +91,7 @@
                                                     style="display: inline-block;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return myFunction();">
                                                         <i class="las la-trash"></i>
                                                     </button>
                                                 </form>

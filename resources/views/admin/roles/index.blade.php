@@ -4,7 +4,8 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">Roles Sections</h4><span class="text-muted mt-1 tx-13 ml-2 mb-0">/ RolesList</span>
+                <h4 class="content-title mb-0 my-auto">Roles Sections</h4><span class="text-muted mt-1 tx-13 ml-2 mb-0">/
+                    RolesList</span>
             </div>
         </div>
     </div>
@@ -29,42 +30,45 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped mg-b-0 text-md-nowrap">
-                            <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Name</th>
-                                <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach ($roles as $key => $role)
-                                <tr>
-                                    <td>1</td>
-                                    <td>{{$role->name}}</td>
-                                    <td><a class="btn btn-dark-gradient" href="{{ route('roles.show',$role->id) }}"><i
-                                                class="typcn  typcn typcn-zoom-in-outline "></i></a>
-                                        <a class="btn btn-secondary-gradient"
-                                           href="{{ route('roles.edit',$role->id) }}"><i
-                                                class="typcn typcn-edit"></i></a>
-                                        <form action="{{ route('roles.destroy', $role->id) }}"
-                                              method="post" style="display: inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger-gradient">
-                                                <i
-                                                    class="typcn typcn-trash"></i>
-                                            </button>
-                                        </form>
-                                        {{--                                        <a class="btn btn-danger-gradient" href="{{ route('users.destroy',$user->id) }}"> <i--}}
-                                        {{--                                                class="typcn typcn-trash"></i></a>--}}
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div><!-- bd -->
+                    @if (count($roles) > 0)
+                        <div class="table-responsive">
+                            <table class="table table-striped mg-b-0 text-md-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Name</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($roles as $key => $role)
+                                        <tr>
+                                            <td>1</td>
+                                            <td>{{ $role->name }}</td>
+                                            <td><a class="btn btn-dark-gradient"
+                                                    href="{{ route('roles.show', $role->id) }}"><i
+                                                        class="typcn  typcn typcn-zoom-in-outline "></i></a>
+                                                <a class="btn btn-secondary-gradient"
+                                                    href="{{ route('roles.edit', $role->id) }}"><i
+                                                        class="typcn typcn-edit"></i></a>
+                                                <form action="{{ route('roles.destroy', $role->id) }}" method="post"
+                                                    style="display: inline-block;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger-gradient"
+                                                        onclick="return myFunction();">
+                                                        <i class="typcn typcn-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div><!-- bd -->
+                    @else
+                        No Roles Found!
+                    @endif
                 </div><!-- bd -->
             </div><!-- bd -->
         </div>

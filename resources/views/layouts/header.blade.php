@@ -117,12 +117,13 @@
                 <!-- SEARCH BAR -->
                 <div class="col-md-5">
                     <div class="header-search">
-                        <form>
+
+                        <form action="{{ route('product.view') }}">
                             <select class="input-select">
                                 <option value="0">{{ __('welcome.All_Categories') }}</option>
                             </select>
-                            <input class="input" placeholder="{{ __('welcome.Search_here') }}">
-                            <button class="search-btn">{{ __('welcome.Search') }}</button>
+                            <input class="input" value="{{ request()->get('search') }}"  name="search" placeholder="{{ __('welcome.Search_here') }}">
+                            <button type="submit" class="search-btn">{{ __('welcome.Search') }}</button>
                         </form>
                     </div>
                 </div>

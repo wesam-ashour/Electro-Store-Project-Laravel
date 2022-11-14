@@ -5,9 +5,18 @@
         <div class="col-lg-7 col-xl-7 col-md-12 col-sm-12">
             <div class="card  box-shadow-0 ">
                 <div class="card-header">
-                    <h4 class="card-title mb-1">Create New User</h4>
+                    <h4 class="card-title mb-1">Create New SubAdmin</h4>
                 </div>
                 <div class="card-body pt-0">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form method="POST" action="{{ route('admins.store') }}">
                         @csrf
                         <div class="">

@@ -1,26 +1,26 @@
 @extends('celebrity.layouts.master')
 @section('content')
-    <!-- breadcrumb -->
-    <div class="breadcrumb-header justify-content-between">
-        <div class="my-auto">
-            <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">Ecommerce</h4><span class="text-muted mt-1 tx-13 ml-2 mb-0">/
-                    Product-Cart</span>
-            </div>
-            <br>
-            <div class="pull-right">
-                <a class="btn btn-primary-gradient btn-block" href="{{ route('products.create') }}"> Create
-                    New
-                    Product</a>
-            </div>
-        </div>
-    </div>
-    <!-- breadcrumb -->
 
+<br>
     <!-- row opened -->
     <div class="row">
         <div class="col-xl-12 col-md-12">
             <div class="card">
+                <div class="card-header pb-0">
+                    <div class="d-flex justify-content-between">
+                        <h4 class="card-title mg-b-0">Products Table</h4>
+                        <i class="mdi mdi-dots-horizontal text-gray"></i>
+                    </div>
+                    <p class="tx-12 tx-gray-500 mb-2">List of all products</p>
+                    <div class="row row-xs wd-xl-80p">
+
+                        <div class="pull-right">
+                            <a class="btn btn-primary-gradient btn-block" href="{{ route('products.create') }}"> Create
+                                New
+                                Product</a>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
                     <!-- Shopping Cart-->
                     <div class="product-details table-responsive text-nowrap">

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreRole;
+use App\Http\Requests\UpdateRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -30,13 +32,8 @@ class RoleController extends Controller
         return view('admin.roles.create',compact('permission'));
     }
 
-    public function store(Request $request)
+    public function store(StoreRole $request)
     {
-        $this->validate($request, [
-            'name' => 'required|unique:roles,name',
-            'permission' => 'required',
-        ]);
-
         $role = Role::create(['name' => $request->input('name')]);
         $role->syncPermissions($request->input('permission'));
 
@@ -65,12 +62,8 @@ class RoleController extends Controller
         return view('admin.roles.edit',compact('role','permission','rolePermissions'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateRole $request, $id)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'permission' => 'required',
-        ]);
 
         $role = Role::find($id);
         $role->name = $request->input('name');

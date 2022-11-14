@@ -24,10 +24,6 @@
                         </div>
                     </div>
                     <div class="main-contact-info-body p-4">
-{{--                        <div>--}}
-{{--                            <h6>Biography</h6>--}}
-{{--                            <p>Sed ut perspiciatis unde omnis iste natus</p>--}}
-{{--                        </div>--}}
                         <div class="media-list pb-0">
                             <div class="media">
                                 <div class="media-body">
@@ -35,7 +31,13 @@
                                         <label>Mobile</label> <span class="tx-medium">{{$users->mobile}}</span>
                                     </div>
                                     <div>
-                                        <label>Status</label> <span class="tx-medium">{{$users->status}}</span>
+                                        <label>Status</label> <span class="tx-medium">
+                                            @if ($users->status == 1)
+                                                Active
+                                            @else
+                                                Inactive
+                                            @endif
+                                        </span>
                                     </div>
                                 </div>
                             </div>

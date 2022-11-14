@@ -17,5 +17,5 @@ return [
     'Category' => 'Category',
     'Description' => 'Description',
     'Related_Products' => 'Related Products',
-    'No_Products_Found' => 'No Products Found',
+    'No' => 'No Products Found!',
 ];
