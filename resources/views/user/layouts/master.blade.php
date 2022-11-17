@@ -62,5 +62,6 @@
 <!-- End Page -->
 
 @include('user.layouts.js')
+
 </body>
 </html>

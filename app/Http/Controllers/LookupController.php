@@ -10,7 +10,7 @@ class LookupController extends Controller
 {
     public function index(Lookup $lookup)
     {
-       
+
     }
 
     /**
@@ -26,7 +26,7 @@ class LookupController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -37,30 +37,30 @@ class LookupController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Lookup  $lookup
+     * @param \App\Models\Lookup $lookup
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
     {
-        
+
     }
 
-    
+
     public function edit($id)
     {
-        
+
         $lookups = Lookup::find($id)->get();
-        return view('admin.social',compact('lookups'));
+        return view('admin.social', compact('lookups'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Lookup  $lookup
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Lookup $lookup
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateLookup $request,$id)
+    public function update(UpdateLookup $request, $id)
     {
         Lookup::find($id)->update($request->input());
         toastr()->info('Updated Successfully', 'Update');
@@ -70,7 +70,7 @@ class LookupController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Lookup  $lookup
+     * @param \App\Models\Lookup $lookup
      * @return \Illuminate\Http\Response
      */
     public function destroy(Lookup $lookup)

@@ -13,16 +13,16 @@ class ColorController extends Controller
     public function index()
     {
         $user = Auth::user()->id;
-        $colors = Color::where('celebrity_id',$user)->get();
+        $colors = Color::where('celebrity_id', $user)->get();
         return view('celebrity.colors.index', compact('colors'));
     }
 
     public function store(StoreColorRequest $request)
     {
-        $request['celebrity_id']=Auth::user()->id;
-        $request['name']= ['en' => $request->name_en, 'ar' => $request->name_ar];
-        $color = Color::create($request->all('name', 'color','celebrity_id'));
-        toastr()->success('Created Successfully','Create');
+        $request['celebrity_id'] = Auth::user()->id;
+        $request['name'] = ['en' => $request->name_en, 'ar' => $request->name_ar];
+        $color = Color::create($request->all('name', 'color', 'celebrity_id'));
+        toastr()->success('Created Successfully', 'Create');
         return redirect()->route('colors.index');
     }
 
@@ -43,16 +43,16 @@ class ColorController extends Controller
 
     public function update(UpdateColorRequest $request, Color $color)
     {
-        $request['name']= ['en' => $request->name_en, 'ar' => $request->name_ar];
+        $request['name'] = ['en' => $request->name_en, 'ar' => $request->name_ar];
         Color::where('id', $color->id)->update($request->all('name', 'color'));
-        toastr()->info('Updated Successfully','Update');
+        toastr()->info('Updated Successfully', 'Update');
         return redirect()->route('colors.index');
     }
 
     public function destroy(Color $color)
     {
         $color->delete();
-        toastr()->error('Deleted Successfully','Delete');
+        toastr()->error('Deleted Successfully', 'Delete');
         return redirect()->route('colors.index');
     }
 }

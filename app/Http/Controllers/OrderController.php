@@ -21,6 +21,7 @@ use Exception;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+
 class OrderController extends Controller
 {
 
@@ -109,6 +110,16 @@ class OrderController extends Controller
         }
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
     public function completeOrder($id)
     {
         $user = Auth::user()->id;
@@ -149,56 +160,55 @@ class OrderController extends Controller
 
         if ($request->filled('search')) {
             $orders = Order::where(
-                    function ($query) {
-                        return $query
-                            ->where('order_number', 'Like', '%' . request('search') . '%');       
-                    }
-                )->paginate(10);
-            
+                function ($query) {
+                    return $query
+                        ->where('order_number', 'Like', '%' . request('search') . '%');
+                }
+            )->paginate(10);
+
         } elseif ($request->filled('filter')) {
 
             if ($request->filter == 1 and $request->export == 1) {
-            
-                $orders = Order::where("created_at",">", Carbon::now()->subMonths(3))->get();
+
+                $orders = Order::where("created_at", ">", Carbon::now()->subMonths(3))->get();
                 $pdf = Pdf::loadView('admin.orders.myPDF', compact('orders'));
                 return $pdf->download('Order.pdf');
             } elseif ($request->filter == 1 and $request->export == 2) {
-                $orders = Order::where("created_at",">", Carbon::now()->subMonths(3))->get();
+                $orders = Order::where("created_at", ">", Carbon::now()->subMonths(3))->get();
                 return Excel::download(new OrdersExport($orders), 'Order-collection.xlsx');
             } elseif ($request->filter == 1 and $request->export == 3) {
-                $orders = Order::where("created_at",">", Carbon::now()->subMonths(3))->get();
+                $orders = Order::where("created_at", ">", Carbon::now()->subMonths(3))->get();
                 return (new OrdersExport($orders))->download('Order.csv', \Maatwebsite\Excel\Excel::CSV);
             } elseif ($request->filter == 1) {
-                $orders = Order::where("created_at",">", Carbon::now()->subMonths(3))->paginate(10);
+                $orders = Order::where("created_at", ">", Carbon::now()->subMonths(3))->paginate(10);
 
 
             } elseif ($request->filter == 2 and $request->export == 1) {
-                $orders = Order::where("created_at",">", Carbon::now()->subMonths(6))->get();
+                $orders = Order::where("created_at", ">", Carbon::now()->subMonths(6))->get();
                 $pdf = Pdf::loadView('admin.orders.myPDF', compact('orders'));
                 return $pdf->download('orders.pdf');
             } elseif ($request->filter == 2 and $request->export == 2) {
-                $orders = Order::where("created_at",">", Carbon::now()->subMonths(6))->get();
+                $orders = Order::where("created_at", ">", Carbon::now()->subMonths(6))->get();
                 return Excel::download(new OrdersExport($orders), 'orders-collection.xlsx');
             } elseif ($request->filter == 2 and $request->export == 3) {
-                $orders = Order::where("created_at",">", Carbon::now()->subMonths(6))->get();
+                $orders = Order::where("created_at", ">", Carbon::now()->subMonths(6))->get();
                 return (new OrdersExport($orders))->download('orders.csv', \Maatwebsite\Excel\Excel::CSV);
             } elseif ($request->filter == 2) {
-                $orders = Order::where("created_at",">", Carbon::now()->subMonths(6))->paginate(10);
+                $orders = Order::where("created_at", ">", Carbon::now()->subMonths(6))->paginate(10);
 
 
             } elseif ($request->filter == 3 and $request->export == 1) {
-                $orders = Order::where("created_at",">", Carbon::now()->subMonths(9))->get();
+                $orders = Order::where("created_at", ">", Carbon::now()->subMonths(9))->get();
                 $pdf = Pdf::loadView('admin.orders.myPDF', compact('orders'));
                 return $pdf->download('orders.pdf');
             } elseif ($request->filter == 3 and $request->export == 2) {
-                $orders = Order::where("created_at",">", Carbon::now()->subMonths(9))->get();
+                $orders = Order::where("created_at", ">", Carbon::now()->subMonths(9))->get();
                 return Excel::download(new OrdersExport($orders), 'orders-collection.xlsx');
             } elseif ($request->filter == 3 and $request->export == 3) {
-                $orders = Order::where("created_at",">", Carbon::now()->subMonths(9))->get();
+                $orders = Order::where("created_at", ">", Carbon::now()->subMonths(9))->get();
                 return (new OrdersExport($orders))->download('orders.csv', \Maatwebsite\Excel\Excel::CSV);
             } elseif ($request->filter == 3) {
-                $orders = Order::where("created_at",">", Carbon::now()->subMonths(9))->paginate(10);
-
+                $orders = Order::where("created_at", ">", Carbon::now()->subMonths(9))->paginate(10);
 
 
             } elseif ($request->filter == 0 and $request->export == 1) {
@@ -222,11 +232,13 @@ class OrderController extends Controller
 
         return view('admin.orders.index', compact('orders', 'status'));
     }
+
     public function edit_orders_status($id)
     {
         $order = Order::find($id);
         return view('admin.orders.edit', compact('order'));
     }
+
     public function update_orders_status(Order $order, Request $request)
     {
         // dd($request->input());
@@ -349,11 +361,13 @@ class OrderController extends Controller
 
         return redirect()->back();
     }
+
     public function show_orders_all_details($id)
     {
         $orderItems = OrderItem::where('order_id', $id)->paginate(10);
         return view('admin.orders.show', compact('orderItems'));
     }
+
     public function address_for_order($id)
     {
         $order = Order::find($id);
@@ -362,19 +376,9 @@ class OrderController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -392,7 +396,7 @@ class OrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Order  $order
+     * @param \App\Models\Order $order
      * @return \Illuminate\Http\Response
      */
     public function edit(Order $order)
@@ -403,8 +407,8 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Order  $order
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Order $order
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Order $order)
@@ -415,7 +419,7 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Order  $order
+     * @param \App\Models\Order $order
      * @return \Illuminate\Http\Response
      */
     public function destroy(Order $order)

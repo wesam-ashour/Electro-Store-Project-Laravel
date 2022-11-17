@@ -21,13 +21,15 @@
                         @csrf
                         @method('PUT')
                         <div class="">
-                            <div class="form-group">
-                                <label>Name</label>
+                            <div class="row row-sm">
+                                <div class="col-lg-6">
+                                    <label>Name</label>
                                 <input type="text" name="name" class="form-control" placeholder="Enter name"
                                     value="{{ $ads->name }}">
-                            </div>
-                            <div class="form-group">
-                                <label>Status</label>
+                                </div>
+                                
+                                <div class="col-lg-6">
+                                    <label>Status</label>
                                 <select class="form-control" name="status" required>
                                     @foreach (App\Models\User::STATUS as $status)
                                         <option value="{{ $status }}"
@@ -40,7 +42,11 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                </div>
+                                
                             </div>
+                            <br>
+
                             
                             <div class="form-group">
                                 <label>Images</label>

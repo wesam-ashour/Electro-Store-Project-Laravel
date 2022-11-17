@@ -18,10 +18,10 @@ class ContactController extends Controller
         if ($request->filled('search')) {
 
             $submisions = Contact::
-                        where('name', 'Like', '%' . request('search') . '%')
-                        ->orwhere('email', 'Like', '%' . request('search') . '%')
-                        ->orwhere('mobile', 'Like', '%' . request('search') . '%')
-                        ->orwhere('message', 'Like', '%' . request('search') . '%')
+            where('name', 'Like', '%' . request('search') . '%')
+                ->orwhere('email', 'Like', '%' . request('search') . '%')
+                ->orwhere('mobile', 'Like', '%' . request('search') . '%')
+                ->orwhere('message', 'Like', '%' . request('search') . '%')
                 ->paginate(10);
         } else {
             $submisions = Contact::orderBy('id', 'asc')->paginate(10);
@@ -36,7 +36,7 @@ class ContactController extends Controller
     {
         return view('contact');
     }
-    
+
     public function store_submisions(StoreContact $request)
     {
         $submision = Contact::create($request->all('name', 'email', 'mobile', 'message'));
@@ -52,7 +52,7 @@ class ContactController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Contact  $contact
+     * @param \App\Models\Contact $contact
      * @return \Illuminate\Http\Response
      */
     public function show(Contact $contact)
@@ -63,7 +63,7 @@ class ContactController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Contact  $contact
+     * @param \App\Models\Contact $contact
      * @return \Illuminate\Http\Response
      */
     public function edit(Contact $contact)
@@ -74,8 +74,8 @@ class ContactController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Contact  $contact
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Contact $contact
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Contact $contact)
@@ -86,7 +86,7 @@ class ContactController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Contact  $contact
+     * @param \App\Models\Contact $contact
      * @return \Illuminate\Http\Response
      */
     public function destroy(Contact $contact)

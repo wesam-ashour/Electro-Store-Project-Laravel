@@ -11,7 +11,6 @@ use App\Models\Category;
 use App\Models\Celebrity;
 use App\Models\Color;
 use App\Models\Coupons;
-use App\Models\Images;
 use App\Models\Material;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -22,30 +21,20 @@ use App\Models\Transaction;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Redirect;
 use Intervention\Image\Facades\Image;
 use Session;
-use Stripe;
+use Stripe\StripeClient;
 
 class ProductController extends Controller
 {
     public function index(Request $request)
     {
         $user = Auth::user();
-        $products = Product::with('category')
-            ->where(
-                'celebrity_id', $user->id
-            )
-            ->orderBy(
-                'id',
-                'ASC'
-            )
-            ->paginate(
-                10
-            );
+        $products = Product::with('category')->where('celebrity_id', $user->id)->orderBy('id', 'ASC')->paginate(10);
         return view('celebrity.products.index', compact('products'));
     }
 
@@ -57,22 +46,12 @@ class ProductController extends Controller
 
         if ($request->ajax()) {
             $categoryId = $request->category;
-            $products = Product::whereHas(
-                'category',
-                function ($Q) use ($categoryId) {
-                    $Q->where('category_id', $categoryId)->where('status', 1);
-                }
-            )->get(
-                );
+            $products = Product::whereHas('category', function ($Q) use ($categoryId) {
+                $Q->where('category_id', $categoryId)->where('status', 1);
+            })->get();
 
             $renderview = view('render.renderView', compact('products'))->render();
-            return response()->json(
-                [
-                    'success' => true,
-                    'html' => $renderview,
-                    'products' => $products
-                ]
-            );
+            return response()->json(['success' => true, 'html' => $renderview, 'products' => $products]);
 
         } elseif ($request->filled('search')) {
             $categories = Category::whereNotNull('parent_id')->get();
@@ -102,7 +81,6 @@ class ProductController extends Controller
         $create_product->title = ['en' => $request->title_en, 'ar' => $request->title_ar];
         $create_product->description = ['en' => $request->description_en, 'ar' => $request->description_ar];
         $create_product->celebrity_id = Auth::user()->id;
-        ;
         $create_product->cover = $path;
         $create_product->price = $request->price;
         $create_product->offer_price = $request->offer_price;
@@ -123,14 +101,7 @@ class ProductController extends Controller
                 $name = 'product_color-' . now($index) . '.' . $key->getClientOriginalExtension();
                 $color_image = $key->storeAs('files/color_images', $name);
 
-                ProductColor::create(
-                    [
-                        'product_id' => $article->id,
-                        'color_id' => $object['color'],
-                        'quantity' => $object['quantity'],
-                        'logo' => $color_image,
-                    ]
-                );
+                ProductColor::create(['product_id' => $article->id, 'color_id' => $object['color'], 'quantity' => $object['quantity'], 'logo' => $color_image,]);
 
             }
 
@@ -140,11 +111,6 @@ class ProductController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $user = Celebrity::find(auth()->user()->id);
@@ -201,6 +167,7 @@ class ProductController extends Controller
         $productsColor = ProductColor::where('product_id', $id)->get();
         return view('celebrity.products.product_detials', compact('productsColor', 'products'));
     }
+
     public function edit_details_products(Request $request, $id)
     {
         // dd($id);
@@ -208,15 +175,11 @@ class ProductController extends Controller
         $productsColor = ProductColor::where('id', $id)->get();
         return view('celebrity.products.edit_product_detials', compact('productsColor'));
     }
+
     public function update_details_products(Request $request, $id)
     {
         // dd($request->file('logo'));
-        $request->validate(
-            [
-                'quantity' => ['required', 'integer', 'min:0'],
-                'logo' => ['sometimes', 'mimes:jpeg,png,jpg,gif'],
-            ]
-        );
+        $request->validate(['quantity' => ['required', 'integer', 'min:0'], 'logo' => ['sometimes', 'mimes:jpeg,png,jpg,gif'],]);
 
         $input = $request->all('quantity');
 
@@ -231,46 +194,6 @@ class ProductController extends Controller
         $productColor->update($input);
         toastr()->info('Updated Successfully', 'Update');
         return redirect()->route('edit_all_details_products', ['id' => $productColor->product_id]);
-
-    }
-
-    public function create_color_product($id)
-    {
-        $product = $id;
-        $colors = Color::all();
-        return view('celebrity.products.create_product_color', compact('colors', 'product'));
-    }
-
-    public function store_color_product(Request $request, $id)
-    {
-        $request->validate(
-            [
-                'quantity' => ['required', 'integer', 'min:0'],
-                'logo' => ['required', 'mimes:jpeg,png,jpg,gif'],
-            ]
-        );
-
-        $input = $request->all('quantity');
-
-        if ($request->file('logo')) {
-            $key = $request->file('logo');
-            $name = 'product_color-' . time() . '.' . $key->getClientOriginalExtension();
-            $color_image = $key->storeAs('files/color_images', $name);
-            $input['logo'] = $color_image;
-        }
-        $input['product_id'] = $id;
-        $input['color_id'] = $request->color_id;
-
-        $productColor = ProductColor::create($input);
-        toastr()->info('Created Successfully', 'Update');
-        return redirect()->route('edit_all_details_products', ['id' => $id]);
-    }
-
-    public function delete_color_products($id)
-    {
-        ProductColor::find($id)->delete();
-        toastr()->error('Deleted Successfully', 'Delete');
-        return Redirect()->back();
 
     }
 
@@ -302,6 +225,41 @@ class ProductController extends Controller
         return redirect(route('products.index'));
     }
 
+    public function create_color_product($id)
+    {
+        $product = $id;
+        $colors = Color::all();
+        return view('celebrity.products.create_product_color', compact('colors', 'product'));
+    }
+
+    public function store_color_product(Request $request, $id)
+    {
+        $request->validate(['quantity' => ['required', 'integer', 'min:0'], 'logo' => ['required', 'mimes:jpeg,png,jpg,gif'],]);
+
+        $input = $request->all('quantity');
+
+        if ($request->file('logo')) {
+            $key = $request->file('logo');
+            $name = 'product_color-' . time() . '.' . $key->getClientOriginalExtension();
+            $color_image = $key->storeAs('files/color_images', $name);
+            $input['logo'] = $color_image;
+        }
+        $input['product_id'] = $id;
+        $input['color_id'] = $request->color_id;
+
+        $productColor = ProductColor::create($input);
+        toastr()->info('Created Successfully', 'Update');
+        return redirect()->route('edit_all_details_products', ['id' => $id]);
+    }
+
+    public function delete_color_products($id)
+    {
+        ProductColor::find($id)->delete();
+        toastr()->error('Deleted Successfully', 'Delete');
+        return Redirect()->back();
+
+    }
+
     public function destroy(Product $product)
     {
         $product->delete();
@@ -325,13 +283,7 @@ class ProductController extends Controller
     {
 
         // dd($request->input());
-        $request->validate(
-            [
-                'size' => ['required', 'integer', 'min:1'],
-                'color' => ['required', 'integer', 'min:1'],
-                'quantity' => ['required', 'integer', 'min:1'],
-            ]
-        );
+        $request->validate(['size' => ['required', 'integer', 'min:1'], 'color' => ['required', 'integer', 'min:1'], 'quantity' => ['required', 'integer', 'min:1'],]);
 
         $product = Product::findOrFail($id);
         $cart = session()->get('cart', []);
@@ -353,8 +305,7 @@ class ProductController extends Controller
             if ($request->quantity <= $res->quantity) {
 
 
-                foreach ($cart[$id]['color_items'] as $index => $item)
-                    $_item = $item;
+                foreach ($cart[$id]['color_items'] as $index => $item) $_item = $item;
                 if ($_item['color'] == $request->color) {
                     $_item['quantity'] += $request->quantity;
                     unset($cart[$id]['color_items'][$index]);
@@ -366,11 +317,7 @@ class ProductController extends Controller
                     // session()->forget('remain');
                     session()->put('cart', $cart);
                 } else {
-                    $newArray = [
-                        'size' => (int) $request->size,
-                        'color' => (int) $request->color,
-                        'quantity' => (int) $request->quantity,
-                    ];
+                    $newArray = ['size' => (int)$request->size, 'color' => (int)$request->color, 'quantity' => (int)$request->quantity,];
                     //                array_push($cart[$id]['color_items'], $newArray);
                     $cart[$id]['color_items'][] = $newArray;
                     // session()->forget('remain');
@@ -393,16 +340,11 @@ class ProductController extends Controller
 
                     $remain = ((100 - ($value)) / 100) * $totals;
 
-                    $remains = [
-                        "remain" => $remain,
-                        "code" => $code,
-                        "value" => $value,
-                    ];
+                    $remains = ["remain" => $remain, "code" => $code, "value" => $value,];
 
                     session()->put('remain', []);
                     session()->put('remain', $remains);
                 }
-
 
 
             } else {
@@ -415,16 +357,7 @@ class ProductController extends Controller
 
             if ($request->quantity <= $res->quantity) {
 
-                $cart[$id] = [
-                    'id' => $product->id,
-                    'color_items' => [
-                        [
-                            'size' => (int) $request->size,
-                            'color' => (int) $request->color,
-                            'quantity' => (int) $request->quantity,
-                        ]
-                    ],
-                ];
+                $cart[$id] = ['id' => $product->id, 'color_items' => [['size' => (int)$request->size, 'color' => (int)$request->color, 'quantity' => (int)$request->quantity,]],];
 
                 // session()->forget('remain');
                 session()->put('cart', $cart);
@@ -433,7 +366,6 @@ class ProductController extends Controller
                 toastr()->error('Please enter an available quantity in stock', 'Failed');
                 return back();
             }
-
 
 
             if (session()->get('remain', [])) {
@@ -452,11 +384,7 @@ class ProductController extends Controller
 
                 $remain = ((100 - ($value)) / 100) * $totals;
 
-                $remains = [
-                    "remain" => $remain,
-                    "code" => $code,
-                    "value" => $value,
-                ];
+                $remains = ["remain" => $remain, "code" => $code, "value" => $value,];
 
                 session()->put('remain', []);
                 session()->put('remain', $remains);
@@ -466,7 +394,6 @@ class ProductController extends Controller
         }
         // session()->forget('remain');
         $carts = session()->get('remain', []);
-
 
 
         toastr()->success('Product added to cart successfully!', 'Success');
@@ -489,7 +416,7 @@ class ProductController extends Controller
 
             $carts = session()->get('cart');
             $cart = session()->get('cart', [])[$request->idCart]['color_items'];
-            $cart[$request->idItem]["quantity"] = (int) $request->quantity;
+            $cart[$request->idItem]["quantity"] = (int)$request->quantity;
             unset($carts[$request->idCart]['color_items']);
             $carts[$request->idCart]['color_items'] = $cart;
             session()->put('cart', []);
@@ -512,11 +439,7 @@ class ProductController extends Controller
 
                 $remain = ((100 - ($value)) / 100) * $totals;
 
-                $remains = [
-                    "remain" => $remain,
-                    "code" => $code,
-                    "value" => $value,
-                ];
+                $remains = ["remain" => $remain, "code" => $code, "value" => $value,];
 
                 session()->put('remain', []);
                 session()->put('remain', $remains);
@@ -644,8 +567,7 @@ class ProductController extends Controller
                 toastr()->error('Need login or rigster to compleate checkout', 'Failed');
                 return redirect()->back();
             }
-        } catch
-        (Exception $e) {
+        } catch (Exception $e) {
             toastr()->error('Need login or rigster to compleate checkout', 'Failed');
             return redirect(route('cart'));
         }
@@ -678,21 +600,7 @@ class ProductController extends Controller
                     }
 
 
-                    $order = Order::create(
-                        [
-                            'order_number' => 'ORD-' . strtoupper(uniqid()),
-                            'user_id' => auth()->user()->id,
-                            'status' => '2',
-                            'grand_total' => $money,
-                            'item_count' => $sum,
-                            'payment_status' => 0,
-                            'payment_method' => 'COD',
-                            'address_id' => $request->address,
-                            'notes' => $request->notes,
-                            'coupon_id' => $r[0]->id,
-                        ]
-                    );
-
+                    $order = Order::create(['order_number' => 'ORD-' . strtoupper(uniqid()), 'user_id' => auth()->user()->id, 'status' => '2', 'grand_total' => $money, 'item_count' => $sum, 'payment_status' => 0, 'payment_method' => 'COD', 'address_id' => $request->address, 'notes' => $request->notes, 'coupon_id' => $r[0]->id,]);
 
 
                     Coupons::find($r[0]->id)->decrement('min_order_amt');
@@ -705,17 +613,7 @@ class ProductController extends Controller
 
                         foreach ($details['color_items'] as $key => $c) {
                             $celebrity_id = Product::find($details['id'])->celebrity_id;
-                            $orderItem = new OrderItem(
-                                [
-                                    'order_id' => $order->id,
-                                    'product_id' => $details['id'],
-                                    'celebrity_id' => $celebrity_id,
-                                    'quantity' => $c['quantity'],
-                                    'color_id' => $c['color'],
-                                    'size_id' => $c['size'],
-                                    'price' => Product::find($details['id'])->offer_price
-                                ]
-                            );
+                            $orderItem = new OrderItem(['order_id' => $order->id, 'product_id' => $details['id'], 'celebrity_id' => $celebrity_id, 'quantity' => $c['quantity'], 'color_id' => $c['color'], 'size_id' => $c['size'], 'price' => Product::find($details['id'])->offer_price]);
 
                             $color = ProductColor::where('product_id', $details['id'])->where('color_id', $c['color'])->decrement('quantity', $c['quantity']);
 
@@ -724,16 +622,7 @@ class ProductController extends Controller
                         }
                     }
 
-                    Transaction::create(
-                        [
-                            'user_id' => Auth()->user()->id,
-                            'order_id' => $order->id,
-                            'order_amount' => $money,
-                            'payment_method' => 'COD',
-                            'response' => 'No response',
-                            'status' => 'pending'
-                        ]
-                    );
+                    Transaction::create(['user_id' => Auth()->user()->id, 'order_id' => $order->id, 'order_amount' => $money, 'payment_method' => 'COD', 'response' => 'No response', 'status' => 'pending']);
 
                     if ($order->items()->save($orderItem)) {
                         session()->forget('remain');
@@ -744,22 +633,15 @@ class ProductController extends Controller
                     }
 
                     try {
-                        $mailData = [
-                            'title' => 'Mail from Store',
-                            'body' => 'Placed Order',
-                            'order_number' => $order->order_number,
-                        ];
+                        $mailData = ['title' => 'Mail from Store', 'body' => 'Placed Order', 'order_number' => $order->order_number,];
                         Mail::to($user_email)->send(new PlaceOrderMail($mailData));
-                    } catch
-                    (Exception $e) {
+                    } catch (Exception $e) {
                         return redirect()->back();
                     }
 
-                } catch
-                (Exception $e) {
+                } catch (Exception $e) {
                     return redirect(route('cart'))->with('error', 'Invalid Activity!');
                 }
-
 
 
             } else {
@@ -775,20 +657,7 @@ class ProductController extends Controller
                 }
 
                 try {
-                    $order = Order::create(
-                        [
-                            'order_number' => 'ORD-' . strtoupper(uniqid()),
-                            'user_id' => auth()->user()->id,
-                            'status' => '2',
-                            'grand_total' => $total,
-                            'item_count' => $sum,
-                            'payment_status' => 0,
-                            'payment_method' => 'COD',
-                            'address_id' => $request->address,
-                            'notes' => $request->notes,
-                            'coupon_id' => null,
-                        ]
-                    );
+                    $order = Order::create(['order_number' => 'ORD-' . strtoupper(uniqid()), 'user_id' => auth()->user()->id, 'status' => '2', 'grand_total' => $total, 'item_count' => $sum, 'payment_status' => 0, 'payment_method' => 'COD', 'address_id' => $request->address, 'notes' => $request->notes, 'coupon_id' => null,]);
 
                     $items = session()->get('cart');
 
@@ -797,17 +666,7 @@ class ProductController extends Controller
                         foreach ($details['color_items'] as $key => $c) {
                             $celebrity_id = Product::find($details['id'])->celebrity_id;
 
-                            $orderItem = new OrderItem(
-                                [
-                                    'order_id' => $order->id,
-                                    'product_id' => $details['id'],
-                                    'celebrity_id' => $celebrity_id,
-                                    'quantity' => $c['quantity'],
-                                    'color_id' => $c['color'],
-                                    'size_id' => $c['size'],
-                                    'price' => Product::find($details['id'])->offer_price
-                                ]
-                            );
+                            $orderItem = new OrderItem(['order_id' => $order->id, 'product_id' => $details['id'], 'celebrity_id' => $celebrity_id, 'quantity' => $c['quantity'], 'color_id' => $c['color'], 'size_id' => $c['size'], 'price' => Product::find($details['id'])->offer_price]);
 
                             $color = ProductColor::where('product_id', $details['id'])->where('color_id', $c['color'])->decrement('quantity', $c['quantity']);
 
@@ -817,16 +676,7 @@ class ProductController extends Controller
 
                     }
 
-                    Transaction::create(
-                        [
-                            'user_id' => Auth()->user()->id,
-                            'order_id' => $order->id,
-                            'order_amount' => $total,
-                            'payment_method' => 'COD',
-                            'response' => 'No response',
-                            'status' => 'pending'
-                        ]
-                    );
+                    Transaction::create(['user_id' => Auth()->user()->id, 'order_id' => $order->id, 'order_amount' => $total, 'payment_method' => 'COD', 'response' => 'No response', 'status' => 'pending']);
 
                     if ($order->items()->save($orderItem)) {
                         session()->forget('remain');
@@ -837,19 +687,13 @@ class ProductController extends Controller
                     }
 
                     try {
-                        $mailData = [
-                            'title' => 'Mail from Store',
-                            'body' => 'Placed Order',
-                            'order_number' => $order->order_number,
-                        ];
+                        $mailData = ['title' => 'Mail from Store', 'body' => 'Placed Order', 'order_number' => $order->order_number,];
                         Mail::to($user_email)->send(new PlaceOrderMail($mailData));
-                    } catch
-                    (Exception $e) {
+                    } catch (Exception $e) {
                         return redirect()->back();
                     }
 
-                } catch
-                (Exception $e) {
+                } catch (Exception $e) {
                     return redirect(route('cart'))->with('error', 'Invalid Activity!');
                 }
 
@@ -868,17 +712,8 @@ class ProductController extends Controller
                     $total = $remains['remain'];
                     $r = DB::table('coupons')->where(['code' => $remains['code']])->get();
                     $money = $total;
-                    $stripe = new \Stripe\StripeClient(
-                        'sk_test_51LrHn8Lw9BmBv7zE61pS9iDdrgVW1hK03LoUwvsVhBpIhwFtFUqXxahbT1MHI6PlWLo43hWpOa4wvKuZLZiNbF7Q00EF0ytbDt'
-                    );
-                    $res = $stripe->charges->create(
-                        [
-                            'amount' => 100 * $total,
-                            'currency' => 'usd',
-                            'source' => 'tok_amex',
-                            'description' => 'My First Test Charge (created for API docs at https://www.stripe.com/docs/api)',
-                        ]
-                    );
+                    $stripe = new StripeClient('sk_test_51LrHn8Lw9BmBv7zE61pS9iDdrgVW1hK03LoUwvsVhBpIhwFtFUqXxahbT1MHI6PlWLo43hWpOa4wvKuZLZiNbF7Q00EF0ytbDt');
+                    $res = $stripe->charges->create(['amount' => 100 * $total, 'currency' => 'usd', 'source' => 'tok_amex', 'description' => 'My First Test Charge (created for API docs at https://www.stripe.com/docs/api)',]);
 
                     $response = $stripe->charges->retrieve($res->id, []);
 
@@ -889,21 +724,7 @@ class ProductController extends Controller
                         $total += Product::find($details['id'])->offer_price * $sum;
                     }
 
-                    $order = Order::create(
-                        [
-                            'order_number' => 'ORD-' . strtoupper(uniqid()),
-                            'user_id' => auth()->user()->id,
-                            'status' => '2',
-                            'grand_total' => $money,
-                            'item_count' => $sum,
-                            'payment_status' => 1,
-                            'payment_method' => 'credit card',
-                            'address_id' => $request->address,
-                            'notes' => $request->notes,
-                            'coupon_id' => $r[0]->id,
-                            'charge_id' => $res->id,
-                        ]
-                    );
+                    $order = Order::create(['order_number' => 'ORD-' . strtoupper(uniqid()), 'user_id' => auth()->user()->id, 'status' => '2', 'grand_total' => $money, 'item_count' => $sum, 'payment_status' => 1, 'payment_method' => 'credit card', 'address_id' => $request->address, 'notes' => $request->notes, 'coupon_id' => $r[0]->id, 'charge_id' => $res->id,]);
 
                     Coupons::find($r[0]->id)->decrement('min_order_amt');
 
@@ -913,17 +734,7 @@ class ProductController extends Controller
                         foreach ($details['color_items'] as $key => $c) {
                             $celebrity_id = Product::find($details['id'])->celebrity_id;
 
-                            $orderItem = new OrderItem(
-                                [
-                                    'order_id' => $order->id,
-                                    'product_id' => $details['id'],
-                                    'celebrity_id' => $celebrity_id,
-                                    'quantity' => $c['quantity'],
-                                    'color_id' => $c['color'],
-                                    'size_id' => $c['size'],
-                                    'price' => Product::find($details['id'])->offer_price
-                                ]
-                            );
+                            $orderItem = new OrderItem(['order_id' => $order->id, 'product_id' => $details['id'], 'celebrity_id' => $celebrity_id, 'quantity' => $c['quantity'], 'color_id' => $c['color'], 'size_id' => $c['size'], 'price' => Product::find($details['id'])->offer_price]);
 
                             $color = ProductColor::where('product_id', $details['id'])->where('color_id', $c['color'])->decrement('quantity', $c['quantity']);
 
@@ -933,16 +744,7 @@ class ProductController extends Controller
                         }
                     }
 
-                    Transaction::create(
-                        [
-                            'user_id' => Auth()->user()->id,
-                            'order_id' => $order->id,
-                            'order_amount' => $money,
-                            'payment_method' => 'credit card',
-                            'response' => $response,
-                            'status' => '1'
-                        ]
-                    );
+                    Transaction::create(['user_id' => Auth()->user()->id, 'order_id' => $order->id, 'order_amount' => $money, 'payment_method' => 'credit card', 'response' => $response, 'status' => '1']);
 
                     if ($order->items()->save($orderItem)) {
                         session()->forget('remain');
@@ -953,19 +755,13 @@ class ProductController extends Controller
                     }
 
                     try {
-                        $mailData = [
-                            'title' => 'Mail from Store',
-                            'body' => 'Placed Order',
-                            'order_number' => $order->order_number,
-                        ];
+                        $mailData = ['title' => 'Mail from Store', 'body' => 'Placed Order', 'order_number' => $order->order_number,];
                         Mail::to($user_email)->send(new PlaceOrderMail($mailData));
-                    } catch
-                    (Exception $e) {
+                    } catch (Exception $e) {
                         return redirect()->back();
                     }
 
-                } catch
-                (Exception $e) {
+                } catch (Exception $e) {
                     return redirect(route('cart'))->with('error', 'Invalid Activity!');
                 }
 
@@ -984,35 +780,12 @@ class ProductController extends Controller
 
                 try {
 
-                    $stripe = new \Stripe\StripeClient(
-                        'sk_test_51LrHn8Lw9BmBv7zE61pS9iDdrgVW1hK03LoUwvsVhBpIhwFtFUqXxahbT1MHI6PlWLo43hWpOa4wvKuZLZiNbF7Q00EF0ytbDt'
-                    );
-                    $res = $stripe->charges->create(
-                        [
-                            'amount' => 100 * $total,
-                            'currency' => 'usd',
-                            'source' => 'tok_amex',
-                            'description' => 'My First Test Charge (created for API docs at https://www.stripe.com/docs/api)',
-                        ]
-                    );
+                    $stripe = new StripeClient('sk_test_51LrHn8Lw9BmBv7zE61pS9iDdrgVW1hK03LoUwvsVhBpIhwFtFUqXxahbT1MHI6PlWLo43hWpOa4wvKuZLZiNbF7Q00EF0ytbDt');
+                    $res = $stripe->charges->create(['amount' => 100 * $total, 'currency' => 'usd', 'source' => 'tok_amex', 'description' => 'My First Test Charge (created for API docs at https://www.stripe.com/docs/api)',]);
 
                     $response = $stripe->charges->retrieve($res->id, []);
 
-                    $order = Order::create(
-                        [
-                            'order_number' => 'ORD-' . strtoupper(uniqid()),
-                            'user_id' => auth()->user()->id,
-                            'status' => '2',
-                            'grand_total' => $total,
-                            'item_count' => $sum,
-                            'payment_status' => 1,
-                            'payment_method' => 'credit card',
-                            'address_id' => $request->address,
-                            'notes' => $request->notes,
-                            'coupon_id' => null,
-                            'charge_id' => $res->id,
-                        ]
-                    );
+                    $order = Order::create(['order_number' => 'ORD-' . strtoupper(uniqid()), 'user_id' => auth()->user()->id, 'status' => '2', 'grand_total' => $total, 'item_count' => $sum, 'payment_status' => 1, 'payment_method' => 'credit card', 'address_id' => $request->address, 'notes' => $request->notes, 'coupon_id' => null, 'charge_id' => $res->id,]);
 
                     $items = session()->get('cart');
 
@@ -1020,17 +793,7 @@ class ProductController extends Controller
                         foreach ($details['color_items'] as $key => $c) {
                             $celebrity_id = Product::find($details['id'])->celebrity_id;
 
-                            $orderItem = new OrderItem(
-                                [
-                                    'order_id' => $order->id,
-                                    'product_id' => $details['id'],
-                                    'celebrity_id' => $celebrity_id,
-                                    'quantity' => $c['quantity'],
-                                    'color_id' => $c['color'],
-                                    'size_id' => $c['size'],
-                                    'price' => Product::find($details['id'])->offer_price
-                                ]
-                            );
+                            $orderItem = new OrderItem(['order_id' => $order->id, 'product_id' => $details['id'], 'celebrity_id' => $celebrity_id, 'quantity' => $c['quantity'], 'color_id' => $c['color'], 'size_id' => $c['size'], 'price' => Product::find($details['id'])->offer_price]);
                             $color = ProductColor::where('product_id', $details['id'])->where('color_id', $c['color'])->decrement('quantity', $c['quantity']);
                             // dd($color);
 
@@ -1039,16 +802,7 @@ class ProductController extends Controller
                         }
                     }
 
-                    Transaction::create(
-                        [
-                            'user_id' => Auth()->user()->id,
-                            'order_id' => $order->id,
-                            'order_amount' => $total,
-                            'payment_method' => 'credit card',
-                            'response' => $response,
-                            'status' => '1'
-                        ]
-                    );
+                    Transaction::create(['user_id' => Auth()->user()->id, 'order_id' => $order->id, 'order_amount' => $total, 'payment_method' => 'credit card', 'response' => $response, 'status' => '1']);
 
                     if ($order->items()->save($orderItem)) {
                         session()->forget('remain');
@@ -1059,29 +813,20 @@ class ProductController extends Controller
                     }
 
                     try {
-                        $mailData = [
-                            'title' => 'Mail from Store',
-                            'body' => 'Placed Order',
-                            'order_number' => $order->order_number,
-                        ];
+                        $mailData = ['title' => 'Mail from Store', 'body' => 'Placed Order', 'order_number' => $order->order_number,];
                         Mail::to($user_email)->send(new PlaceOrderMail($mailData));
-                    } catch
-                    (Exception $e) {
+                    } catch (Exception $e) {
                         return redirect()->back();
                     }
 
-                } catch
-                (Exception $e) {
+                } catch (Exception $e) {
                     return redirect(route('cart'))->with('error', 'Invalid Activity!');
                 }
             }
         }
     }
 
-    public
-        function applyCouponCode(
-        Request $request
-    )
+    public function applyCouponCode(Request $request)
     {
 
         $result = DB::table('coupons')->where(['code' => $request->coupon_code])->get();
@@ -1090,8 +835,6 @@ class ProductController extends Controller
         $remain = 0;
         $value = 0;
         $code = 0;
-
-
 
 
         if (isset($result[0])) {
@@ -1115,8 +858,6 @@ class ProductController extends Controller
         }
 
 
-
-
         if ($status == 'success') {
             $total = $request->total;
             $value = $result[0]->value;
@@ -1124,11 +865,7 @@ class ProductController extends Controller
 
             $remain = ((100 - ($value)) / 100) * $total;
 
-            $remains = [
-                "remain" => $remain,
-                "code" => $result[0]->code,
-                "value" => $result[0]->value,
-            ];
+            $remains = ["remain" => $remain, "code" => $result[0]->code, "value" => $result[0]->value,];
             session()->put('remain', []);
             session()->put('remain', $remains);
         }
@@ -1137,9 +874,7 @@ class ProductController extends Controller
         return response()->json(['status' => $status, 'msg' => $msg, 'remain' => $remain, 'value' => $value, 'code' => $code]);
     }
 
-    public
-        function removeCouponCode(
-    )
+    public function removeCouponCode()
     {
         $remains = session()->get('remain', []);
         session()->forget('remain');

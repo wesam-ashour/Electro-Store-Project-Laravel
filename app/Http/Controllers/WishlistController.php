@@ -13,7 +13,7 @@ class WishlistController extends Controller
             auth()->user()
         )->get();
         // dd($products);
-        return view('user.wishlists.index',compact('products'));
+        return view('user.wishlists.index', compact('products'));
     }
 
     public function favoriteAdd($id)

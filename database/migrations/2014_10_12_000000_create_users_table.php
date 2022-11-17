@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('mobile')->nullable();
             $table->integer('status')->default(1);
             $table->string('add_by');
-            $table->enum('type', array('registered_user','guest_user'));
+            $table->enum('type', array('registered_user','guest_user'))->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

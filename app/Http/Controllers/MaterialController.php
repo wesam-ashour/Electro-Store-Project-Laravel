@@ -14,22 +14,22 @@ class MaterialController extends Controller
     public function index()
     {
         $user = Auth::user()->id;
-        $materials = Material::where('celebrity_id',$user)->get();
-        return view('celebrity.materials.index',compact('materials'));
+        $materials = Material::where('celebrity_id', $user)->get();
+        return view('celebrity.materials.index', compact('materials'));
+    }
+
+    public function store(StoreMaterialRequest $request)
+    {
+        $request['name'] = ['en' => $request->name_en, 'ar' => $request->name_ar];
+        $request['celebrity_id'] = Auth::user()->id;
+        $materials = Material::create($request->all('name', 'celebrity_id'));
+        toastr()->success('Created Successfully', 'Create');
+        return redirect()->route('materials.index');
     }
 
     public function create()
     {
         return view('celebrity.materials.create');
-    }
-
-    public function store(StoreMaterialRequest $request)
-    {
-        $request['name']= ['en' => $request->name_en, 'ar' => $request->name_ar];
-        $request['celebrity_id']=Auth::user()->id;
-        $materials = Material::create($request->all('name','celebrity_id'));
-        toastr()->success('Created Successfully', 'Create');
-        return redirect()->route('materials.index');
     }
 
     public function show(Material $material)
@@ -45,7 +45,7 @@ class MaterialController extends Controller
 
     public function update(UpdateMaterialRequest $request, Material $material)
     {
-        $request['name']= ['en' => $request->name_en, 'ar' => $request->name_ar];
+        $request['name'] = ['en' => $request->name_en, 'ar' => $request->name_ar];
         Material::where('id', $material->id)->update($request->all('name'));
         toastr()->info('Updated Successfully', 'Update');
         return redirect()->route('materials.index');

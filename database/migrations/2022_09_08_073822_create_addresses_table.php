@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string("floor_no");
             $table->string("flat_no");
             $table->string("landmark");
+            $table->string('lat')->nullable();
+            $table->string('lng')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

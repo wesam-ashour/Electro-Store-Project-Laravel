@@ -22,7 +22,8 @@ class HomeController extends Controller
         return redirect(url('/'));
     }
 
-    public function myAccount(){
+    public function myAccount()
+    {
         return view('accounts');
     }
 }

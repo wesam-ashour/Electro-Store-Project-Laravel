@@ -21,6 +21,8 @@ class Address extends Model
         'floor_no',
         'flat_no',
         'landmark',
+        'lat',
+        'lng',
     ];
 
 }

@@ -20,14 +20,14 @@ class AdsController extends Controller
     }
 
     public function store(StoreAds $request)
-    {    
+    {
 
         $input = $request->all();
         // dd($input);
         $input['celebrity_id'] = Auth::user()->id;
         $file = $request->file('image');
         $resized_img = Image::make($file);
-        $resized_img->fit(720,90)->save($file);
+        $resized_img->fit(720, 90)->save($file);
         $fileName = 'ads-' . time() . '.' . $file->getClientOriginalExtension();
         $path = $file->storeAs('files', $fileName);
         $input['image'] = $path;
@@ -38,28 +38,18 @@ class AdsController extends Controller
         return redirect()->route('ads.index')
             ->with('success', 'Ads created successfully');
     }
-    public function updateOrder(Request $request)
-    {
-        foreach ($request->order as $key => $order) {
-            $post = Ads::find($order['id'])->update(['order' => $order['order']]);
-        }
-        return response('Update Successfully.', 200);
-    }
 
     public function create()
     {
         return view('admin.ads.create');
     }
 
-    public function show($id)
+    public function updateOrder(Request $request)
     {
-        //
-    }
-
-    public function edit($id)
-    {
-        $ads = Ads::find($id);
-        return view('admin.ads.edit', compact('ads'));
+        foreach ($request->order as $key => $order) {
+            $post = Ads::find($order['id'])->update(['order' => $order['order']]);
+        }
+        return response('Update Successfully.', 200);
     }
 
     public function update(UpdateAds $request, $id)
@@ -89,6 +79,17 @@ class AdsController extends Controller
         }
         return redirect()->route('ads.index')
             ->with('success', 'Ads updated successfully');
+    }
+
+    public function show($id)
+    {
+        //
+    }
+
+    public function edit($id)
+    {
+        $ads = Ads::find($id);
+        return view('admin.ads.edit', compact('ads'));
     }
 
     /**

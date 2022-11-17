@@ -20,47 +20,46 @@ class TransactionController extends Controller
         if ($request->filled('filter')) {
 
             if ($request->filter == 1 and $request->export == 1) {
-            
-                $transactions = Transaction::where('status', '1')->where("created_at",">", Carbon::now()->subMonths(3))->get();
+
+                $transactions = Transaction::where('status', '1')->where("created_at", ">", Carbon::now()->subMonths(3))->get();
                 $pdf = Pdf::loadView('admin.transactions.myPDF', compact('transactions'));
                 return $pdf->download('transactions.pdf');
             } elseif ($request->filter == 1 and $request->export == 2) {
-                $transactions = Transaction::where('status', '1')->where("created_at",">", Carbon::now()->subMonths(3))->get();
+                $transactions = Transaction::where('status', '1')->where("created_at", ">", Carbon::now()->subMonths(3))->get();
                 return Excel::download(new TransactionsExport($transactions), 'transactions-collection.xlsx');
             } elseif ($request->filter == 1 and $request->export == 3) {
-                $transactions = Transaction::where('status', '1')->where("created_at",">", Carbon::now()->subMonths(3))->get();
+                $transactions = Transaction::where('status', '1')->where("created_at", ">", Carbon::now()->subMonths(3))->get();
                 return (new TransactionsExport($transactions))->download('transactions.csv', \Maatwebsite\Excel\Excel::CSV);
             } elseif ($request->filter == 1) {
-                $transactions = Transaction::where('status', '1')->where("created_at",">", Carbon::now()->subMonths(3))->paginate(10);
+                $transactions = Transaction::where('status', '1')->where("created_at", ">", Carbon::now()->subMonths(3))->paginate(10);
 
 
             } elseif ($request->filter == 2 and $request->export == 1) {
-                $transactions = Transaction::where('status', '1')->where("created_at",">", Carbon::now()->subMonths(6))->get();
+                $transactions = Transaction::where('status', '1')->where("created_at", ">", Carbon::now()->subMonths(6))->get();
                 $pdf = Pdf::loadView('admin.transactions.myPDF', compact('transactions'));
                 return $pdf->download('transactions.pdf');
             } elseif ($request->filter == 2 and $request->export == 2) {
-                $transactions = Transaction::where('status', '1')->where("created_at",">", Carbon::now()->subMonths(6))->get();
+                $transactions = Transaction::where('status', '1')->where("created_at", ">", Carbon::now()->subMonths(6))->get();
                 return Excel::download(new TransactionsExport($transactions), 'transactions-collection.xlsx');
             } elseif ($request->filter == 2 and $request->export == 3) {
-                $transactions = Transaction::where('status', '1')->where("created_at",">", Carbon::now()->subMonths(6))->get();
+                $transactions = Transaction::where('status', '1')->where("created_at", ">", Carbon::now()->subMonths(6))->get();
                 return (new TransactionsExport($transactions))->download('transactions.csv', \Maatwebsite\Excel\Excel::CSV);
             } elseif ($request->filter == 2) {
-                $transactions = Transaction::where('status', '1')->where("created_at",">", Carbon::now()->subMonths(6))->paginate(10);
+                $transactions = Transaction::where('status', '1')->where("created_at", ">", Carbon::now()->subMonths(6))->paginate(10);
 
 
             } elseif ($request->filter == 3 and $request->export == 1) {
-                $transactions = Transaction::where('status', '1')->where("created_at",">", Carbon::now()->subMonths(9))->get();
+                $transactions = Transaction::where('status', '1')->where("created_at", ">", Carbon::now()->subMonths(9))->get();
                 $pdf = Pdf::loadView('admin.transactions.myPDF', compact('transactions'));
                 return $pdf->download('transactions.pdf');
             } elseif ($request->filter == 3 and $request->export == 2) {
-                $transactions = Transaction::where('status', '1')->where("created_at",">", Carbon::now()->subMonths(9))->get();
+                $transactions = Transaction::where('status', '1')->where("created_at", ">", Carbon::now()->subMonths(9))->get();
                 return Excel::download(new TransactionsExport($transactions), 'transactions-collection.xlsx');
             } elseif ($request->filter == 3 and $request->export == 3) {
-                $transactions = Transaction::where('status', '1')->where("created_at",">", Carbon::now()->subMonths(9))->get();
+                $transactions = Transaction::where('status', '1')->where("created_at", ">", Carbon::now()->subMonths(9))->get();
                 return (new TransactionsExport($transactions))->download('transactions.csv', \Maatwebsite\Excel\Excel::CSV);
             } elseif ($request->filter == 3) {
-                $transactions = Transaction::where('status', '1')->where("created_at",">", Carbon::now()->subMonths(9))->paginate(10);
-
+                $transactions = Transaction::where('status', '1')->where("created_at", ">", Carbon::now()->subMonths(9))->paginate(10);
 
 
             } elseif ($request->filter == 0 and $request->export == 1) {
@@ -96,7 +95,7 @@ class TransactionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -107,7 +106,7 @@ class TransactionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Transaction  $transaction
+     * @param \App\Models\Transaction $transaction
      * @return \Illuminate\Http\Response
      */
     public function show(Transaction $transaction)
@@ -118,7 +117,7 @@ class TransactionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Transaction  $transaction
+     * @param \App\Models\Transaction $transaction
      * @return \Illuminate\Http\Response
      */
     public function edit(Transaction $transaction)
@@ -129,8 +128,8 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Transaction  $transaction
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Transaction $transaction
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Transaction $transaction)
@@ -141,7 +140,7 @@ class TransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Transaction  $transaction
+     * @param \App\Models\Transaction $transaction
      * @return \Illuminate\Http\Response
      */
     public function destroy(Transaction $transaction)

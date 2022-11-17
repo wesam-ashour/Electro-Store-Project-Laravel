@@ -21,33 +21,48 @@
                         @csrf
                         @method('PUT')
                         <div class="">
-                            <div class="form-group">
-                                <label>First name</label>
+
+                            <div class="row row-sm">
+                                <div class="col-lg-6">
+                                    <label>First name</label>
                                 <input type="text" name="first_name" class="form-control" placeholder="Enter First name"
                                     value="{{ $admin->first_name }}">
-                            </div>
-                            <div class="form-group">
-                                <label>Last name</label>
+                                </div>
+                                
+                                <div class="col-lg-6">
+                                    <label>Last name</label>
                                 <input type="text" name="last_name" class="form-control" placeholder="Enter Last name"
                                     value="{{ $admin->last_name }}">
+                                </div>
+                                
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Email address</label>
+                            <br>
+
+                            <div class="row row-sm">
+                                <div class="col-lg-6">
+                                    <label for="exampleInputEmail1">Email address</label>
                                 <input type="email" name="email" class="form-control" id="exampleInputEmail1"
                                     placeholder="Enter Email" value="{{ $admin->email }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Password</label>
+                                </div>
+                                
+                                <div class="col-lg-6">
+                                    <label for="exampleInputPassword1">Password</label>
                                 <input type="password" name="password" class="form-control" id="exampleInputPassword1"
                                     placeholder="Password">
+                                </div>
+                                
                             </div>
-                            <div class="form-group">
-                                <label>Phone number</label>
+                            <br>
+
+                            <div class="row row-sm">
+                                <div class="col-lg-6">
+                                    <label>Phone number</label>
                                 <input type="tel" name="mobile" class="form-control" placeholder="Enter Phone number"
                                     value="{{ $admin->mobile }}">
-                            </div>
-                            <div class="mb-4">
-                                <label>Status</label>
+                                </div>
+                                
+                                <div class="col-lg-6">
+                                    <label>Status</label>
                                 <select name="status" class="form-control">
                                     @foreach (\App\Models\User::STATUS as $status)
                                         <option value="{{ $status }}"
@@ -60,11 +75,20 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                </div>
+                                
                             </div>
-                            <div class="form-group">
-                                <label>Roles</label>
-                                {!! Form::select('roles[]', $roles, $userRole, ['class' => 'form-control', 'multiple']) !!}
+                            <br>
+
+                            <div class="row row-sm">
+                                <div class="col-lg-6">
+                                    <label>Roles</label>
+                                    {!! Form::select('roles[]', $roles, $userRole, ['class' => 'form-control', 'multiple']) !!}
+                                </div>
+                                
+                                
                             </div>
+                            <br>
                         </div>
                         <button type="submit" class="btn btn-primary mt-3 mb-0">Submit</button>
                     </form>

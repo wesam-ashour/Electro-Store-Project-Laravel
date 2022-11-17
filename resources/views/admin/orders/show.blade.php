@@ -1,5 +1,16 @@
 @extends('admin.layouts.master')
 @section('content')
+<style>
+    .dott {
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+        margin: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- breadcrumb -->
     <div class="breadcrumb-header justify-content-between">
@@ -29,6 +40,7 @@
                             <thead>
                                 <tr>
                                     <th class="wd-lg-20p"><span>name</span></th>
+                                    <th class="wd-lg-20p"><span>offer price</span></th>
                                     <th class="wd-lg-20p"><span>size</span></th>
                                     <th class="wd-lg-20p"><span>color</span></th>
                                     <th class="wd-lg-20p"><span>quantity</span></th>
@@ -41,10 +53,13 @@
                                             <a>{{ \App\Models\Product::find($orderItem->product_id)->title }}</a>
                                         </td>
                                         <td>
+                                            <a>{{ \App\Models\Product::find($orderItem->product_id)->offer_price }}</a>
+                                        </td>
+                                        <td>
                                             <a>{{ \App\Models\Size::find($orderItem->size_id)->name }}</a>
                                         </td>
                                         <td>
-                                            <a>{{ \App\Models\Color::find($orderItem->color_id)->name }}</a>
+                                            <a class="dott" style="background-color:{{ \App\Models\Color::find($orderItem->color_id)->color }}"></a>
                                         </td>
                                         <td>
                                             <a>{{ $orderItem->quantity }}</a>

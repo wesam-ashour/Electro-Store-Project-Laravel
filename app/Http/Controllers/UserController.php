@@ -211,29 +211,6 @@ class UserController extends Controller
         return view('admin.users.edit', compact('users'));
     }
 
-    public function update(Request $request, $id)
-    {
-        $this->validate($request, [
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'email' => 'required|email|unique:users,email,' . $id,
-            'password' => $request->password != null ? 'sometimes|required|min:8' : '',
-            'mobile' => ['required', 'string', 'max:15'],
-            'status'  => 'required|min:1|max:50',
-        ]);
-
-        $input = $request->all();
-        if (!empty($input['password'])) {
-            $input['password'] = Hash::make($input['password']);
-        } else {
-            $input = Arr::except($input, array('password'));
-        }
-        $user = User::find($id);
-        $user->update($input);
-        return redirect()->route('users.index')
-            ->with('success', 'User updated successfully');
-    }
-
     public function destroy($id)
     {
         User::find($id)->delete();
@@ -241,11 +218,28 @@ class UserController extends Controller
             ->with('success', 'User deleted successfully');
     }
 
-    public function profile()
+    public function profile(Request $request)
     {
         $user = Auth::user();
         $users = Auth::user()->id;
         $addresss = Address::where('user_id', $users)->orderBy('id', 'ASC')->paginate(3);
+//        $user_ip = getenv('REMOTE_ADDR');
+////        $geo = unserialize(file_get_contents("http://www.geoplugin.net/php.gp?ip=$user_ip"));
+//        $ip = trim(shell_exec("dig +short myip.opendns.com @resolver1.opendns.com"));
+//
+//        $data = \Location::get($ip);
+//
+//        $initialMarkers = [
+//            [
+//                'position' => [
+//                    'lat' => (double)$data->latitude,
+//                    'lng' => (double)$data->longitude,
+//                ],
+//                'label' => [ 'color' => 'white', 'text' => 'M' ],
+//                'draggable' => true
+//            ],
+//        ];
+
         return view('user.profile.index', compact('user', 'addresss'));
     }
 
@@ -280,6 +274,29 @@ class UserController extends Controller
         return redirect()->route('profile_user', ['id' => $user->id]);
     }
 
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => 'required|email|unique:users,email,' . $id,
+            'password' => $request->password != null ? 'sometimes|required|min:8' : '',
+            'mobile' => ['required', 'string', 'max:15'],
+            'status' => 'required|min:1|max:50',
+        ]);
+
+        $input = $request->all();
+        if (!empty($input['password'])) {
+            $input['password'] = Hash::make($input['password']);
+        } else {
+            $input = Arr::except($input, array('password'));
+        }
+        $user = User::find($id);
+        $user->update($input);
+        return redirect()->route('users.index')
+            ->with('success', 'User updated successfully');
+    }
+
     public function add_address(Address $address, Request $request, User $user)
     {
         $request->validate([
@@ -292,6 +309,8 @@ class UserController extends Controller
             'floor_no' => ['required', 'string', 'max:255'],
             'flat_no' => ['required', 'string', 'max:255'],
             'landmark' => ['required', 'string', 'max:255'],
+            'lat' => ['required', 'numeric', 'max:255'],
+            'lng' => ['required', 'numeric', 'max:255'],
         ]);
 
         $user = Auth::user()->id;
@@ -307,7 +326,23 @@ class UserController extends Controller
 
     public function edit_address(Address $address, Request $request, User $user)
     {
-        return view('user.profile.edit_address', compact('address', 'user'));
+        $user_ip = getenv('REMOTE_ADDR');
+        $geo = unserialize(file_get_contents("http://www.geoplugin.net/php.gp?ip=$user_ip"));
+        $data = \Location::get($geo['geoplugin_request']);
+        $user_id= Auth::user()->id;
+        $datas = Address::where('id',$address->id)->where('user_id',$user_id)->first();
+        $initialMarkers = [
+            [
+                'position' => [
+                    'lat' => (double)$datas->lat,
+                    'lng' => (double)$datas->lng,
+                ],
+                'label' => [ 'color' => 'white', 'text' => 'M' ],
+                'draggable' => true
+            ],
+        ];
+
+        return view('user.profile.edit_address', compact('address', 'user','datas','initialMarkers'));
 
     }
 
@@ -325,6 +360,8 @@ class UserController extends Controller
             'floor_no' => ['required', 'string', 'max:255'],
             'flat_no' => ['required', 'string', 'max:255'],
             'landmark' => ['required', 'string', 'max:255'],
+            'lat' => ['required', 'numeric', 'max:255'],
+            'lng' => ['required', 'numeric', 'max:255'],
         ]);
 
         $input = $request->all();

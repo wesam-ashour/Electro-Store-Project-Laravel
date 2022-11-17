@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\ReCaptcha;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreContact extends FormRequest
@@ -28,6 +29,7 @@ class StoreContact extends FormRequest
             'email' => 'required|email|max:100',
             'mobile' => 'required|digits_between:10,20',
             'message' => 'required|max:500|min:10',
+            'g-recaptcha-response' => ['required', new ReCaptcha],
         ];
     }
 }

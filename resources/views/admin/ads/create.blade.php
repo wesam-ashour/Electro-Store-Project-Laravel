@@ -20,13 +20,15 @@
                     <form method="POST" action="{{route('ads.store')}}" enctype="multipart/form-data">
                         @csrf
                         <div class="">
-                            <div class="form-group">
-                                <label>Ad name</label>
-                                <input type="text" name="name" class="form-control"
-                                       placeholder="Enter First name">
-                            </div>
-                            <div class="form-group">
-                                <label>Ad status</label>
+                            <div class="row row-sm">
+                                <div class="col-lg-6">
+                                    <label>Ad name</label>
+                                    <input type="text" name="name" class="form-control"
+                                           placeholder="Enter ad name">
+                                </div>
+                                
+                                <div class="col-lg-6">
+                                    <label>Ad status</label>
                                 <select name="status" class="form-control">
                                     @foreach(\App\Models\User::STATUS as $status)
                                         <option
@@ -39,7 +41,10 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                </div>
+                                
                             </div>
+                            <br>
                             <div class="form-group">
                                 <label>Images</label>
                                 <div class="input-group file-browser">

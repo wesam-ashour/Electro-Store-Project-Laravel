@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('content')
+    <script src='https://www.google.com/recaptcha/api.js'></script>
      <!-- BREADCRUMB -->
      <div id="breadcrumb" class="section">
         <!-- container -->
@@ -70,7 +71,15 @@
                                             <textarea type="text" name="message" placeholder="{{ __('contact.Message') }}" data-form-field="name" class="form-control" value=""
                                                 id="name-form7-n"></textarea>
                                         </div>
-                                       
+                                        <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" data-for="name">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <strong>ReCaptcha:</strong>
+                                                    <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                     <div class="col-auto mbr-section-btn align-center">
                                         <button type="submit" class="btn btn-primary display-4">{{ __('contact.Submit') }}</button>
