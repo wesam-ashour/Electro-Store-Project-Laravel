@@ -54,7 +54,7 @@
                                 <div class="mb-3">
                                     <label for="emailaddress" class="form-label">Email address</label>
                                     <input class="form-control" type="email" name="email" id="emailaddress"
-                                        required="" placeholder="Enter your email">
+                                        required="" placeholder="Enter your email" value="admin@admin.com">
                                 </div>
 
                                 <div class="mb-3">
@@ -63,7 +63,7 @@
                                     <label for="password" class="form-label">Password</label>
                                     <div class="input-group input-group-merge">
                                         <input type="password" id="password" name="password" class="form-control"
-                                            placeholder="Enter your password">
+                                            placeholder="Enter your password" value="password">
                                         <div class="input-group-text" data-password="false">
                                             <span class="password-eye"></span>
                                         </div>

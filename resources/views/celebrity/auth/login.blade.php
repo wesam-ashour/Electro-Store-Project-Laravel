@@ -54,14 +54,14 @@
                                 <div class="mb-3">
                                     <label for="emailaddress" class="form-label">Username</label>
                                     <input class="form-control" type="text" name="username" id="username"
-                                        required="" placeholder="Enter your username">
+                                        required="" placeholder="Enter your username" value="user">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password</label>
                                     <div class="input-group input-group-merge">
                                         <input type="password" id="password" name="password" class="form-control"
-                                            placeholder="Enter your password">
+                                            placeholder="Enter your password" value="password">
                                         <div class="input-group-text" data-password="false">
                                             <span class="password-eye"></span>
                                         </div>

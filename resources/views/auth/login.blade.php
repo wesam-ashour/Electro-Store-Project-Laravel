@@ -51,7 +51,7 @@
                         <div class="mb-3">
                             <label for="emailaddress" class="form-label">{{ __('auth.Email_address') }}</label>
                             <input class="form-control" type="email" name="email" id="emailaddress" required=""
-                                placeholder="{{ __('auth.Enter_your_email') }}">
+                                placeholder="{{ __('auth.Enter_your_email') }}" value="user@user.com">
                         </div>
                         <div class="mb-3">
                             <a href="{{ route('password.request') }}" class="text-muted float-end"><small>
@@ -59,7 +59,7 @@
                                 </small></a>
                             <label for="password" class="form-label">{{ __('auth.Password') }}</label>
                             <input class="form-control" type="password" name="password" required="" id="password"
-                                placeholder="{{ __('auth.Enter_your_password') }}">
+                                placeholder="{{ __('auth.Enter_your_password') }}" value="password">
                         </div>
                         <div class="mb-3">
                             <div class="form-check">
