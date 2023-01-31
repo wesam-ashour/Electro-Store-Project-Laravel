@@ -42,7 +42,7 @@
                                         <td>
                                             <div class="media">
                                                 <div class="card-aside-img">
-                                                    <img src="{{ asset('storage/' . $product['cover']) }}" alt="img"
+                                                    <img src="{{ asset('images/cover/' . $product['cover']) }}" alt="img"
                                                         class="h-60 w-60">
                                                 </div>
                                                 <div class="media-body">

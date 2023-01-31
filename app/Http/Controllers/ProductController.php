@@ -71,17 +71,21 @@ class ProductController extends Controller
     {
 
 
-        $file = $request->file('cover');
-        $resized_img = Image::make($file);
-        $resized_img->fit(600, 600)->save($file);
-        $fileName = 'cover-' . time() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs('files/cover', $fileName);
+//        $file = $request->file('cover');
+//        $resized_img = Image::make($file);
+//        $resized_img->fit(600, 600)->save($file);
+//        $fileName = 'cover-' . time() . '.' . $file->getClientOriginalExtension();
+//        $path = $file->storeAs('files/cover', $fileName);
+
+        $value = $request->file('cover');
+        $name = time() . rand(1, 100) . '.' . $value->extension();
+        $value->move('images/cover/', $name);
 
         $create_product = new Product();
         $create_product->title = ['en' => $request->title_en, 'ar' => $request->title_ar];
         $create_product->description = ['en' => $request->description_en, 'ar' => $request->description_ar];
         $create_product->celebrity_id = Auth::user()->id;
-        $create_product->cover = $path;
+        $create_product->cover = $name;
         $create_product->price = $request->price;
         $create_product->offer_price = $request->offer_price;
         $create_product->status = $request->status;
@@ -199,21 +203,25 @@ class ProductController extends Controller
 
     public function update(UpdateProducts $request, Product $product)
     {
-
         $input = $request->all();
+//        dd(request()->hasFile('cover'));
         $input['celebrity_id'] = Auth::user()->id;
         $input['title'] = ['en' => $request->title_en, 'ar' => $request->title_ar];
         $input['description'] = ['en' => $request->description_en, 'ar' => $request->description_ar];
 
-        if (!request()->filled('cover')) {
-            $input['cover'] = $product->cover;
+        if (request()->hasFile('cover')) {
+            $value = $request->file('cover');
+            $name = time() . rand(1, 100) . '.' . $value->extension();
+            $value->move('images/cover/', $name);
+            $input['cover'] = $name;
         } else {
-            $file = $request->file('cover');
-            $resized_img = Image::make($file);
-            $resized_img->fit(600, 600)->save($file);
-            $fileName = 'cover-' . time() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('files/cover', $fileName);
-            $input['cover'] = $path;
+//            $file = $request->file('cover');
+//            $resized_img = Image::make($file);
+//            $resized_img->fit(600, 600)->save($file);
+//            $fileName = 'cover-' . time() . '.' . $file->getClientOriginalExtension();
+//            $path = $file->storeAs('files/cover', $fileName);
+//            $input['cover'] = $path;
+            $input['cover'] = $product->cover;
         }
 
         $product->update($input);
