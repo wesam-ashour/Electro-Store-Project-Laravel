@@ -42,7 +42,7 @@
                                         <td>
                                             <div class="media">
                                                 <div class="card-aside-img">
-                                                    <img src="{{ \Illuminate\Support\Facades\Storage::url("/storage/app/{$product['cover']}") }}" alt="img"
+                                                    <img src="{{ asset('storage/' . $product['cover']) }}" alt="img"
                                                         class="h-60 w-60">
                                                 </div>
                                                 <div class="media-body">
