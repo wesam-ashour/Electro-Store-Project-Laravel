@@ -35,7 +35,7 @@
                     <div id="product-main-img">
                         @foreach ($product->color_product as $colors)
                             <div class="product-preview">
-                                <img src="{{ asset('storage/' . $colors->logo) }}" alt="">
+                                <img src="{{ asset('images/color_images/' . $colors->logo) }}" alt="">
                             </div>
                         @endforeach
                     </div>
@@ -47,7 +47,7 @@
                         @foreach ($product->color_product as $colors)
                             <div class="product-preview">
                                 <div class="product-preview">
-                                    <img src="{{ asset('storage/' . $colors->logo) }}" alt="">
+                                    <img src="{{ asset('images/color_images/' . $colors->logo) }}" alt="">
                                 </div>
                             </div>
                         @endforeach
@@ -83,10 +83,10 @@
                                     <select class="input-select" name="color" style="width: 190px;">
                                         <?php $sum = 0; ?>
                                         @foreach ($product->color_product as $key => $colors)
-                                        @if ($colors->quantity != 0)                                            
+                                        @if ($colors->quantity != 0)
                                         <option value="{{ $colors->color->id }}" name="color">
                                             {{ $colors->color->name . ' - ' . $colors->quantity . ' in stock' }}
-                                        </option>                                      
+                                        </option>
                                         @endif
                                             <?php $sum += $colors->quantity; ?>
                                         @endforeach
@@ -190,7 +190,7 @@
                     <div class="col-md-3 col-xs-6">
                         <div class="product">
                             <div class="product-img">
-                                <img src="{{ asset('storage/' . $product['cover']) }}" alt="">
+                                <img src="{{ asset('images/cover/' . $product['cover']) }}" alt="">
                                 <div class="product-label">
                                     <span class="new">{{ __('products.NEW') }}</span>
                                 </div>

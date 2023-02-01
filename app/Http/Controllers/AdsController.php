@@ -25,12 +25,17 @@ class AdsController extends Controller
         $input = $request->all();
         // dd($input);
         $input['celebrity_id'] = Auth::user()->id;
-        $file = $request->file('image');
-        $resized_img = Image::make($file);
-        $resized_img->fit(720, 90)->save($file);
-        $fileName = 'ads-' . time() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs('files', $fileName);
-        $input['image'] = $path;
+        $value = $request->file('image');
+        $name = time() . rand(1, 100) . '.' . $value->extension();
+        $value->move('images/ads/', $name);
+        $input['image'] = $name;
+
+//        $file = $request->file('image');
+//        $resized_img = Image::make($file);
+//        $resized_img->fit(720, 90)->save($file);
+//        $fileName = 'ads-' . time() . '.' . $file->getClientOriginalExtension();
+//        $path = $file->storeAs('files', $fileName);
+//        $input['image'] = $path;
         $input['order'] = rand(0, 99999);
 
         $user = Ads::create($input);
@@ -59,15 +64,19 @@ class AdsController extends Controller
 
             $brand = Ads::findOrFail($id);
 
-            $imagePath = $request->file('image');
-            $imageName = 'ads-' . time() . '.' . $imagePath->getClientOriginalName();
-            $path = $imagePath->storeAs('files', $imageName);
-            unlink(storage_path('app/public/' . $brand->image));
+            $value = $request->file('image');
+            $name = time() . rand(1, 100) . '.' . $value->extension();
+            $value->move('images/ads/', $name);
+
+//            $imagePath = $request->file('image');
+//            $imageName = 'ads-' . time() . '.' . $imagePath->getClientOriginalName();
+//            $path = $imagePath->storeAs('files', $imageName);
+//            unlink(storage_path('app/public/' . $brand->image));
 
             $brand->update([
                 'name' => $request->name,
                 'status' => $request->status,
-                'image' => $path,
+                'image' => $name,
             ]);
 
         } else {

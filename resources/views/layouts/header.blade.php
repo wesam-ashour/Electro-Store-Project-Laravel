@@ -176,16 +176,16 @@
                             <?php $total = 0; ?>
                             <div class="cart-dropdown">
                                 <div class="cart-list">
-                                    @if (count(session()->get('cart', [])) != 0)
+                                    @if (count(session()->get('cart', [])))
                                         @foreach (session()->get('cart', []) as $id => $item)
                                             <div class="product-widget">
                                                 <div class="product-img">
-                                                    <img src="{{ asset('storage/' . \App\Models\Product::find($item['id'])->cover) }}"
+                                                    <img src="{{ asset('images/cover/' . \App\Models\Product::find($item['id'])->cover) }}"
                                                         alt="">
                                                 </div>
                                                 <div class="product-body">
-                                                    <h3 class="product-name"><a
-                                                            href="#">{{ \App\Models\Product::find($item['id'])->title }}</a>
+                                                    <h3 class="product-name">
+                                                        <a href="#">{{ \App\Models\Product::find($item['id'])->title }}</a>
                                                     </h3>
                                                     <h4 class="product-price"><span class="qty">
                                                             <?php $sum = 0; ?>

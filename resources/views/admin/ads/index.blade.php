@@ -63,7 +63,7 @@
                                                     style="object-fit: cover;
                                         width: 150x;
                                         height: 50px;"
-                                                    src="{{ asset('/storage/' . $ad->image) }}">
+                                                    src="{{ asset('images/ads/' . $ad->image) }}">
                                             </td>
                                             <td>{{ $ad->name }}</td>
                                             <td>

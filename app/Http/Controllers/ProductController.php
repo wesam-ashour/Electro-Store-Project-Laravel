@@ -99,13 +99,22 @@ class ProductController extends Controller
 
         foreach ($request->product_colors as $index => $object) {
             if (isset($object['color'], $object['quantity'], $object['logo'])) {
-                $key = $object['logo'];
-                $resized_img = Image::make($key);
-                $resized_img->fit(600, 600)->save($key);
-                $name = 'product_color-' . now($index) . '.' . $key->getClientOriginalExtension();
-                $color_image = $key->storeAs('files/color_images', $name);
 
-                ProductColor::create(['product_id' => $article->id, 'color_id' => $object['color'], 'quantity' => $object['quantity'], 'logo' => $color_image,]);
+                $value = $object['logo'];
+                $name = time() . rand(1, 100) . '.' . $value->extension();
+                $value->move('images/color_images/', $name);
+//                $input['cover'] = $name;
+
+
+//                $key = $object['logo'];
+//                $resized_img = Image::make($key);
+//                $resized_img->fit(600, 600)->save($key);
+//                $name = time() . rand(1, 100) . '.' . $key->extension();
+//                $key->move('images/color_images/', $name);
+//                $name = 'product_color-' . now($index) . '.' . $key->getClientOriginalExtension();
+//                $color_image = $key->storeAs('files/color_images', $name);
+
+                ProductColor::create(['product_id' => $article->id, 'color_id' => $object['color'], 'quantity' => $object['quantity'], 'logo' => $name]);
 
             }
 
@@ -182,16 +191,21 @@ class ProductController extends Controller
 
     public function update_details_products(Request $request, $id)
     {
-        // dd($request->file('logo'));
+//         dd($request->file('logo'));
         $request->validate(['quantity' => ['required', 'integer', 'min:0'], 'logo' => ['sometimes', 'mimes:jpeg,png,jpg,gif'],]);
 
         $input = $request->all('quantity');
 
         if ($request->file('logo')) {
-            $key = $request->file('logo');
-            $name = 'product_color-' . time() . '.' . $key->getClientOriginalExtension();
-            $color_image = $key->storeAs('files/color_images', $name);
-            $input['logo'] = $color_image;
+            $value = $request->file('logo');
+            $name = time() . rand(1, 100) . '.' . $value->extension();
+            $value->move('images/color_images/', $name);
+            $input['logo'] = $name;
+
+//            $key = $request->file('logo');
+//            $name = 'product_color-' . time() . '.' . $key->getClientOriginalExtension();
+//            $color_image = $key->storeAs('files/color_images', $name);
+//            $input['logo'] = $color_image;
         }
 
         $productColor = ProductColor::find($id);
@@ -247,10 +261,15 @@ class ProductController extends Controller
         $input = $request->all('quantity');
 
         if ($request->file('logo')) {
-            $key = $request->file('logo');
-            $name = 'product_color-' . time() . '.' . $key->getClientOriginalExtension();
-            $color_image = $key->storeAs('files/color_images', $name);
-            $input['logo'] = $color_image;
+            $value = $request->file('logo');
+            $name = time() . rand(1, 100) . '.' . $value->extension();
+            $value->move('images/color_images/', $name);
+            $input['logo'] = $name;
+
+//            $key = $request->file('logo');
+//            $name = 'product_color-' . time() . '.' . $key->getClientOriginalExtension();
+//            $color_image = $key->storeAs('files/color_images', $name);
+//            $input['logo'] = $color_image;
         }
         $input['product_id'] = $id;
         $input['color_id'] = $request->color_id;

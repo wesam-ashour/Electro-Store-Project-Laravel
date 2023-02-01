@@ -55,7 +55,7 @@
                         @forelse ($topSellings as $topSelling)
                             <div class="product-widget">
                                 <div class="product-img">
-                                    <img src="{{ asset('storage/' . $topSelling['cover']) }}" alt="">
+                                    <img src="{{ asset('images/cover/' . $topSelling['cover']) }}" alt="">
                                 </div>
                                 <div class="product-body">
                                     {{-- <p class="product-category">Category</p> --}}
@@ -69,7 +69,7 @@
                             </div>
                         @empty
                         {{ __('products.No') }}
-                            
+
                         @endforelse
                     </div>
                     <!-- /aside Widget -->
@@ -87,7 +87,7 @@
                                 <div class="col-md-4 col-xs-6">
                                     <div class="product">
                                         <div class="product-img">
-                                            <img src="{{ asset('storage/' . $product['cover']) }}" alt="">
+                                            <img src="{{ asset('images/cover/' . $product['cover']) }}" alt="">
                                             <div class="product-label">
 
                                                 <span class="new">{{ __('products.NEW') }}</span>

@@ -186,7 +186,7 @@
                                                     Edit
                                                 </button>
                                             </td>
-                                        </tr>                                 
+                                        </tr>
                                     </tbody>
                                 </table> --}}
                                 @foreach ($carts['color_items'] as $key => $details)
@@ -202,7 +202,7 @@
                                                     <div class="col-md-3">
                                                         <img class="img-fluid mx-auto d-block image"
                                                             style="height: 180px;width: 180px"
-                                                            src="{{ asset('storage/' . \App\Models\Product::find($carts['id'])->cover) }}">
+                                                            src="{{ asset('images/cover/' . \App\Models\Product::find($carts['id'])->cover) }}">
                                                     </div>
                                                     <div class="col-md-8">
                                                         <div class="info">

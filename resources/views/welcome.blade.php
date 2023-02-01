@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <!-- /shop -->
-                
+
             </div>
             <!-- /row -->
         </div>
@@ -83,7 +83,7 @@
                                     @forelse ($products as $product)
                                         <div class="product">
                                             <div class="product-img">
-                                                <img src="{{ asset('storage/' . $product['cover']) }}" alt="">
+                                                <img src="{{ asset('images/cover/' . $product['cover']) }}" alt="">
                                                 <div class="product-label">
                                                     <span class="new">{{ __('welcome.NEW') }}</span>
                                                 </div>
@@ -154,19 +154,19 @@
     </div>
 
     <!-- /SECTION -->
- 
-        
-    
+
+
+
     <div class="section">
         <!-- container -->
         <div class="container">
-            <!-- row -->         
-            <div class="col-md-12">             
-                <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel" >                
+            <!-- row -->
+            <div class="col-md-12">
+                <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel" >
                     <div class="carousel-inner">
                         @foreach ($banners as $banner)
-                        <div class="carousel-item {{ $loop->first ? 'active' : '' }}" data-bs-interval="10000">                        
-                            <img src="{{ asset('/storage/' . $banner->image) }}" class="d-block w-100" alt="...">                     
+                        <div class="carousel-item {{ $loop->first ? 'active' : '' }}" data-bs-interval="10000">
+                            <img src="{{ asset('images/cover/' . $banner->image) }}" class="d-block w-100" alt="...">
                         </div>
                         @endforeach
                     </div>
@@ -179,12 +179,12 @@
                         data-bs-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">{{ __('welcome.Next') }}</span>
-                    </button>         
-                </div>  
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-    
+
     <!-- HOT DEAL SECTION -->
     <div id="hot-deal" class="section">
         <!-- container -->

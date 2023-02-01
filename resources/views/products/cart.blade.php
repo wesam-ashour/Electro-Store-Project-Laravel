@@ -178,7 +178,7 @@
 
                                 <div class="row main align-items-center">
                                     <div class="col-2"><img class="img-fluid"
-                                            src="{{ asset('storage/' . \App\Models\Product::find($details['id'])->cover) }}">
+                                            src="{{ asset('images/cover/' . \App\Models\Product::find($details['id'])->cover) }}">
                                     </div>
                                     <div class="col">
                                         <div class="row text-muted">{{ \App\Models\Product::find($details['id'])->title }}
